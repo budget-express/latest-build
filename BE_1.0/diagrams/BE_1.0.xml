@@ -1,3 +1,67 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<entities>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><entities>
+	<entity>
+		<entity-name>com.tdavis.be.entity.Role</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>146</entity-height>
+		<entity-X-Coordinate>50</entity-X-Coordinate>
+		<entity-Y-Coordinate>41</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
+		<entity-name>com.tdavis.be.entity.User</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>266</entity-height>
+		<entity-X-Coordinate>270</entity-X-Coordinate>
+		<entity-Y-Coordinate>41</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
+		<entity-name>com.tdavis.be.entity.Project</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>206</entity-height>
+		<entity-X-Coordinate>550</entity-X-Coordinate>
+		<entity-Y-Coordinate>46</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
+		<entity-name>com.tdavis.be.entity.Budget</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>166</entity-height>
+		<entity-X-Coordinate>840</entity-X-Coordinate>
+		<entity-Y-Coordinate>46</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
+		<entity-name>com.tdavis.be.entity.Quote</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>146</entity-height>
+		<entity-X-Coordinate>1070</entity-X-Coordinate>
+		<entity-Y-Coordinate>51</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
+
+	<entity>
+		<entity-name>com.tdavis.be.entity.History</entity-name>
+		<entity-width>120</entity-width>
+		<entity-height>108</entity-height>
+		<entity-X-Coordinate>400</entity-X-Coordinate>
+		<entity-Y-Coordinate>390</entity-Y-Coordinate>
+		<primary-collapsed>false</primary-collapsed>
+		<relation-collapsed>false</relation-collapsed>
+		<basic-collapsed>false</basic-collapsed>
+	</entity>
 </entities>

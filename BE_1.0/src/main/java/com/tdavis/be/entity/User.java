@@ -17,7 +17,6 @@ import org.hibernate.validator.constraints.Email;
 
 
 @Entity
-@Table(name = "app_user")
 public class User {
 
 	@Id
@@ -27,23 +26,53 @@ public class User {
 	@NotNull
 	@Size(min = 3, message = "Name must be at least 3 characters!")
 	@Column(unique = true)
-	private String name;
+	private String fname;
+	
+	@NotNull
+	@Size(min = 3, message = "Name must be at least 3 characters!")
+	@Column(unique = true)
+	private String lname;
 
 	@Size(min = 1, message = "Invalid email address!")
 	@Email(message = "Invalid email address!")
 	private String email;
-
+	
+	private String title;
+	
 	@Size(min = 5, message = "Password must be at least 5 characters!")
 	private String password;
 
 	private boolean enabled;
+	
+	private boolean admin;
 
 	@ManyToMany
 	@JoinTable(name="app_user_role")
 	private List<Role> roles;
+	
+	public String getFname() {
+		return fname;
+	}
 
+	public void setFname(String fname) {
+		this.fname = fname;
+	}
 
-	private boolean admin;
+	public String getLname() {
+		return lname;
+	}
+
+	public void setLname(String lname) {
+		this.lname = lname;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public boolean isAdmin() {
 		return admin;
@@ -76,14 +105,6 @@ public class User {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getEmail() {

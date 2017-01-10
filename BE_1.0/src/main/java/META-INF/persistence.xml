@@ -3,5 +3,9 @@
 	<persistence-unit name="BE_1.0">
 		<class>com.tdavis.be.entity.Role</class>
 		<class>com.tdavis.be.entity.User</class>
+		<class>com.tdavis.be.entity.Project</class>
+		<class>com.tdavis.be.entity.Budget</class>
+		<class>com.tdavis.be.entity.Quote</class>
+		<class>com.tdavis.be.entity.History</class>
 	</persistence-unit>
 </persistence>
