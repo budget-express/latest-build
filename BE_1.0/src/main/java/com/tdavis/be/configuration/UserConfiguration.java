@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 
 @Configuration
 public class UserConfiguration extends WebSecurityConfigurerAdapter {
@@ -32,6 +33,8 @@ public class UserConfiguration extends WebSecurityConfigurerAdapter {
 		// @formatter:on
 	}
 
+/*
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
@@ -52,11 +55,13 @@ public class UserConfiguration extends WebSecurityConfigurerAdapter {
 				.permitAll()
 				.and()
 			.logout()
-				/* @see: org.springframework.security.config.annotation.web.configurers.LogoutConfigurer#logoutUrl */
+				// @see: org.springframework.security.config.annotation.web.configurers.LogoutConfigurer#logoutUrl 
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
 				.and()
 			.rememberMe();
 		// @formatter:on
 	}
+	*/
+
 
 }

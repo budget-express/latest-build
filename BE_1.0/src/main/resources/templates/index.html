@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<head>
+	<th:block th:include="/layout/header :: header-meta"></th:block>
+</head>
+
+<body class="nav-md">
+	<div class="container body">
+		<div class="main_container">
+			<th:block th:include="/layout/side_nav :: side_nav"></th:block>
+			<th:block th:include="/layout/top_nav :: top_nav"></th:block>
+			<!-- Page Start -->
+			<div class="right_col" role="main">
+          		<div class="row">
+          		<div class="page-title">
+				<div class="jumbotron">
+				  <h1>Budget Express Application</h1>
+				  <p>Using 100% open source</p>
+				  <ul>
+				  	<li>Java</li>
+				  	<li>Spring Boot</li>
+				  	<li>STS</li>
+				  	<li>Maven</li>
+				  	<li>Hypersonic SQL</li>
+				  	<li>mySQL</li>
+				  	
+				  </ul>
+				</div>
+				</div>
+				</div>
+				</div>
+			<!-- Page End -->
+			<th:block th:include="/layout/footer :: footer"></th:block>
+		</div>
+	</div>
+	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
+</body>
+</html>
+

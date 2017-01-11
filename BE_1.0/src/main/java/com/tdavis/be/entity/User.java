@@ -19,6 +19,7 @@ import org.hibernate.validator.constraints.Email;
 
 
 @Entity
+@Table(name = "app_user")
 public class User {
 
 	@Id

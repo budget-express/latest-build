@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<head>
+	<th:block th:include="/layout/header :: header-meta"></th:block>
+</head>
+
+  <body class="login">
+    <div>
+      <a class="hiddenanchor" id="signup"></a>
+      <a class="hiddenanchor" id="signin"></a>
+
+      <div class="login_wrapper">
+        <div class="animate form login_form">
+          <section class="login_content">
+            <form class="form-signin" role="form" action="/j_spring_security_check" method="POST">
+              <h1>Login Form</h1>
+              <div>
+                <input type="text" name="j_username" class="form-control" placeholder="Name" required="required" autofocus="autofocus" /> 
+              </div>
+              <div>
+				<input type="password" name="j_password" class="form-control" placeholder="Password" required="required" />
+              </div>
+              <div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="separator">
+
+                <div class="clearfix"></div>
+                <br />
+				<div>
+                  <h1><i class="fa fa-money"></i> Budget Express</h1>
+                  <p>Tim Davis</p>
+                </div>
+              </div>
+            </form>
+          </section></div>
+		</div>
+	</div>
+	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
+</body>
+</html>
