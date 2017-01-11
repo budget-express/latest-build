@@ -13,9 +13,9 @@
 	<entity>
 		<entity-name>com.tdavis.be.entity.History</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>108</entity-height>
-		<entity-X-Coordinate>400</entity-X-Coordinate>
-		<entity-Y-Coordinate>390</entity-Y-Coordinate>
+		<entity-height>206</entity-height>
+		<entity-X-Coordinate>530</entity-X-Coordinate>
+		<entity-Y-Coordinate>310</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -57,7 +57,7 @@
 	<entity>
 		<entity-name>com.tdavis.be.entity.User</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>266</entity-height>
+		<entity-height>306</entity-height>
 		<entity-X-Coordinate>270</entity-X-Coordinate>
 		<entity-Y-Coordinate>41</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>

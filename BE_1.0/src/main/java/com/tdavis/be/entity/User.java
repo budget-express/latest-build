@@ -35,6 +35,9 @@ public class User {
 	@Column(unique = true)
 	private String lname;
 
+	@NotNull
+	private String name;
+	
 	@Size(min = 1, message = "Invalid email address!")
 	@Email(message = "Invalid email address!")
 	private String email;
@@ -55,6 +58,24 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<History> historys;
 	
+	
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<History> getHistorys() {
+		return historys;
+	}
+
+	public void setHistorys(List<History> historys) {
+		this.historys = historys;
+	}
+
 	public String getFname() {
 		return fname;
 	}
