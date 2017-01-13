@@ -139,6 +139,8 @@
 				var lname = $(this).data('lname');
 				var email = $(this).data('email');
 				var title = $(this).data('title');
+				boolean enabled = $(this).data('enabled');
+				boolean admin = $(this).data('admin');
 				
 				console.log(id);
 				
@@ -148,6 +150,8 @@
 				$(".user-lname").val(lname);
 				$(".user-email").val(email);
 				$(".user-title").val(title);
+				$(".user-enabled").val(enabled);
+				$(".user-admin").val(admin);
 				
 			});
 	    </script>

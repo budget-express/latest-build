@@ -99,7 +99,9 @@
 													data-fname=${user.fname},
 													data-lname=${user.lname},
 													data-email=${user.email},
-													data-title=${user.title}">
+													data-title=${user.title},
+													data-enabled=${user.enabled},
+													data-admin=${user.admin}">
 													Edit
 												  </th:button></th:block></td>
 							</tr>
@@ -129,12 +131,24 @@
 								
 									<label for="userName">Name:</label>
 									<input type="text" th:field="*{name}" id="userName" class="form-control" />
+									
+									<label for="userfName">First Name:</label>
+									<input type="text" th:field="*{fname}" id="userfName" class="form-control" />
+									
+									<label for="userlName">Last Name:</label>
+									<input type="text" th:field="*{lname}" id="userlName" class="form-control" />
 												
 									<label for="userPassword" class="control-label">Password:</label>
 									<input type="password" th:field="*{password}" id="userPassword" class="form-control" />
 									
 									<label for="userEmail" class="control-label">Email:</label>
 									<input type="email" th:field="*{email}" id="userEmail" class="form-control" />
+									
+									<label for="userTitle">Title:</label>
+									<input type="text" th:field="*{title}" id="userTitle" class="form-control" />
+							
+									<label for="userEnabled" class="control-label">Enabled?</label>
+									<input type="checkbox" th:field="*{enabled}" id="userEnabled" class="flat" />
 							
 									<label for="userAdmin" class="control-label">Admin?</label>
 									<input type="checkbox" th:field="*{admin}" id="userAdmin" class="flat" />
@@ -182,8 +196,11 @@
 							<label for="userTitle">Title:</label>
 							<input class="user-title form-control" type="text" th:field="*{title}" id="userTitle"  />
 					
+							<label for="userEnabled" class="control-label">Enabled?</label>
+							<input type="checkbox" th:field="*{enabled}" id="userEnabled" class="flat user-enabled" />
+					
 							<label for="userAdmin" class="control-label">Admin?</label>
-							<input type="checkbox" th:field="*{admin}" id="userAdmin" class="flat" />
+							<input type="checkbox" th:field="*{admin}" id="userAdmin" class="flat user-admin" />
 					
 						</div>
 						

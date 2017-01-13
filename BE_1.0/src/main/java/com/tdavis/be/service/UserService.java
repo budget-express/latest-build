@@ -48,14 +48,23 @@ public class UserService {
 	
 	public void edit(User user) {
 		User temp = userRepository.findOne(user.getId());
+		temp.setId(user.getId());
 		temp.setName(user.getName());
 		temp.setFname(user.getFname());
 		temp.setLname(user.getLname());
 		temp.setEmail(user.getEmail());
 		temp.setTitle(user.getTitle());
 		
-		userRepository.save(temp);
+		List<Role> roles = new ArrayList<Role>();
+		if (user.isEnabled()){
+			roles.add(roleRepository.findByName("ROLE_USER"));
+		}
+		if (user.isAdmin()) {
+			roles.add(roleRepository.findByName("ROLE_ADMIN"));
+		}
+		temp.setRoles(roles);
 		
+		userRepository.save(temp);
 	}
 	
 }
