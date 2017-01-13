@@ -57,7 +57,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Budget</h2><div th:if="${param.success ne null and param.success[0] eq 'true'}" class="alert alert-success">Budget Added!</div>
+                    <h2>Projects</h2><div th:if="${param.success ne null and param.success[0] eq 'true'}" class="alert alert-success">Budget Added!</div>
                     <ul class="nav navbar-right panel_toolbox">
                       <li>
                       	<!--  Modal work here for Add Project -->
@@ -91,17 +91,15 @@
                         </thead>
 
                         <tbody>
-							<th:block th:each="budget, rowStat : ${projects}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
+							<th:block th:each="project, rowStat : ${projects}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
 							<tr class="toprow pointer"> <!-- Change This Odd/Even -->
 								<td class="a-center ">
 									<input type="checkbox" class="flat" name="table_records" />
 								</td>
-								<td th:text="${project.name}"></td>
+								<td><a th:href="@{/project(id=${project.id})}"><th:block th:text="${project.name}"></th:block></a></td>
 								<td th:text="${project.description}"></td>
 								<td th:text="${project.year}"></td>
-								<th:block th:if="project.enabled">
-									<td>Active</td>
-								</th:block>
+								<td th:text="${project.enabled}"></td>
 								
 								<td class=" last"><a href="#">Edit</a></td>
 							</tr>

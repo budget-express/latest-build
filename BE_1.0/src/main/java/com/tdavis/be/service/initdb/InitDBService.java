@@ -82,6 +82,7 @@ public class InitDBService {
 			project.setName("2016 Financials");
 			project.setDescription("2016 Budgets");
 			project.setYear("2016");
+			project.setEnabled(true);
 			List<Budget> pbudget = new ArrayList<Budget>();
 			
 			Budget budget= new Budget();

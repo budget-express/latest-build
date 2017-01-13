@@ -22,7 +22,7 @@ public class ProjectController {
 		return new Project();
 	}
 	
-	@RequestMapping("/project/active")
+	@RequestMapping("/project")
 	public String showUsers(Model model) {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
