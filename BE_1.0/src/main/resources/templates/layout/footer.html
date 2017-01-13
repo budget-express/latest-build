@@ -34,7 +34,7 @@
 	    <script src="/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
 	    <script src="/vendors/flot.curvedlines/curvedLines.js"></script> -->
 	    <!-- DateJS -->
-	    <script src="/vendors/DateJS/build/date.js"></script>
+	    <script src="/vendors/date.js"></script>
 	    <!-- bootstrap-daterangepicker -->
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.24/daterangepicker.js"></script>
@@ -130,32 +130,26 @@
 			    message: { text: 'User Added!' }
 			  }).show(); // for the ones that aren't closable and don't fade out there is a .hide() function.
 		</script>
-	
-	    <!-- gauge.js -->
+	    
 	    <script>
-	      var opts = {
-	          lines: 12,
-	          angle: 0,
-	          lineWidth: 0.4,
-	          pointer: {
-	              length: 0.75,
-	              strokeWidth: 0.042,
-	              color: '#1D212A'
-	          },
-	          limitMax: 'false',
-	          colorStart: '#1ABC9C',
-	          colorStop: '#1ABC9C',
-	          strokeColor: '#F0F3F3',
-	          generateGradient: true
-	      };
-	      var target = document.getElementById('foo'),
-	          gauge = new Gauge(target).setOptions(opts);
-	
-	      gauge.maxValue = 6000;
-	      gauge.animationSpeed = 32;
-	      gauge.set(3200);
-	      gauge.setTextField(document.getElementById("gauge-text"));
+		    $(document).on("click", '.edit_button',function(e) {
+				var id = $(this).data('id');
+				var username = $(this).data('username');
+				var fname = $(this).data('fname');
+				var lname = $(this).data('lname');
+				var email = $(this).data('email');
+				var title = $(this).data('title');
+				
+				console.log(id);
+				
+				$(".user-id").val(id);
+				$(".user-username").val(username);
+				$(".user-fname").val(fname);
+				$(".user-lname").val(lname);
+				$(".user-email").val(email);
+				$(".user-title").val(title);
+				
+			});
 	    </script>
-	    <!-- /gauge.js -->
 	</th:block>
 </th:block>

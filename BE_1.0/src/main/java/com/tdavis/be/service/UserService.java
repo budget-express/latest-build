@@ -46,4 +46,16 @@ public class UserService {
 
 	}
 	
+	public void edit(User user) {
+		User temp = userRepository.findOne(user.getId());
+		temp.setName(user.getName());
+		temp.setFname(user.getFname());
+		temp.setLname(user.getLname());
+		temp.setEmail(user.getEmail());
+		temp.setTitle(user.getTitle());
+		
+		userRepository.save(temp);
+		
+	}
+	
 }
