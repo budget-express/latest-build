@@ -93,7 +93,7 @@
 									</th:block>
 								</td>
 								<td th:text="${user.enabled}"></td>
-								<td class=" last"><th:block><th:button type="button" data-toggle="modal" data-target="#editUser-modal" class="btn btn-default btn-sm edit_button" 
+								<td class=" last"><button type="button" data-toggle="modal" data-target="#editUser-modal" class="btn btn-default btn-sm edit_button" 
 													th:attr="data-id=${user.id},
 													data-username=${user.name},
 													data-fname=${user.fname},
@@ -103,7 +103,17 @@
 													data-enabled=${user.enabled},
 													data-admin=${user.admin}">
 													Edit
-												  </th:button></th:block></td>
+												  </button>
+												  <button type="button" data-toggle="modal" data-target="#deleteUser-modal" class="btn btn-default btn-sm delete_button" 
+													th:attr="data-id=${user.id},
+												  	data-username=${user.name},
+												  	data-fname=${user.fname},
+												  	data-lname=${user.lname}">
+												  Delete
+												  </button>
+												  
+								</td>
+												  
 							</tr>
 							</th:block>			
 											  				  
@@ -206,7 +216,38 @@
 						
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<button type="submit" class="btn btn-primary">Apply</button>
+							<button type="submit" class="btn btn-primary">Edit</button>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			</form>
+			<!-- Delete User Modal -->
+			<form action="#" th:action="@{delete}" th:object="${user}" method="post">
+			<div class="modal fade" id="deleteUser-modal" tabindex="-1" role="dialog" aria-labellefby="deleteUser">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="addUser">Delete User</h4>
+						</div>
+						
+						<div class="modal-body">
+						
+						<input class="form-control delete-id" type="hidden" th:field="*{id}" name="id"/>
+						<input class="form-control delete-username" type="hidden" th:field="*{name}" name="id"/>
+						<input class="form-control delete-fname" type="hidden" th:field="*{fname}" name="id"/>
+						<input class="form-control delete-lname" type="hidden" th:field="*{lname}" name="id"/>
+						
+						<label class="user-delete" id="delete_user_label"> </label> 																
+							
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Delete</button>
 						</div>
 						
 					</div>

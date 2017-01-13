@@ -141,9 +141,8 @@
 				var title = $(this).data('title');
 				boolean enabled = $(this).data('enabled');
 				boolean admin = $(this).data('admin');
-				
-				console.log(id);
-				
+			
+		
 				$(".user-id").val(id);
 				$(".user-username").val(username);
 				$(".user-fname").val(fname);
@@ -153,6 +152,23 @@
 				$(".user-enabled").val(enabled);
 				$(".user-admin").val(admin);
 				
+			});
+	    </script>
+	   	<script>
+		    $(document).on("click", '.delete_button',function(e) {
+				var id = $(this).data('id');
+				var username = $(this).data('username');
+				var fname = $(this).data('fname');
+				var lname = $(this).data('lname');
+				
+				$(".delete-id").val(id);
+				$(".delete-username").val(username);
+				$(".delete-fname").val(fname);
+				$(".delete-lname").val(lname);
+				
+				
+				var label = 'Remove User with ID: '+id+' and Username: '+username;
+				document.getElementById('delete_user_label').innerHTML = label;			
 			});
 	    </script>
 	</th:block>

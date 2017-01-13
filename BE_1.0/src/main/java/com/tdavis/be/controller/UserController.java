@@ -59,9 +59,24 @@ public class UserController {
 			System.out.println(bindingResult.toString());
 			return "admin";
 		}
-		System.out.println(user.getId());
-		System.out.println(user.getName());
 		userService.edit(user);
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String name = auth.getName(); //get logged in username
+    	model.addAttribute("username", name);
+    	model.addAttribute("users", userService.findAll());
+		model.addAttribute("title", "Admin");		
+		model.addAttribute("success", true);
+		return "admin";
+	}
+	
+	@PostMapping("/delete")
+	public String deleteUser(@ModelAttribute @Valid User user, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			System.out.println(bindingResult.toString());
+			return "admin";
+		}
+		
+		userService.delete(user.getId());
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);

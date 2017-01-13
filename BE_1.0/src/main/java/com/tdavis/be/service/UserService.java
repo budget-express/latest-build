@@ -67,4 +67,8 @@ public class UserService {
 		userRepository.save(temp);
 	}
 	
+	public void delete(Integer id) {
+		User temp = userRepository.findOne(id);
+		userRepository.delete(temp);
+	}
 }
