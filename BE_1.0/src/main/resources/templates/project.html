@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<head>
+<th:block th:include="/layout/header :: header-meta"></th:block>
+</head>
+
+<body class="nav-md">
+	<div class="container body">
+		<div class="main_container">
+			<th:block th:include="/layout/side_nav :: side_nav"></th:block>
+			<th:block th:include="/layout/top_nav :: top_nav"></th:block>
+			
+			<!-- Page Start -->
+			<div class="right_col" role="main">
+          		<div class="">
+					<div class="page-title">
+						<div class="title_left">
+							<div class="dropdown">
+								<button class="btn btn-default dropdown-toggle" type="button"
+									id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="true">
+									<th:body th:if="${year == null}" th:text="All"></th:body>
+									<th:body th:if="${year != null}" th:text="${year}"></th:body>
+
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									<th:body th:each="link : ${links}">
+										<li><a th:href="@{/budget-details(year=${link})}"
+											th:text="${link}"></a></li>
+									</th:body>
+								</ul>
+							</div>
+						</div>
+
+						<div class="title_right">
+							<div
+								class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+								<div class="input-group">
+									<input type="text" class="form-control"
+										placeholder="Search for..." /> <span class="input-group-btn">
+										<button class="btn btn-default" type="button">Go!</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="clearfix"></div>
+
+            
+
+              <div class="clearfix"></div>
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Budget</h2><div th:if="${param.success ne null and param.success[0] eq 'true'}" class="alert alert-success">Budget Added!</div>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li>
+                      	<!--  Modal work here for Add Project -->
+                      	<a th:href="@{/budget/add}" class="btn btn-default btn-sm">Add</a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+
+                    <!-- <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p> -->
+
+                    <div class="table-responsive">
+                      <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+                          <tr class="headings">
+                            <th>
+                              <input type="checkbox" id="check-all" class="flat" />
+                            </th>
+                            <th class="column-title">Project Name </th>
+                            <th class="column-title">Description </th>
+                            <th class="column-title">Year</th>
+                            <th class="column-title">Status</th>
+                            <th class="column-title no-link last"><span class="nobr">Action</span>
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+							<th:block th:each="budget, rowStat : ${projects}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
+							<tr class="toprow pointer"> <!-- Change This Odd/Even -->
+								<td class="a-center ">
+									<input type="checkbox" class="flat" name="table_records" />
+								</td>
+								<td th:text="${project.name}"></td>
+								<td th:text="${project.description}"></td>
+								<td th:text="${project.year}"></td>
+								<th:block th:if="project.enabled">
+									<td>Active</td>
+								</th:block>
+								
+								<td class=" last"><a href="#">Edit</a></td>
+							</tr>
+							</th:block>			
+											  				  
+						</tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+				<!-- Modal Start
+				<form th:action="@{budget/add}" th:object="${budget}" class="form-horizontal form-label-left" method="post">
+					
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Project Name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{name}" class="form-control" />
+							<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Project Description - Short</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{descriptionShort}" class="form-control" />
+							<span th:if="${#fields.hasErrors('descriptionShort')}" th:errors="*{descriptionShort}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Project Description - Long <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<textarea th:field="*{descriptionLong}" class="form-control" rows="3"></textarea>
+							<span th:if="${#fields.hasErrors('descriptionLong')}" th:errors="*{descriptionLong}">error</span>
+                        </div>
+                      </div>
+                      
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Portfolio Category</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" th:field="*{category}">
+                            <option value=""></option>
+                            <option value="datacenter">Datacenter</option>
+                            <option value="license">License</option>
+                            <option value="software">Software</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Region or Segment</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" th:field="*{region}">
+                            <option value=""></option>
+                            <option value="global">Global Corporate Strategy</option>
+                            <option value="us">US</option>
+                            <option value="emea">EMEA</option>
+                            <option value="apac">APAC</option>
+                            <option value="latam">LATAM</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Business Criticality</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" th:field="*{criticality}">
+                            <option value=""></option>
+                            <option value="lightsout">1- Lights Out</option>
+                            <option value="critical">2 - Critical</option>
+                            <option value="project">3 - Project</option>
+                          </select>
+                        </div>
+                      </div>   
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Priority Ranking</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" th:field="*{ranking}">
+                            <option value="0"></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </select>
+                        </div>
+                      </div>          
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amount Requested</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{requested_amount}" class="form-control" />
+							<span th:if="${#fields.hasErrors('requested_amount')}" th:errors="*{requested_amount}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Q1 Amount</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{q1}" class="form-control" />
+							<span th:if="${#fields.hasErrors('q1')}" th:errors="*{q1}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Q2 Amount</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{q2}" class="form-control" />
+							<span th:if="${#fields.hasErrors('q2')}" th:errors="*{q2}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Q3 Amount</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{q3}" class="form-control" />
+							<span th:if="${#fields.hasErrors('q3')}" th:errors="*{q3}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Q4 Amount</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{q3}" class="form-control" />
+							<span th:if="${#fields.hasErrors('q3')}" th:errors="*{q3}">error</span>
+                        </div>
+                      </div>
+                                                      
+                      
+        
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button type="submit" class="btn btn-primary">Cancel</button>
+                          <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+
+                    </form>
+				
+				Modal End -->
+				<!-- Page End -->
+				<th:block th:include="/layout/footer :: footer"></th:block>
+			</div>
+		</div>
+
+	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
+</body>
+</html>
+
+
+
