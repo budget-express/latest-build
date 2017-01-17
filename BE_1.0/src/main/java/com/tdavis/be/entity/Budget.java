@@ -41,7 +41,8 @@ public class Budget {
 	@JoinColumn(name = "project_id")
 	private Project project;
 	
-	@OneToMany(mappedBy = "budget", cascade = CascadeType.REMOVE)
+	@OneToMany(cascade = CascadeType.REMOVE)
+	@JoinColumn(name="budget_id")
 	private List<Quote> quotes;
 
 	public Integer getId() {

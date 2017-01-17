@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<head>
+<th:block th:include="/layout/header :: header-meta"></th:block>
+</head>
+
+<body class="nav-md">
+	<div class="container body">
+		<div class="main_container">
+			<th:block th:include="/layout/side_nav :: side_nav"></th:block>
+			<th:block th:include="/layout/top_nav :: top_nav"></th:block>
+			
+			<!-- Page Start -->
+			<div class="right_col" role="main">
+          		<div class="">
+					<div class="page-title">
+						<div class="title_left">
+							<div class="dropdown">
+								<button class="btn btn-default dropdown-toggle" type="button"
+									id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="true">
+									<th:body th:if="${year == null}" th:text="All"></th:body>
+									<th:body th:if="${year != null}" th:text="${year}"></th:body>
+
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									<th:body th:each="link : ${links}">
+										<li><a th:href="@{/budget-details(year=${link})}"
+											th:text="${link}"></a></li>
+									</th:body>
+								</ul>
+							</div>
+						</div>
+
+						<div class="title_right">
+							<div
+								class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+								<div class="input-group">
+									<input type="text" class="form-control"
+										placeholder="Search for..." /> <span class="input-group-btn">
+										<button class="btn btn-default" type="button">Go!</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="clearfix"></div>
+
+            
+
+              <div class="clearfix"></div>
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Budget</h2><div th:if="${param.success ne null and param.success[0] eq 'true'}" class="alert alert-success">Budget Added!</div>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li>
+                      	<a th:href="@{/budget/add}" class="btn btn-default btn-sm">Add</a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+
+                    <!-- <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p> -->
+
+                    <div class="table-responsive">
+                      <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+                          <tr class="headings">
+                            <th class="column-title">Project Name </th>
+                            <th class="column-title">Description - Short </th>
+                            <th class="column-title">Portfolio Category </th>
+                            <th class="column-title">Region or Segment </th>
+                            <th class="column-title">Business Criticality</th>
+                            <th class="column-title">Priority Ranking </th>
+							<th class="column-title">Amount Requested</th>
+							<th class="column-title">Q1</th>
+							<th class="column-title">Q2</th>
+							<th class="column-title">Q3</th>
+							<th class="column-title">Q4</th>
+                            <th class="column-title no-link last"><span class="nobr">Action</span>
+                            </th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+							
+							<tr class="toprow pointer"> <!-- Change This Odd/Even -->
+								<td th:text="${budget.name}"></td>
+								<!-- <td th:text="${budget.descriptionShort}"></td> -->
+								<td></td>
+								<td th:text="${budget.category}"></td>
+								<td th:text="${budget.region}"></td>
+								<td th:text="${budget.criticality}"></td>
+								<td th:text="${budget.ranking}"></td>						
+								<td>$ <span th:text="${#numbers.formatDecimal(budget.requested_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+								<td>$ <span th:text="${#numbers.formatDecimal(budget.q1, 0, 'COMMA', 2, 'POINT')}"></span></td>
+								<td>$ <span th:text="${#numbers.formatDecimal(budget.q2, 0, 'COMMA', 2, 'POINT')}"></span></td>
+								<td>$ <span th:text="${#numbers.formatDecimal(budget.q3, 0, 'COMMA', 2, 'POINT')}"></span></td>
+								<td>$ <span th:text="${#numbers.formatDecimal(budget.q4, 0, 'COMMA', 2, 'POINT')}"></span></td>
+								<td class=" last"><a href="#">Edit</a></td>
+							</tr>
+										
+											  				  
+						</tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Quotes</h2><div th:if="${param.success ne null and param.success[0] eq 'true'}" class="alert alert-success">Budget Added!</div>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li>
+                      	<a th:href="@{/budget/add}" class="btn btn-default btn-sm">Add</a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div class="x_content">
+
+                    <!-- <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p> -->
+
+                    <div class="table-responsive">
+                      <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+                          <tr class="headings">
+                            <th class="column-title">Quote Name </th>
+                            <th class="column-title">Vendor </th>
+                            <th class="column-title">Capex </th>
+                            <th class="column-title">Opex</th>
+                            <th class="bulk-actions" colspan="7">
+                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                            </th>
+                          </tr>
+                        </thead>
+
+									<tbody>
+										<th:block th:each="quote, rowStat : ${budget.quotes}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
+											<tr class="toprow pointer clickable-row" th:attr="data-href=@{/quote/}, data-id=${quote.id}">
+												<td th:text="${quote.name}"></td>
+												<td th:text="${quote.vendor}"></td>				
+												<td>$ <span th:text="${#numbers.formatDecimal(quote.capex, 0, 'COMMA', 2, 'POINT')}"></span></td>
+												<td>$ <span th:text="${#numbers.formatDecimal(quote.opex, 0, 'COMMA', 2, 'POINT')}"></span></td>
+											</tr>
+										</th:block>			
+									</tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+				<!-- Page End -->
+				<th:block th:include="/layout/footer :: footer"></th:block>
+			</div>
+		</div>
+
+	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
+</body>
+</html>
+
+
+

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.tdavis.be.entity.Budget;
 import com.tdavis.be.entity.Project;
+import com.tdavis.be.entity.Quote;
 //import com.tdavis.be.entity.Quote;
 import com.tdavis.be.entity.Role;
 import com.tdavis.be.entity.User;
@@ -37,9 +38,11 @@ public class InitDBService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@Autowired QuoteRepository quoteRepository;
+	@Autowired 
+	private QuoteRepository quoteRepository;
 	
-	@Autowired ProjectRepository projectRepository;
+	@Autowired 
+	private ProjectRepository projectRepository;
 	
 	@PostConstruct
 	public void init() throws IOException {
@@ -85,8 +88,8 @@ public class InitDBService {
 			project.setDescription("2016 Budgets");
 			project.setYear("2016");
 			project.setEnabled(true);
-			List<Budget> pbudget = new ArrayList<Budget>();
 			
+			List<Budget> pbudget = new ArrayList<Budget>();
 			Budget budget= new Budget();
 			budget.setName("US Server Capacity");
 			budget.setDescriptionShort("Additional servers for application growth.");
@@ -101,6 +104,40 @@ public class InitDBService {
 			budget.setQ3(10000);
 			budget.setQ4(10000);
 			budget.setYear("2016");
+			
+			List<Quote> onequote = new ArrayList<Quote>();
+			Quote quote1 = new Quote();
+			quote1.setName("vxRack - Additional Nodes");
+			quote1.setJustification("This project is in the approved 2016 Capital Budget for Infrastructure, approved by Chris Kirk and approved by the Capital Committee.  This purchase is for additional memory for Server Capacity/Refresh.  Will reduce our overall footprint in the DC.   ");
+			quote1.setVendor("CDW");
+			quote1.setPo("");
+			quote1.setCapex(321900.00);
+			quote1.setOpex(812);
+			quoteRepository.save(quote1);
+			onequote.add(quote1);
+			
+			Quote quote2 = new Quote();
+			quote2.setName("vxRack - Additional Nodes");
+			quote2.setJustification("This project is in the approved 2016 Capital Budget for Infrastructure, approved by Chris Kirk and approved by the Capital Committee.  This purchase is for additional memory for Server Capacity/Refresh.  Will reduce our overall footprint in the DC.   ");
+			quote2.setVendor("CDW");
+			quote2.setPo("");
+			quote2.setCapex(321900.00);
+			quote2.setOpex(812);
+			quoteRepository.save(quote2);
+			onequote.add(quote2);
+			
+			Quote quote3 = new Quote();
+			quote3.setName("vxRack - Additional Nodes");
+			quote3.setJustification("This project is in the approved 2016 Capital Budget for Infrastructure, approved by Chris Kirk and approved by the Capital Committee.  This purchase is for additional memory for Server Capacity/Refresh.  Will reduce our overall footprint in the DC.   ");
+			quote3.setVendor("CDW");
+			quote3.setPo("");
+			quote3.setCapex(321900.00);
+			quote3.setOpex(812);
+			quoteRepository.save(quote3);
+			onequote.add(quote3);
+			
+			
+			budget.setQuotes(onequote);
 			budgetRepository.save(budget);
 			
 			Budget budget1= new Budget();
@@ -117,6 +154,7 @@ public class InitDBService {
 			budget1.setQ3(2500);
 			budget1.setQ4(2500);
 			budget1.setYear("2016");
+			
 			budgetRepository.save(budget1);
 
 			Budget budget2= new Budget();
@@ -133,6 +171,8 @@ public class InitDBService {
 			budget2.setQ3(10000);
 			budget2.setQ4(5000);
 			budget2.setYear("2016");
+			
+			
 			budgetRepository.save(budget2);
 
 			Budget budget3= new Budget();
@@ -149,6 +189,8 @@ public class InitDBService {
 			budget3.setQ3(2500);
 			budget3.setQ4(0);
 			budget3.setYear("2016");
+			
+			
 			budgetRepository.save(budget3);
 
 			Budget budget4= new Budget();

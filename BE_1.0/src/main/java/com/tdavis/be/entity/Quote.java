@@ -1,7 +1,5 @@
 package com.tdavis.be.entity;
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,6 +33,8 @@ public class Quote {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "budget_id")
 	private Budget budget;
+	
+	
 
 	public Integer getId() {
 		return id;

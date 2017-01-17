@@ -134,6 +134,16 @@
 			  }).show(); // for the ones that aren't closable and don't fade out there is a .hide() function.
 		</script>
 	    <!-- Notify End -->
+	    <!--  Clickable Rows -->
+		<script>
+			$(document).ready(function($) {
+	    		$(".clickable-row").click(function() {
+	    			var link = $(this).data("href");
+	    			var id = $(this).data("id");
+	        		window.location = link+id;
+	    		});
+			});
+		</script>
   
 	</th:block>
 </th:block>

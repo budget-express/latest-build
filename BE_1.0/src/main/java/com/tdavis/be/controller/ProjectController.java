@@ -9,13 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tdavis.be.entity.Project;
 import com.tdavis.be.service.ProjectService;
@@ -43,12 +40,11 @@ public class ProjectController {
 	}
 	
 	@RequestMapping("/{id}")
-	public String ShowProjectDetails(Model model) {
-		int id = 1;
+	public String ShowProjectDetails(Model model, @PathVariable String id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
-    	model.addAttribute("project", projectService.findById(id));
+    	model.addAttribute("project", projectService.findById(Integer.parseInt(id)));
 		model.addAttribute("title", "Project");
 		return "details";
 	}

@@ -72,7 +72,7 @@
    					<div class="col-md-12 col-sm-12 col-xs-12">
 						<div class="x_panel">
 							<div class="x_title">
-								<h2><th:body th:text="${project.name}"></th:body></h2>
+								<h2><th:body th:text="${project.name}"> - Budgets</th:body></h2>
 								<div class="clearfix"></div>
 							</div>
 
@@ -83,28 +83,21 @@
 							        	<tr class="headings">
 									    	<th class="column-title">Budget Name </th>
 					                       	<th class="column-title">Description - Short </th>
-					                       	<th class="column-title">Portfolio Category </th>
-					                       	<th class="column-title">Region or Segment </th>
-					                       	<th class="column-title">Business Criticality</th>
-					                       	<th class="column-title">Priority Ranking </th>
 											<th class="column-title">Amount Requested</th>
+											<th class="column-title">Amount Approved</th>
 											<th class="column-title">Q1</th>
 											<th class="column-title">Q2</th>
 											<th class="column-title">Q3</th>
 											<th class="column-title">Q4</th>
-					                       	<th class="column-title no-link last"><span class="nobr">Action</span></th>
 										</tr>
 						            </thead>
 									<tbody>
 										<th:block th:each="budget, rowStat : ${project.budgets}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
-											<tr class="toprow pointer"> <!-- Change This Odd/Even -->
+											<tr class="toprow pointer clickable-row" th:attr="data-href=@{/budget/}, data-id=${budget.id}">
 												<td th:text="${budget.name}"></td>
-												<td th:text="${budget.descriptionShort}"></td>
-												<td th:text="${budget.category}"></td>
-												<td th:text="${budget.region}"></td>
-												<td th:text="${budget.criticality}"></td>
-												<td th:text="${budget.ranking}"></td>						
+												<td th:text="${budget.descriptionShort}"></td>				
 												<td>$ <span th:text="${#numbers.formatDecimal(budget.requested_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+												<td>$ <span th:text="${#numbers.formatDecimal(budget.approved_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
 												<td>$ <span th:text="${#numbers.formatDecimal(budget.q1, 0, 'COMMA', 2, 'POINT')}"></span></td>
 												<td>$ <span th:text="${#numbers.formatDecimal(budget.q2, 0, 'COMMA', 2, 'POINT')}"></span></td>
 												<td>$ <span th:text="${#numbers.formatDecimal(budget.q3, 0, 'COMMA', 2, 'POINT')}"></span></td>

@@ -26,4 +26,8 @@ public class BudgetService {
 			budgetRepository.save(budget);
 		}
 		
+		public Budget findById(int id){
+			return budgetRepository.findById(id);
+		}
+		
 }

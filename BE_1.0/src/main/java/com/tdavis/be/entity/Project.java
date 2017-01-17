@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -23,7 +24,8 @@ public class Project {
 	
 	private String Year;
 	
-	@OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
+	@OneToMany(cascade = CascadeType.REMOVE)
+	@JoinColumn(name="project_id")
 	private List<Budget> budgets;
 
 	public Integer getId() {
