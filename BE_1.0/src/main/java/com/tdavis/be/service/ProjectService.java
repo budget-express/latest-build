@@ -20,6 +20,10 @@ public class ProjectService {
 			return projectRepository.findAll();
 		}
 		
+		public Project findById(int id){
+			return projectRepository.findById(id);
+		}
+		
 		public void save(Project project) {
 			
 

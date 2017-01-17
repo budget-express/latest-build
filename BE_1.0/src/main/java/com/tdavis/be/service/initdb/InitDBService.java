@@ -65,6 +65,7 @@ public class InitDBService {
 			roles.add(roleAdmin);
 			roles.add(roleUser);
 			userAdmin.setRoles(roles);
+			userAdmin.setAdmin(true);
 			userRepository.save(userAdmin);
 			
 			User userUser = new User();
@@ -76,6 +77,7 @@ public class InitDBService {
 			List<Role> uroles = new ArrayList<Role>();
 			uroles.add(roleUser);
 			userUser.setRoles(uroles);
+			userUser.setAdmin(false);
 			userRepository.save(userUser);
 			
 			Project project = new Project();

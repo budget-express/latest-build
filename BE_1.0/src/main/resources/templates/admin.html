@@ -207,10 +207,10 @@
 							<input class="user-title form-control" type="text" th:field="*{title}" id="userTitle"  />
 					
 							<label for="userEnabled" class="control-label">Enabled?</label>
-							<input type="checkbox" th:field="*{enabled}" id="userEnabled" class="flat user-enabled" />
+							<input type="checkbox" th:field="*{enabled}" id="userEnabled" class="flat user-enabled user-enabled" />
 					
 							<label for="userAdmin" class="control-label">Admin?</label>
-							<input type="checkbox" th:field="*{admin}" id="userAdmin" class="flat user-admin" />
+							<input type="checkbox" th:field="*{admin}" id="userAdmin" class="flat user-admin user-admin" />
 					
 						</div>
 						
@@ -261,5 +261,56 @@
 		</div>
 	</div>
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
+	<!-- Admin Modal Start -->
+	    <!-- Admin Edit -->
+	    <script>
+		    $(document).on("click", '.edit_button',function(e) {
+				var id = $(this).data('id');
+				var username = $(this).data('username');
+				var fname = $(this).data('fname');
+				var lname = $(this).data('lname');
+				var email = $(this).data('email');
+				var title = $(this).data('title');
+				var enabled = $(this).data('enabled');
+				var admin = $(this).data('admin');
+				
+				if (enabled == true){
+					$('.user-enabled').prop('checked', true);
+				}else {$('.user-enabled').prop('checked', false);}
+				
+				if (admin ==true){
+					$(".user-admin").prop("checked", true);
+				}else {$(".user-admin").prop("checked", false);}
+
+				$(".user-id").val(id);
+				$(".user-username").val(username);
+				$(".user-fname").val(fname);
+				$(".user-lname").val(lname);
+				$(".user-email").val(email);
+				$(".user-title").val(title);
+				$(".user-enabled").val(enabled);
+				$(".user-admin").val(admin);
+				
+			});
+	    </script>
+	    <!-- Admin Delete -->
+	   	<script>
+		    $(document).on("click", '.delete_button',function(e) {
+				var id = $(this).data('id');
+				var username = $(this).data('username');
+				var fname = $(this).data('fname');
+				var lname = $(this).data('lname');
+				
+				$(".delete-id").val(id);
+				$(".delete-username").val(username);
+				$(".delete-fname").val(fname);
+				$(".delete-lname").val(lname);
+				
+				
+				var label = 'Remove User with ID: '+id+' and Username: '+username;
+				document.getElementById('delete_user_label').innerHTML = label;			
+			});
+	    </script>
+	    <!-- Admin Modal End -->
 </body>
 </html>

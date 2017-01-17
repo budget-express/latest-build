@@ -45,12 +45,15 @@
 	    <!-- Custom Theme Scripts -->
 	    <script src="/build/js/custom.min.js"></script>
 	    
+	    <!-- jQuery Smart Wizard -->
+	    <script src="/vendors/jquery/smartwizard/jquery.smartWizard.js"></script>
+	    
 	    
 	
 	    
 
 	    
-	    <!-- bootstrap-daterangepicker -->
+	    <!-- bootstrap-daterangepicker Start-->
 	    <script>
 	      $(document).ready(function() {
 	
@@ -122,54 +125,15 @@
 	        });
 	      });
 	    </script>
-	    <!-- /bootstrap-daterangepicker -->
+	    <!-- /bootstrap-daterangepicker End -->
 	
-		<!-- notify -->
+		<!-- Notify Start -->
 		<script>
 		  $('.bottom-right').notify({
 			    message: { text: 'User Added!' }
 			  }).show(); // for the ones that aren't closable and don't fade out there is a .hide() function.
 		</script>
-	    
-	    <script>
-		    $(document).on("click", '.edit_button',function(e) {
-				var id = $(this).data('id');
-				var username = $(this).data('username');
-				var fname = $(this).data('fname');
-				var lname = $(this).data('lname');
-				var email = $(this).data('email');
-				var title = $(this).data('title');
-				boolean enabled = $(this).data('enabled');
-				boolean admin = $(this).data('admin');
-			
-		
-				$(".user-id").val(id);
-				$(".user-username").val(username);
-				$(".user-fname").val(fname);
-				$(".user-lname").val(lname);
-				$(".user-email").val(email);
-				$(".user-title").val(title);
-				$(".user-enabled").val(enabled);
-				$(".user-admin").val(admin);
-				
-			});
-	    </script>
-	   	<script>
-		    $(document).on("click", '.delete_button',function(e) {
-				var id = $(this).data('id');
-				var username = $(this).data('username');
-				var fname = $(this).data('fname');
-				var lname = $(this).data('lname');
-				
-				$(".delete-id").val(id);
-				$(".delete-username").val(username);
-				$(".delete-fname").val(fname);
-				$(".delete-lname").val(lname);
-				
-				
-				var label = 'Remove User with ID: '+id+' and Username: '+username;
-				document.getElementById('delete_user_label').innerHTML = label;			
-			});
-	    </script>
+	    <!-- Notify End -->
+  
 	</th:block>
 </th:block>
