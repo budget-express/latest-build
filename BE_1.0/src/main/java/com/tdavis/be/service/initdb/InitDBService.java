@@ -7,6 +7,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,14 +16,17 @@ import org.springframework.stereotype.Service;
 import com.tdavis.be.entity.Budget;
 import com.tdavis.be.entity.Project;
 import com.tdavis.be.entity.Quote;
-//import com.tdavis.be.entity.Quote;
 import com.tdavis.be.entity.Role;
 import com.tdavis.be.entity.User;
 import com.tdavis.be.repository.BudgetRepository;
 import com.tdavis.be.repository.ProjectRepository;
+//import com.tdavis.be.repository.BudgetRepository;
+//import com.tdavis.be.repository.ProjectRepository;
 import com.tdavis.be.repository.QuoteRepository;
 import com.tdavis.be.repository.RoleRepository;
 import com.tdavis.be.repository.UserRepository;
+import com.tdavis.be.service.BudgetService;
+import com.tdavis.be.service.ProjectService;
 
 
 
@@ -29,6 +34,8 @@ import com.tdavis.be.repository.UserRepository;
 @Service
 public class InitDBService {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private BudgetRepository budgetRepository;
 	
@@ -43,6 +50,7 @@ public class InitDBService {
 	
 	@Autowired 
 	private ProjectRepository projectRepository;
+	
 	
 	@PostConstruct
 	public void init() throws IOException {
@@ -146,13 +154,18 @@ public class InitDBService {
 			
 			budget.setQuotes(onequote);
 			budgetRepository.save(budget);
+			logger.info("InitDBService - Before Saving Budget");
+			//budgetService.save(budget);
+			logger.info("InitDBService - After Saving Budget");
 			
 			Budget budget1= new Budget();
+			logger.info("InitDBService - Create Budget budget1");
 			budget1.setName("Global Backup Refresh");
 			budget1.setDescriptionShort("Backups to the Cloud");
 			budget1.setDescriptionLong("Eliminate tape backups, and ustilize public cloud for archives.");
 			budget1.setCategory("Datacenter");
 			budget1.setRegion("Global Corporate Strategy");
+			
 			budget1.setCriticality("1 - Lights Out");
 			budget1.setRanking(1);
 			budget1.setRequested_amount(15000);
@@ -160,10 +173,16 @@ public class InitDBService {
 			budget1.setQ2(10000);
 			budget1.setQ3(2500);
 			budget1.setQ4(2500);
-			budget1.setYear("2016");
 			
+			budget1.setQ1_enabled(true);
+			budget1.setQ2_enabled(true);
+			budget1.setQ3_enabled(true);
+			budget1.setQ4_enabled(true);
+			budget1.setYear("2016");
+			logger.info("In the Middle");
 			budgetRepository.save(budget1);
-
+			logger.info("InitDBService - After Saving Budget1");
+			
 			Budget budget2= new Budget();
 			budget2.setName("US Storage Refresh");
 			budget2.setDescriptionShort("Additional servers for application growth.");
@@ -177,11 +196,15 @@ public class InitDBService {
 			budget2.setQ2(5000);
 			budget2.setQ3(10000);
 			budget2.setQ4(5000);
+			budget2.setQ1_enabled(true);
+			budget2.setQ2_enabled(true);
+			budget2.setQ3_enabled(true);
+			budget2.setQ4_enabled(true);
 			budget2.setYear("2016");
-			
-			
-			budgetRepository.save(budget2);
 
+			budgetRepository.save(budget2);
+			logger.info("InitDBService - After Saving Budget2");
+			
 			Budget budget3= new Budget();
 			budget3.setName("Yammer PoC");
 			budget3.setDescriptionShort("Social networking for internal CBRE.");
@@ -199,6 +222,7 @@ public class InitDBService {
 			
 			
 			budgetRepository.save(budget3);
+			logger.info("InitDBService - After Saving Budget3");
 
 			Budget budget4= new Budget();
 			budget4.setName("US Server Capacity");
@@ -215,7 +239,8 @@ public class InitDBService {
 			budget4.setQ4(10000);
 			budget4.setYear("2015");
 			budgetRepository.save(budget4);
-
+			logger.info("InitDBService - After Saving Budget4");
+			
 			Budget budget5= new Budget();
 			budget5.setName("Global Backup Refresh");
 			budget5.setDescriptionShort("Backups to the Cloud");
@@ -231,6 +256,7 @@ public class InitDBService {
 			budget5.setQ4(2500);
 			budget5.setYear("2015");
 			budgetRepository.save(budget5);
+			logger.info("InitDBService - After Saving Budget5");
 
 			Budget budget6= new Budget();
 			budget6.setName("US Storage Refresh");
@@ -247,6 +273,7 @@ public class InitDBService {
 			budget6.setQ4(5000);
 			budget6.setYear("2015");
 			budgetRepository.save(budget6);
+			logger.info("InitDBService - After Saving Budget6");
 
 			Budget budget7= new Budget();
 			budget7.setName("Yammer PoC");
@@ -263,6 +290,7 @@ public class InitDBService {
 			budget7.setQ4(0);
 			budget7.setYear("2015");
 			budgetRepository.save(budget7);
+			logger.info("InitDBService - After Saving Budget7");
 
 			Budget budget8= new Budget();
 			budget8.setName("US Server Capacity");
@@ -279,6 +307,7 @@ public class InitDBService {
 			budget8.setQ4(10000);
 			budget8.setYear("2014");
 			budgetRepository.save(budget8);
+			logger.info("InitDBService - After Saving Budget8");
 
 			Budget budget9= new Budget();
 			budget9.setName("Global Backup Refresh");
@@ -295,6 +324,7 @@ public class InitDBService {
 			budget9.setQ4(2500);
 			budget9.setYear("2015");
 			budgetRepository.save(budget9);
+			logger.info("InitDBService - After Saving Budget9");
 
 			Budget budget10= new Budget();
 			budget10.setName("US Storage Refresh");
@@ -311,6 +341,7 @@ public class InitDBService {
 			budget10.setQ4(5000);
 			budget10.setYear("2015");
 			budgetRepository.save(budget10);
+			logger.info("InitDBService - After Saving Budget10");
 
 			Budget budget11= new Budget();
 			budget11.setName("Yammer PoC");
@@ -327,6 +358,7 @@ public class InitDBService {
 			budget11.setQ4(0);
 			budget11.setYear("2015");
 			budgetRepository.save(budget11);
+			logger.info("InitDBService - After Saving Budget11");
 
 			
 			pbudget.add(budget);
@@ -342,6 +374,7 @@ public class InitDBService {
 			pbudget.add(budget10);
 			pbudget.add(budget11);
 			project.setBudgets(pbudget);
+			//projectRepository.save(project);
 			projectRepository.save(project);
 
 		}

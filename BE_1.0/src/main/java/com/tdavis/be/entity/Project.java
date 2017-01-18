@@ -125,6 +125,14 @@ public class Project {
 	public void setStaged_budget(double staged_budget) {
 		this.staged_budget = staged_budget;
 	}
+
+	public double getApproved_budget() {
+		return approved_budget;
+	}
+
+	public void setApproved_budget(double approved_budget) {
+		this.approved_budget = approved_budget;
+	}
 	
 	
 }
