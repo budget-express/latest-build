@@ -28,6 +28,8 @@ public class Quote {
 	
 	private String po;
 	
+	private String status;
+	
 	//private List<Byte []> po_files;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -114,6 +116,14 @@ public class Quote {
 
 	public void setBudget(Budget budget) {
 		this.budget = budget;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

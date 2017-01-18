@@ -36,6 +36,9 @@ public class Budget {
     private double q4;
     private boolean q4_enabled;
     private String year;
+    private double quote_spent;
+    private double quote_pending;
+    private double quote_staged;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
@@ -212,6 +215,32 @@ public class Budget {
 	public void setQuotes(List<Quote> quotes) {
 		this.quotes = quotes;
 	}
+
+	public double getQuote_spent() {
+		return quote_spent;
+	}
+
+	public void setQuote_spent(double quote_spent) {
+		this.quote_spent = quote_spent;
+	}
+
+	public double getQuote_pending() {
+		return quote_pending;
+	}
+
+	public void setQuote_pending(double quote_pending) {
+		this.quote_pending = quote_pending;
+	}
+
+	public double getQuote_staged() {
+		return quote_staged;
+	}
+
+	public void setQuote_staged(double quote_staged) {
+		this.quote_staged = quote_staged;
+	}
+	
+
 	
 	
 }

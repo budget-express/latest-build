@@ -36,7 +36,9 @@ public class UserService {
 		user.setPassword(encoder.encode(user.getPassword()));
 
 		List<Role> roles = new ArrayList<Role>();
-		roles.add(roleRepository.findByName("ROLE_USER"));
+		if (user.isEnabled()) {
+			roles.add(roleRepository.findByName("ROLE_USER"));
+		}
 		if (user.isAdmin()) {
 			roles.add(roleRepository.findByName("ROLE_ADMIN"));
 		}

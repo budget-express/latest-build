@@ -103,6 +103,10 @@ public class InitDBService {
 			budget.setQ2(15000);
 			budget.setQ3(10000);
 			budget.setQ4(10000);
+			budget.setQ1_enabled(true);
+			budget.setQ2_enabled(true);
+			budget.setQ3_enabled(true);
+			budget.setQ4_enabled(true);
 			budget.setYear("2016");
 			
 			List<Quote> onequote = new ArrayList<Quote>();
@@ -113,6 +117,7 @@ public class InitDBService {
 			quote1.setPo("");
 			quote1.setCapex(321900.00);
 			quote1.setOpex(812);
+			quote1.setStatus("complete");
 			quoteRepository.save(quote1);
 			onequote.add(quote1);
 			
@@ -123,6 +128,7 @@ public class InitDBService {
 			quote2.setPo("");
 			quote2.setCapex(321900.00);
 			quote2.setOpex(812);
+			quote2.setStatus("pending");
 			quoteRepository.save(quote2);
 			onequote.add(quote2);
 			
@@ -133,6 +139,7 @@ public class InitDBService {
 			quote3.setPo("");
 			quote3.setCapex(321900.00);
 			quote3.setOpex(812);
+			quote3.setStatus("staged");
 			quoteRepository.save(quote3);
 			onequote.add(quote3);
 			

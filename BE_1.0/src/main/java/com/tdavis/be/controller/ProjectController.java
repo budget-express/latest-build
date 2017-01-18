@@ -49,6 +49,17 @@ public class ProjectController {
 		return "details";
 	}
 	
+	@RequestMapping("/details")
+	public String projectDetails(Model model) {
+		int id = 1;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String name = auth.getName(); //get logged in username
+    	model.addAttribute("username", name);
+    	model.addAttribute("project", projectService.findById(id));
+		model.addAttribute("title", "Project Details -" + projectService.findById(id).getName());
+		return "project_details";
+	}
+	
 	@PostMapping()
 	public String saveUser(@ModelAttribute @Valid Project project, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {

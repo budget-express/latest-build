@@ -24,6 +24,16 @@ public class Project {
 	
 	private String Year;
 	
+	private double requested_budget;
+	
+	private double approved_budget;
+	
+	private double spent_budget;
+	
+	private double pending_budget;
+	
+	private double staged_budget;
+	
 	@OneToMany(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="project_id")
 	private List<Budget> budgets;
@@ -74,6 +84,46 @@ public class Project {
 
 	public void setBudgets(List<Budget> budgets) {
 		this.budgets = budgets;
+	}
+
+	public double getAproved_budget() {
+		return approved_budget;
+	}
+
+	public void setAproved_budget(double aproved_budget) {
+		this.approved_budget = aproved_budget;
+	}
+
+	public double getSpent_budget() {
+		return spent_budget;
+	}
+
+	public void setSpent_budget(double spent_budget) {
+		this.spent_budget = spent_budget;
+	}
+
+	public double getRequested_budget() {
+		return requested_budget;
+	}
+
+	public void setRequested_budget(double requested_budget) {
+		this.requested_budget = requested_budget;
+	}
+
+	public double getPending_budget() {
+		return pending_budget;
+	}
+
+	public void setPending_budget(double pending_budget) {
+		this.pending_budget = pending_budget;
+	}
+
+	public double getStaged_budget() {
+		return staged_budget;
+	}
+
+	public void setStaged_budget(double staged_budget) {
+		this.staged_budget = staged_budget;
 	}
 	
 	
