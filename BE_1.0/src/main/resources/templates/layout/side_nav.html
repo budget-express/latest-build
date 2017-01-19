@@ -40,15 +40,16 @@
 							<li>
 								<a><i class="fa fa-table"></i> Project <span class="fa fa-chevron-down"></span></a>
 								<ul class="nav child_menu">
-									<li><a th:href="@{/project}">Active Projects</a></li>
+									<li><a th:href="@{/project/list}">Projects</a></li>
 									<li><a th:href="@{/project/details}">Temp - Details</a></li>
-									<li><a th:href="@{/project/refresh}">Refresh</a></li>
 								</ul>
 							</li>
 							</th:block>
 							<li sec:authorize="hasAuthority('ROLE_ADMIN')">
 								<a><i class="fa fa-cogs"></i> Admin <span	class="fa fa-chevron-down"></span></a>
 								<ul class="nav child_menu">
+									<li><a th:href="@{/project}">Projects</a></li>
+									<li><a th:href="@{/project/refresh}">Refresh</a></li>
 									<li><a th:href="@{admin}">Users</a></li>
 								</ul>
 							</li>

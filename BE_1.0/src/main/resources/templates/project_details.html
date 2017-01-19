@@ -35,7 +35,9 @@
                       <ul class="stats-overview">
                         <li>
                           <span class="name"> Approved Budget </span>
-                          <span class="value text-success" th:text="${#numbers.formatDecimal(project.approved_budget, 0, 'COMMA', 2, 'POINT')}"></span>
+                          <span th:if="${project.approved_budget &gt;= 0}" class="value text-success" th:text="${#numbers.formatDecimal(project.approved_budget, 0, 'COMMA', 2, 'POINT')}"></span>
+                          <span th:if="${project.approved_budget &lt; 0}" class="value text-danger" th:text="${#numbers.formatDecimal(project.approved_budget, 0, 'COMMA', 2, 'POINT')}"></span>
+                          
                         </li>
                         <li>
                           <span class="name"> Spent Budget </span>
@@ -43,7 +45,8 @@
                         </li>
                         <li class="hidden-phone">
                           <span class="name"> Remaining Budget </span>
-                          <span class="value text-success" th:text="${#numbers.formatDecimal(spent, 0, 'COMMA', 2, 'POINT')}"></span>
+                          <span th:if="${spent &gt;= 0}" class="value text-success" th:text="${#numbers.formatDecimal(spent, 0, 'COMMA', 2, 'POINT')}"></span>
+                          <span th:if="${spent &lt; 0}" class="value text-danger" th:text="${#numbers.formatDecimal(spent, 0, 'COMMA', 2, 'POINT')}"></span>
                         </li>
                       </ul>
                       <br />

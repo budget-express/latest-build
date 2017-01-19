@@ -34,6 +34,9 @@ public class Project {
 	
 	private double staged_budget;
 	
+	//Planning/Open/Closed
+	private String status;
+	
 	@OneToMany(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="project_id")
 	private List<Budget> budgets;
@@ -132,6 +135,14 @@ public class Project {
 
 	public void setApproved_budget(double approved_budget) {
 		this.approved_budget = approved_budget;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

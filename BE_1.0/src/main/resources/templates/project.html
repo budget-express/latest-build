@@ -86,7 +86,7 @@
 										<th:block th:each="project, rowStat : ${projects}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
 											<tr class="toprow pointer clickable-row" th:attr="data-href=@{/project/}, data-id=${project.id}"> <!-- Change This Odd/Even -->
 												<td class="a-center "><input type="checkbox" class="flat" name="table_records" /></td>
-												<td th:text="${project.name}">></td>
+												<td th:text="${project.name}"></td>
 												<td th:text="${project.description}"></td>
 												<td th:text="${project.year}"></td>
 												<td th:text="${project.enabled}"></td>

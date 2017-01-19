@@ -39,6 +39,8 @@ public class Budget {
     private double quote_spent;
     private double quote_pending;
     private double quote_staged;
+    private String budget_code;
+    private String status;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
@@ -238,6 +240,22 @@ public class Budget {
 
 	public void setQuote_staged(double quote_staged) {
 		this.quote_staged = quote_staged;
+	}
+
+	public String getBudget_code() {
+		return budget_code;
+	}
+
+	public void setBudget_code(String budget_code) {
+		this.budget_code = budget_code;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 

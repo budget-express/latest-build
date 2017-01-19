@@ -18,15 +18,13 @@ import com.tdavis.be.entity.Project;
 import com.tdavis.be.entity.Quote;
 import com.tdavis.be.entity.Role;
 import com.tdavis.be.entity.User;
+
 import com.tdavis.be.repository.BudgetRepository;
 import com.tdavis.be.repository.ProjectRepository;
-//import com.tdavis.be.repository.BudgetRepository;
-//import com.tdavis.be.repository.ProjectRepository;
 import com.tdavis.be.repository.QuoteRepository;
 import com.tdavis.be.repository.RoleRepository;
 import com.tdavis.be.repository.UserRepository;
-import com.tdavis.be.service.BudgetService;
-import com.tdavis.be.service.ProjectService;
+
 
 
 
@@ -57,6 +55,7 @@ public class InitDBService {
 		
 		if (userRepository != null && userRepository.count() == 0) {
 		
+			//Add User Information
 			Role roleUser = new Role();
 			roleUser.setName("ROLE_USER");
 			roleRepository.save(roleUser);
@@ -91,7 +90,94 @@ public class InitDBService {
 			userUser.setAdmin(false);
 			userRepository.save(userUser);
 			
-			Project project = new Project();
+			//Add Project/Budget/Quote information
+			
+			Project project=new Project();
+			project.setName("2015 Capital Plan");
+			project.setDescription("IT Infrastructure Projects");
+			project.setYear("2015");
+			project.setEnabled(false);
+			project.setStatus("Closed");
+
+			List<Budget> budgets=new ArrayList<Budget>();
+			List<Quote>quotes=new ArrayList<Quote>();
+
+			Budget budget=new Budget();
+			budget.setName("US DC Storage Capacity");
+			budget.setDescriptionShort("Additional Storage capacity in Production data center. ");
+			budget.setDescriptionLong("Additional Storage capacity in Production data center. This includes US, GCS and Global Investor Apps storage");
+			budget.setCategory("Datacenter");
+			budget.setRegion("USA");
+			budget.setCriticality("1 - Lights Out");
+			budget.setRanking(1);
+			budget.setRequested_amount(1500000);
+			budget.setQ1(0);
+			budget.setQ1_enabled(true);
+			budget.setQ2(750000);
+			budget.setQ2_enabled(true);
+			budget.setQ3(750000);
+			budget.setQ3_enabled(true);
+			budget.setQ4(0);
+			budget.setQ4_enabled(true);
+			budget.setYear("2015");
+			budget.setBudget_code("");
+			budget.setStatus("Completed");
+
+			Quote quote1=new Quote();
+			quote1.setName("EMC vMax3 and ExtremeIO (2/4)");
+			quote1.setJustification("This project is in the approved 2015 Capital Budget for Infrastructure, approved by Chris Kirk and approved by the Capital Committee.  This purchase is for additional storage capacity for Production and Test/Dev environments. ");
+			quote1.setVendor("Technologent");
+			quote1.setPo("");
+			quote1.setCapex(859222.35);
+			quote1.setOpex(348265);
+			quote1.setStatus("complete");
+			quoteRepository.save(quote1);
+			quotes.add(quote1);
+
+			Quote quote2=new Quote();
+			quote2.setName("Super AMP");
+			quote2.setJustification("This project is in the approved 2015 Capital Budget for Infrastructure, approved by Chris Kirk and approved by the Capital Committee.  This purchase is for additional storage capacity for Production and Test/Dev environments. ");
+			quote2.setVendor("Technologent");
+			quote2.setPo("");
+			quote2.setCapex(635215.46);
+			quote2.setOpex(235129);
+			quote2.setStatus("complete");
+			quoteRepository.save(quote2);
+			quotes.add(quote2);
+
+			budget.setQuotes(quotes);
+			budgetRepository.save(budget);
+			budgets.add(budget);
+
+			Budget budget1=new Budget();
+			budget1.setName("US DC Storage Capacity");
+			budget1.setDescriptionShort("Additional Storage capacity in Production data center. ");
+			budget1.setDescriptionLong("Additional Storage capacity in Production data center. This includes US, GCS and Global Investor Apps storage");
+			budget1.setCategory("Datacenter");
+			budget1.setRegion("USA");
+			budget1.setCriticality("1 - Lights Out");
+			budget1.setRanking(1);
+			budget1.setRequested_amount(1500000);
+			budget1.setQ1(0);
+			budget1.setQ1_enabled(true);
+			budget1.setQ2(750000);
+			budget1.setQ2_enabled(true);
+			budget1.setQ3(750000);
+			budget1.setQ3_enabled(true);
+			budget1.setQ4(0);
+			budget1.setQ4_enabled(true);
+			budget1.setYear("2015");
+			budget1.setBudget_code("");
+			budget1.setStatus("Completed");
+
+
+
+			project.setBudgets(budgets);
+			projectRepository.save(project);
+
+
+			
+			/*Project project = new Project();
 			project.setName("2016 Financials");
 			project.setDescription("2016 Budgets");
 			project.setYear("2016");
@@ -375,7 +461,7 @@ public class InitDBService {
 			pbudget.add(budget11);
 			project.setBudgets(pbudget);
 			//projectRepository.save(project);
-			projectRepository.save(project);
+			projectRepository.save(project);*/
 
 		}
 		

@@ -1,8 +1,6 @@
 package com.tdavis.be.controller;
 
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tdavis.be.entity.Project;
-import com.tdavis.be.repository.ProjectRepository;
 import com.tdavis.be.service.BudgetService;
 import com.tdavis.be.service.ProjectService;
 
@@ -76,9 +73,19 @@ public class ProjectController {
     	model.addAttribute("project", projectService.findById(id));
     	model.addAttribute("spent",balance);
 		model.addAttribute("title", "Project Details -" + projectService.findById(id).getName());
-		logger.info("This is debug mesg");
 		return "project_details";
 	}
+
+	@RequestMapping("/list") 
+	public String listProjects(Model model) {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String name = auth.getName(); //get logged in username
+    	model.addAttribute("username", name);
+    	model.addAttribute("projects", projectService.findAll());
+		model.addAttribute("title", "Projects");
+		return "project-list";
+	}
+	
 	
 	@RequestMapping("/refresh") 
 	public String projectRefresh(Model model) {

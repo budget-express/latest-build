@@ -35,11 +35,11 @@ public class ProjectService {
 
 			logger.info("Create Budget");
 			//Requested/Approved/Spent/Pending/Staged Amount
-			double requested_budget=2;
-			double approved_budget=2;
-			double spent_budget=2;
-			double pending_budget=2;
-			double staged_budget=2;
+			double requested_budget=0;
+			double approved_budget=0;
+			double spent_budget=0;
+			double pending_budget=0;
+			double staged_budget=0;
 			
 			for (Budget budget : project.getBudgets()){
 				requested_budget += budget.getRequested_amount();
