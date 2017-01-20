@@ -33,7 +33,7 @@ public class UserConfiguration extends WebSecurityConfigurerAdapter {
 		// @formatter:on
 	}
 
-/*
+
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -61,7 +61,7 @@ public class UserConfiguration extends WebSecurityConfigurerAdapter {
 			.rememberMe();
 		// @formatter:on
 	}
-	*/
+	
 
 
 }

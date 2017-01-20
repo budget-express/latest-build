@@ -78,6 +78,8 @@ public class ProjectController {
 
 	@RequestMapping("/list") 
 	public String listProjects(Model model) {
+		
+
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);

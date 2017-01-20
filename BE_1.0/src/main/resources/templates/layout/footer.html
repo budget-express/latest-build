@@ -42,12 +42,14 @@
 		<!-- Notify JS -->
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/js/bootstrap-notify.js"></script>
 		
+		<!-- Progressbar -->
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-progressbar/0.9.0/bootstrap-progressbar.js"></script>
+		
 	    <!-- Custom Theme Scripts -->
 	    <script src="/build/js/custom.min.js"></script>
+
 	    
-	    <!-- jQuery Smart Wizard -->
-	    <script src="/vendors/jquery/smartwizard/jquery.smartWizard.js"></script>
-	    
+
 	    
 	
 	    
@@ -143,6 +145,28 @@
 	        		window.location = link+id;
 	    		});
 			});
+		</script>
+		
+		<!-- 2 Decimals -->
+		<script>
+			function decimalizer(input) {
+			var test1 = 0;
+			var test2 = 0;
+			input = Math.round(input*100);
+			if (input/100 == Math.round(input/100)) {
+			test1 = 1;
+			} else if (input/10 == Math.round(input/10)) {
+			test2 = 1;
+			}
+			/*<![CDATA[*/
+			if (test1==1 && test2==0) {
+			window.document.write(input/100 + ".00");
+			} else if (test1==0 && test2==1) {
+			window.document.write(input/100 + "0");
+			} else {
+			window.document.write(input/100);
+			}/*]]>*/
+			}
 		</script>
   
 	</th:block>

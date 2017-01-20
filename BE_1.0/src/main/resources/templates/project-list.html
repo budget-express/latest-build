@@ -83,9 +83,9 @@
 						  <td th:text="${project.description}"></td>
                           <td class="project_progress">
                             <div class="progress progress_sm">
-                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="57"></div>
+                              <div class="progress-bar bg-green" role="progressbar" th:attr="data-transitiongoal=${(project.spent_budget / project.approved_budget)*100}"></div>
                             </div>
-                            <small>57% Complete</small>
+                            <small><th:block th:text="${(project.spent_budget / project.approved_budget)*100}"></th:block> Spent</small>
                           </td>
                           <td>
                             <button type="button" class="btn btn-success btn-xs">Success</button>
