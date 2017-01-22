@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.tdavis.be.entity.Project;
 import com.tdavis.be.service.BudgetService;
 import com.tdavis.be.service.ProjectService;
+import com.tdavis.be.service.QuoteService;
 
 
 @Controller
@@ -32,8 +33,14 @@ public class ProjectController {
 	@Autowired
 	private BudgetService budgetService;
 	
+	@Autowired
+	private QuoteService quoteService;
+	
 	@ModelAttribute("project")
 	public Project construct() {
+		//budgetService.refresh();
+		//projectService.refresh();
+		//quoteService.refresh();
 		return new Project();
 	}
 	
@@ -57,12 +64,12 @@ public class ProjectController {
 		return "details";
 	}
 	
-	@RequestMapping("/details")
-	public String projectDetails(Model model) {
-		int id = 1;
+	@RequestMapping("/details/{id}")
+	public String projectDetails(Model model, @PathVariable String id) {
+		//int id = 1;
 
-		double approved = projectService.findById(id).getApproved_budget();
-		double spent = projectService.findById(id).getSpent_budget();
+		double approved = projectService.findById(Integer.parseInt(id)).getApproved_budget();
+		double spent = projectService.findById(Integer.parseInt(id)).getSpent_budget();
 		double balance = 0;
 		
 		balance = approved - spent;
@@ -70,9 +77,9 @@ public class ProjectController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
-    	model.addAttribute("project", projectService.findById(id));
+    	model.addAttribute("project", projectService.findById(Integer.parseInt(id)));
     	model.addAttribute("spent",balance);
-		model.addAttribute("title", "Project Details -" + projectService.findById(id).getName());
+		model.addAttribute("title", "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
 		return "project_details";
 	}
 
@@ -93,7 +100,19 @@ public class ProjectController {
 	public String projectRefresh(Model model) {
 		budgetService.refresh();
 		projectService.refresh();
+		quoteService.refresh();
 		return "index";
+	}
+	
+	@RequestMapping("/delete/{id}")
+	public String projectDelete(Model model, @PathVariable int id){
+		projectService.delete(id);
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String name = auth.getName(); //get logged in username
+    	model.addAttribute("username", name);
+    	model.addAttribute("projects", projectService.findAll());
+		model.addAttribute("title", "Projects");
+		return "project-list";
 	}
 	
 	@PostMapping()
@@ -102,13 +121,15 @@ public class ProjectController {
 			
 			return "project";
 		}
+		logger.info("Saving Project: "+project.getName());
 		projectService.save(project);
+		logger.info("Saved Project: "+project.getName());
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
     	model.addAttribute("projects", projectService.findAll());
 		model.addAttribute("title", "Projects");		
 		model.addAttribute("success", true);
-		return "project";
+		return "project-list";
 	}
 }

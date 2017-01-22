@@ -6,7 +6,7 @@
 	<th:block th:include="/layout/header :: header-meta"></th:block>
 </head>
 
-<body class="nav-md">
+<body class="nav-md" onload="myNotify()">
 	<div class="container body">
 		<div class="main_container">
 			<th:block th:include="/layout/side_nav :: side_nav"></th:block>
@@ -17,7 +17,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Projects <small>Listing design</small></h3>
+                <h3>Projects <small>Listing</small></h3>
               </div>
 
               <div class="title_right">
@@ -40,19 +40,8 @@
                   <div class="x_title">
                     <h2>Projects</h2>
                     <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
+                    	<!--  Modal work here for Add Project -->
+						<li><button type="button" data-toggle="modal" data-target="#project-modal-add" class="btn btn-success btn-sm">Add</button></li>
                     </ul>
                     <div class="clearfix"></div>
                   </div>
@@ -78,7 +67,7 @@
                           <td>
                           	<th:block th:text="${project.name}"></th:block>
                             <br />
-                            <small>Created 01.01.2015</small>
+                            <small>Created <th:block th:text="${project.created}"></th:block></small>
                           </td>
 						  <td th:text="${project.description}"></td>
                           <td class="project_progress">
@@ -88,12 +77,16 @@
                             <small><th:block th:text="${(project.spent_budget / project.approved_budget)*100}"></th:block> Spent</small>
                           </td>
                           <td>
-                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                          	<div th:switch="${project.status}">
+                            	<button th:case="'Open'" type="button" class="btn btn-success btn-xs">Open</button>
+                            	<button th:case="'Closed'" type="button" class="btn btn-info btn-xs">Closed</button>
+                            	<button th:case="'Planning'" type="button" class="btn btn-warning btn-xs">Planning</button>
+                            </div>
                           </td>
                           <td>
-                            <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                            <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                            <a href="#" class="btn btn-danger btn-xs" sec:authorize="hasAuthority('ROLE_ADMIN')"><i class="fa fa-trash-o"></i> Delete </a>
+                            <a th:href="@{/project/details/}+${project.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                            <a href="#" class="btn btn-info btn-xs" sec:authorize="hasAuthority('ROLE_ADMIN')"><i class="fa fa-pencil"></i> Edit </a>
+                            <a th:href="@{/project/delete/}+${project.id}" class="btn btn-danger btn-xs" sec:authorize="hasAuthority('ROLE_ADMIN')"><i class="fa fa-trash-o"></i> Delete </a>
                           </td>
                         </tr></th:block>
                        
@@ -109,7 +102,56 @@
           </div>
         </div>
         <!-- /page content -->
-			
+		<!-- Project-Modal-Add Start -->
+		<form action="#" th:action="@{/project}" th:object="${project}" method="post">
+			<div class="modal fade" id="project-modal-add" tabindex="-1" role="dialog" aria-labellefby="addProject">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="addUser">Add Project</h4>
+						</div>
+						
+						<div class="modal-body">
+								
+								
+									<label for="projectName">Name:</label>
+									<input type="text" th:field="*{name}" id="userName" class="form-control" />
+									
+									<label for="projectDescription">Description:</label>
+									<input type="text" th:field="*{description}" id="projectDescription" class="form-control" />
+									
+									<label for="projectYear">Year:</label>
+									<input type="text" th:field="*{year}" id="projectYear" class="form-control" />
+									
+									<label for="projectStatus">Status:</label>
+									<select th:field="*{status}" id="projectStatus" class="form-control">
+				                        <option value="">Choose..</option>
+				                        <option value="Planning">Planning</option>
+				                        <option value="Open">Open</option>
+				                        <option value="Closed">Closed</option>
+			                        </select>
+												
+									<label for="projectType" class="control-label">Type:</label>
+			                        <select th:field="*{type}" id="projectType" class="form-control">
+				                        <option value="">Choose..</option>
+				                        <option value="Infrastructure">Infrastructure</option>
+				                        <option value="Project">Project</option>
+				                        <option value="Special">Special</option>
+			                        </select>
+																			
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Add</button>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			</form>
 			
 			<!-- Page End -->
 			<th:block th:include="/layout/footer :: footer"></th:block>

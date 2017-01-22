@@ -34,12 +34,22 @@ public class Project {
 	
 	private double staged_budget;
 	
+	private String created;
+	
+	private String edited;
+	
+	//Project/Infrastructure
+	private String type;
+	
 	//Planning/Open/Closed
 	private String status;
 	
 	@OneToMany(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="project_id")
 	private List<Budget> budgets;
+	
+	@OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
+	private List<History> historys;
 
 	public Integer getId() {
 		return id;
@@ -143,6 +153,38 @@ public class Project {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCreated() {
+		return created;
+	}
+
+	public void setCreated(String created) {
+		this.created = created;
+	}
+
+	public String getEdited() {
+		return edited;
+	}
+
+	public void setEdited(String edited) {
+		this.edited = edited;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public List<History> getHistorys() {
+		return historys;
+	}
+
+	public void setHistorys(List<History> historys) {
+		this.historys = historys;
 	}
 	
 	

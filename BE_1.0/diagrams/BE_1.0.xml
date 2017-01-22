@@ -2,7 +2,7 @@
 	<entity>
 		<entity-name>com.tdavis.be.entity.Budget</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>566</entity-height>
+		<entity-height>646</entity-height>
 		<entity-X-Coordinate>840</entity-X-Coordinate>
 		<entity-Y-Coordinate>46</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
@@ -13,9 +13,9 @@
 	<entity>
 		<entity-name>com.tdavis.be.entity.History</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>206</entity-height>
-		<entity-X-Coordinate>431</entity-X-Coordinate>
-		<entity-Y-Coordinate>420</entity-Y-Coordinate>
+		<entity-height>226</entity-height>
+		<entity-X-Coordinate>384</entity-X-Coordinate>
+		<entity-Y-Coordinate>499</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -24,7 +24,7 @@
 	<entity>
 		<entity-name>com.tdavis.be.entity.Quote</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>266</entity-height>
+		<entity-height>306</entity-height>
 		<entity-X-Coordinate>1070</entity-X-Coordinate>
 		<entity-Y-Coordinate>51</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
@@ -46,7 +46,7 @@
 	<entity>
 		<entity-name>com.tdavis.be.entity.Project</entity-name>
 		<entity-width>120</entity-width>
-		<entity-height>306</entity-height>
+		<entity-height>406</entity-height>
 		<entity-X-Coordinate>550</entity-X-Coordinate>
 		<entity-Y-Coordinate>46</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>

@@ -1,5 +1,6 @@
 package com.tdavis.be.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -39,8 +40,11 @@ public class Budget {
     private double quote_spent;
     private double quote_pending;
     private double quote_staged;
+    private double remaining_budget;
     private String budget_code;
     private String status;
+    private String created;
+    private String edited;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
@@ -256,6 +260,30 @@ public class Budget {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCreated() {
+		return created;
+	}
+
+	public void setCreated(String created) {
+		this.created = created;
+	}
+
+	public String getEdited() {
+		return edited;
+	}
+
+	public void setEdited(String edited) {
+		this.edited = edited;
+	}
+
+	public double getRemaining_budget() {
+		return remaining_budget;
+	}
+
+	public void setRemaining_budget(double remaining_budget) {
+		this.remaining_budget = remaining_budget;
 	}
 	
 

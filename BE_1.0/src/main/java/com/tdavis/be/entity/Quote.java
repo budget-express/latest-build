@@ -1,5 +1,7 @@
 package com.tdavis.be.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,6 +31,10 @@ public class Quote {
 	private String po;
 	
 	private String status;
+	
+	private String created;
+	
+	private String edited;
 	
 	//private List<Byte []> po_files;
 	
@@ -124,6 +130,22 @@ public class Quote {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCreated() {
+		return created;
+	}
+
+	public void setCreated(String created) {
+		this.created = created;
+	}
+
+	public String getEdited() {
+		return edited;
+	}
+
+	public void setEdited(String edited) {
+		this.edited = edited;
 	}
 	
 	

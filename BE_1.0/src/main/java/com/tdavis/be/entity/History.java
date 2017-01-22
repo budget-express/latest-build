@@ -20,13 +20,17 @@ public class History {
 	
 	private String type;
 	
-	private Date date;
+	private String date;
 	
 	private String log;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="project_id")
+	private Project project;
 
 	public Integer getId() {
 		return id;
@@ -52,11 +56,11 @@ public class History {
 		this.type = type;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
@@ -74,6 +78,14 @@ public class History {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 	
 	
