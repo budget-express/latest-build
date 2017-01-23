@@ -39,6 +39,9 @@ public class BudgetService {
 		@Autowired
 		private HistoryRepository historyRepository;
 		
+		@Autowired
+		private ProjectRepository projectRepository;
+		
 		public Iterable<Budget> findAll () {
 			
 			return budgetRepository.findAll();
@@ -46,7 +49,7 @@ public class BudgetService {
 		
 		public void save(Budget budget) {
 			History history = new History();
-			Project project = budget.getProject();
+			Project project = projectRepository.findById(budget.getProject().getId());
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    	String name = auth.getName(); //get logged in username
 			

@@ -107,12 +107,12 @@
                           <div class="project_detail">
 
                             <p class="title">Budgets</p>
-                            <th:block th:each="budget, rowStat : ${project.budgets}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
+                            <th:block th:each="pbudget, rowStat : ${project.budgets}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
                             	 <table class="table table-hover">
 				                      <tbody>
 				                        <tr>
-				                          <td th:text="${budget.name}"></td>
-				                          <td th:text="'$' + ${#numbers.formatDecimal(budget.remaining_budget, 0, 'COMMA', 2, 'POINT')}"></td>
+				                          <td th:text="${pbudget.name}"></td>
+				                          <td th:text="'$' + ${#numbers.formatDecimal(pbudget.remaining_budget, 0, 'COMMA', 2, 'POINT')}"></td>
 				                        </tr>
 				                      </tbody>
 				                    </table>
@@ -122,8 +122,8 @@
                           <br />
                           
                           <div class="text-center mtop20">
-                            <a href="#" class="btn btn-sm btn-primary">Add Budget</a>
-                            <a href="#" class="btn btn-sm btn-warning">Add Quote</a>
+                            <button type="button" data-toggle="modal" data-target="#budget-modal-add" class="btn btn-sm btn-primary" th:attr="data-id=${project.id}">Add Budget</button>
+                            <button type="button" data-toggle="modal" data-target="#quote-modal-add" class="btn btn-sm btn-primary" >Add Quote</button>
                           </div>
                         </div>
 
@@ -139,12 +139,167 @@
           </div>
         </div>
         <!-- /page content -->
+        
+        <!-- Add Budget Modal Start -->
+        <form action="#" th:action="@{/budget}" th:object="${budget}" method="post">
+			<div class="modal fade" id="budget-modal-add" tabindex="-1" role="dialog" aria-labellefby="addBudget">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="addUser">Add Budget</h4>
+						</div>
+						
+						<div class="modal-body">
+								
+						<input class="form-control budget-id" type="hidden" th:field="*{project.id}" name="id"/>
+						<div class="form-group">
+                        	<label class="control-label col-md-3 col-sm-3 col-xs-12">Project Name</label>
+                        	<div class="col-md-9 col-sm-9 col-xs-12">
+                          		<input type="text" th:field="*{name}" class="form-control" />
+								<!-- ><span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</span> -->
+                        	</div>
+                      	</div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Project Description - Short</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{descriptionShort}" class="form-control" />
+							<span th:if="${#fields.hasErrors('descriptionShort')}" th:errors="*{descriptionShort}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Project Description - Long <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<textarea th:field="*{descriptionLong}" class="form-control" rows="3"></textarea>
+							<span th:if="${#fields.hasErrors('descriptionLong')}" th:errors="*{descriptionLong}">error</span>
+                        </div>
+                      </div>
+                      
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Portfolio Category</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" th:field="*{category}">
+                            <option value=""></option>
+                            <option value="datacenter">Datacenter</option>
+                            <option value="license">License</option>
+                            <option value="software">Software</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Region or Segment</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" th:field="*{region}">
+                            <option value=""></option>
+                            <option value="global">Global Corporate Strategy</option>
+                            <option value="us">US</option>
+                            <option value="emea">EMEA</option>
+                            <option value="apac">APAC</option>
+                            <option value="latam">LATAM</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Business Criticality</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" th:field="*{criticality}">
+                            <option value=""></option>
+                            <option value="lightsout">1- Lights Out</option>
+                            <option value="critical">2 - Critical</option>
+                            <option value="project">3 - Project</option>
+                          </select>
+                        </div>
+                      </div>   
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Priority Ranking</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1" th:field="*{ranking}">
+                            <option value="0"></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </select>
+                        </div>
+                      </div>          
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Amount Requested</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{requested_amount}" class="form-control" />
+							<span th:if="${#fields.hasErrors('requested_amount')}" th:errors="*{requested_amount}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Q1 Amount</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{q1}" class="form-control" />
+							<span th:if="${#fields.hasErrors('q1')}" th:errors="*{q1}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Q2 Amount</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{q2}" class="form-control" />
+							<span th:if="${#fields.hasErrors('q2')}" th:errors="*{q2}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Q3 Amount</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{q3}" class="form-control" />
+							<span th:if="${#fields.hasErrors('q3')}" th:errors="*{q3}">error</span>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Q4 Amount</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          	<input type="text" th:field="*{q3}" class="form-control" />
+							<span th:if="${#fields.hasErrors('q3')}" th:errors="*{q3}">error</span>
+                        </div>
+                      </div>
+																			
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Add</button>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			</form>
+        <!-- Add Budget Modal End -->
+        
+        <!-- Add Quote Modal Start -->
+        
+        <!-- Add Quote Modal End -->
+        
 			<!-- Page End -->
 			<th:block th:include="/layout/footer :: footer"></th:block>
 		</div>
 	</div>
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
-	    <!-- ECharts -->
+		  <script>
+		    $(document).on("click", '.add_budget',function(e) {
+				var id = $(this).data('id');				
+				$(".budget-id").val(id);
+			});
+	    </script>
+	<!-- ECharts -->
     <script>
       var theme = {
           color: [

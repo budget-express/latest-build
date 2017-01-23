@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tdavis.be.entity.Budget;
 import com.tdavis.be.entity.Project;
 import com.tdavis.be.service.BudgetService;
 import com.tdavis.be.service.ProjectService;
@@ -44,6 +45,12 @@ public class ProjectController {
 		return new Project();
 	}
 	
+	@ModelAttribute("budget")
+	public Budget bconstruct() {
+		return new Budget();
+	}
+	
+
 	@RequestMapping()
 	public String showProjects(Model model) {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
