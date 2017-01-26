@@ -4129,3 +4129,11 @@ ul.notifications {
   border: 1px solid #e5e5e5; }
 
 /** /Dropzone.js **/
+
+/**Custom**/
+.scrollable {
+	overflow-y: scroll;
+  height: 200px;
+  width: 100%;
+  position: absolute;
+}

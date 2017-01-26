@@ -89,7 +89,7 @@
 												<td th:text="${project.name}"></td>
 												<td th:text="${project.description}"></td>
 												<td th:text="${project.year}"></td>
-												<td th:text="${project.enabled}"></td>
+												<td th:text="${project.status}"></td>
 												<td class=" last"><a href="#">Edit</a></td>
 											</tr>
 										</th:block>			
@@ -185,17 +185,9 @@
 	<!-- Page End -->
 	<th:block th:include="/layout/footer :: footer"></th:block>
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
-	<!-- Initialize Project Wizard -->
-	<script>
-		$(document).ready(function() {
-		 $('#wizard').smartWizard();
-		
-		 $('.buttonNext').addClass('btn btn-success');
-		 $('.buttonPrevious').addClass('btn btn-primary');
-		});
-		
-	</script>
-	<!-- Project Wizard End -->
+
+	
+
 
 	</div>
 </body>

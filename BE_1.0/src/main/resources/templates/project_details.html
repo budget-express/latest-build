@@ -104,9 +104,10 @@
                           <p th:text="${project.description}"></p>
                           <br />
 
-                          <div class="project_detail">
+                          <div class="project_detail overflow-y: scroll; height: 200px; position: absolute;">
 
                             <p class="title">Budgets</p>
+                          
                             <th:block th:each="pbudget, rowStat : ${project.budgets}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
                             	 <table class="table table-hover">
 				                      <tbody>
@@ -117,12 +118,13 @@
 				                      </tbody>
 				                    </table>
                             </th:block>
+                           
                           </div>
 
                           <br />
                           
                           <div class="text-center mtop20">
-                            <button type="button" data-toggle="modal" data-target="#budget-modal-add" class="btn btn-sm btn-primary" th:attr="data-id=${project.id}">Add Budget</button>
+                            <button type="button" data-toggle="modal" data-target="#budget-modal-add" class="btn btn-sm btn-primary add_budget" th:attr="data-id=${project.id}">Add Budget</button>
                             <button type="button" data-toggle="modal" data-target="#quote-modal-add" class="btn btn-sm btn-primary" >Add Quote</button>
                           </div>
                         </div>
@@ -153,7 +155,7 @@
 						
 						<div class="modal-body">
 								
-						<input class="form-control budget-id" type="hidden" th:field="*{project.id}" name="id"/>
+						<input class="form-control project-id" type="text" th:field="*{project.id}" name="id" readonly="readonly" th:value="${project.id}" />
 						<div class="form-group">
                         	<label class="control-label col-md-3 col-sm-3 col-xs-12">Project Name</label>
                         	<div class="col-md-9 col-sm-9 col-xs-12">
@@ -295,8 +297,9 @@
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
 		  <script>
 		    $(document).on("click", '.add_budget',function(e) {
-				var id = $(this).data('id');				
-				$(".budget-id").val(id);
+				var id = $(this).data('id');
+				console.log(id);
+				$(".project-id").val(id);
 			});
 	    </script>
 	<!-- ECharts -->
