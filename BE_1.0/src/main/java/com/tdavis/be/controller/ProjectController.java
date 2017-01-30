@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -39,9 +40,6 @@ public class ProjectController {
 	
 	@ModelAttribute("project")
 	public Project construct() {
-		//budgetService.refresh();
-		//projectService.refresh();
-		//quoteService.refresh();
 		return new Project();
 	}
 	
@@ -53,10 +51,12 @@ public class ProjectController {
 
 	@RequestMapping()
 	public String showProjects(Model model) {
+		Page<Project> page = projectService.getProjectbyYear(1);
+				
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
-    	model.addAttribute("projects", projectService.findAll());
+    	model.addAttribute("projects", page);//projectService.findAll());
 		model.addAttribute("title", "Projects");
 		return "project";
 	}
@@ -92,12 +92,12 @@ public class ProjectController {
 
 	@RequestMapping("/list") 
 	public String listProjects(Model model) {
-		
+		Page<Project> page = projectService.getProjectbyYear(1);
 
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
-    	model.addAttribute("projects", projectService.findAll());
+    	model.addAttribute("projects", page);
 		model.addAttribute("title", "Projects");
 		return "project-list";
 	}
@@ -114,12 +114,15 @@ public class ProjectController {
 	@RequestMapping("/delete/{id}")
 	public String projectDelete(Model model, @PathVariable int id){
 		projectService.delete(id);
+		
+		Page<Project> page = projectService.getProjectbyYear(1);
+		
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
-    	model.addAttribute("projects", projectService.findAll());
+    	model.addAttribute("projects", page);
 		model.addAttribute("title", "Projects");
-		return "project-list";
+		return "project";
 	}
 	
 	@PostMapping()
@@ -128,15 +131,18 @@ public class ProjectController {
 			
 			return "project";
 		}
-		logger.info("Saving Project: "+project.getName());
+		logger.info("Saving Project: "+project.getName()+project.getYear());
 		projectService.save(project);
-		logger.info("Saved Project: "+project.getName());
+		logger.info("Saved Project: "+project.getName()+project.getYear());
+		
+		Page<Project> page = projectService.getProjectbyYear(1);
+		
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
-    	model.addAttribute("projects", projectService.findAll());
+    	model.addAttribute("projects", page);
 		model.addAttribute("title", "Projects");		
 		model.addAttribute("success", true);
-		return "project-list";
+		return "project";
 	}
 }

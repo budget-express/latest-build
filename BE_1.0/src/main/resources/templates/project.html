@@ -17,21 +17,6 @@
           		<div class="">
 					<div class="page-title">
 						
-						<div class="title_left">
-							<div class="dropdown">
-								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-									<th:body th:if="${year == null}" th:text="All"></th:body>
-									<th:body th:if="${year != null}" th:text="${year}"></th:body>
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-									<th:body th:each="link : ${links}">
-										<li><a th:href="@{/budget-details(year=${link})}" th:text="${link}"></a></li>
-									</th:body>
-								</ul>
-							</div>
-						</div>
-
 						<div class="title_right">
 							<div
 								class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
@@ -52,11 +37,10 @@
 						<div class="x_panel">
 							<div class="x_title">
 								<h2>Projects</h2>
-								<div th:if="${param.success ne null and param.success[0] eq 'true'}" class="alert alert-success">Budget Added!</div>
-						    	<ul class="nav navbar-right panel_toolbox">
+								<ul class="nav navbar-right panel_toolbox">
 						      		<li>
 						      			<!--  Modal work here for Add Project -->
-						  				<button type="button" data-toggle="modal" data-target="#project-modal" class="btn btn-default btn-sm">Add</button>
+						  				<button type="button" data-toggle="modal" data-target="#project-modal-add" class="btn btn-primary btn-sm">Add Project</button>
 									</li>
 								</ul>
 								<div class="clearfix"></div>
@@ -67,30 +51,52 @@
                     		<!-- <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p> -->
 
                     		<div class="table-responsive">
-								<table class="table table-striped jambo_table bulk_action">
+								<table class="table table-striped jambo_table">
 									<thead>
 								    	<tr class="headings">
-								      		<th><input type="checkbox" id="check-all" class="flat" /></th>
 											<th class="column-title">Project Name </th>
 											<th class="column-title">Description </th>
+											<th class="column-title">Remainging Balance</th>
 											<th class="column-title">Year</th>
 											<th class="column-title">Status</th>
 											<th class="column-title no-link last"><span class="nobr">Action</span></th>
-								      		<th class="bulk-actions" colspan="7">
-								        		<a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-								    		</th>
 							  			</tr>
 									</thead>
 
                         			<tbody>
 										<th:block th:each="project, rowStat : ${projects}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
-											<tr class="toprow pointer clickable-row" th:attr="data-href=@{/project/}, data-id=${project.id}"> <!-- Change This Odd/Even -->
-												<td class="a-center "><input type="checkbox" class="flat" name="table_records" /></td>
+											<tr class="toprow pointer" th:attr="data-href=@{/project/}, data-id=${project.id}"> <!-- Change This Odd/Even -->
 												<td th:text="${project.name}"></td>
 												<td th:text="${project.description}"></td>
+												<td th:text="${project.approved_budget-project.spent_budget}"></td>
 												<td th:text="${project.year}"></td>
-												<td th:text="${project.status}"></td>
-												<td class=" last"><a href="#">Edit</a></td>
+												<td>
+						                          	<div th:switch="${project.status}">
+						                            	<button th:case="'Open'" type="button" class="btn btn-success btn-xs">Open</button>
+						                            	<button th:case="'Closed'" type="button" class="btn btn-secondary btn-xs">Closed</button>
+						                            	<button th:case="'Planning'" type="button" class="btn btn-warning btn-xs">Planning</button>
+						                            </div>
+												</td>
+												<td class=" last">
+													<a th:href="@{/project/}+${project.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+													<a  data-toggle="modal" href="#project-modal-edit" class="btn btn-info btn-xs popProject" sec:authorize="hasAuthority('ROLE_ADMIN')" 
+														th:attr="data-id=${project.id},
+														data-name=${project.name},
+														data-description=${project.description},
+														data-status=${project.status},
+														data-type=${project.type},
+														data-year=${project.year}">
+														<i class=" fa fa-pencil"></i>Edit
+													</a>
+													<a data-toggle="modal" href="#project-modal-delete" class="btn btn-danger btn-xs popProject" sec:authorize="hasAuthority('ROLE_ADMIN')"
+													   th:attr="data-id=${project.id},
+													   data-name=${project.name},
+													   data-description=${project.description},
+													   data-status=${project.status},
+													   data-type=${project.type},
+													   data-year=${project.year}">
+													  <i class="fa fa-trash-o"></i> Delete </a>
+												</td>
 											</tr>
 										</th:block>			
 									</tbody>
@@ -101,91 +107,193 @@
    				</div>
 			</div>
 		</div>
-
-		<!-- Project Wizard Start -->
-		
-		<!-- Wizard Modal Start -->		
-		<div class="modal fade" id="project-modal" tabindex="-1" role="dialog" aria-labellefby="addProject">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">	
-					
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="addProject">Project</h4>
-					</div>
+	</div>
+	<!-- Project-Modal-Add Start -->
+		<form action="#" th:action="@{/project}" th:object="${project}" method="post">
+			<div class="modal fade" id="project-modal-add" tabindex="-1" role="dialog" aria-labellefby="addProject">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="addUser">Add Project</h4>
+						</div>
 						
-					<div class="modal-body">
-						<div class="row">
-              				<div class="col-md-12 col-sm-12 col-xs-12">
-                				<div class="x_panel">
-                  					
-				                   		<div id="wizard" class="form_wizard wizard_horizontal">
-				             				<ul class="wizard_steps">
-				               					<li>
-													<a href="#step-1">
-												    	<span class="step_no">1</span><span class="step_descr">Step 1<br /><small>Details</small></span>
-				  									</a>
-												</li>
-				               					<li>
-				                 					<a href="#step-2">
-				                 						<span class="step_no">2</span><span class="step_descr">Step 2<br /><small>Budgets</small></span>
-				                					</a>
-								                </li>
-								                <li>
-				                 					<a href="#step-3">
-				                   						<span class="step_no">3</span><span class="step_descr">Step 3<br /><small>Complete</small></span>
-				                 					</a>
-				                  				</li>
-				       						</ul>
-				                     
-				                     		<form class="form-horizontal form-label-left" action="#" th:action="@{project}" th:object="${project}" method="post">
-				                     			<div id="step-1">
-				                         				
-			                         				<div class="form-group">
-				                           				<label class="control-label col-md-3 col-sm-3 col-xs-12" for="project-name">Name <span class="required">*</span></label>
-				                           				<div class="col-md-6 col-sm-6 col-xs-12">
-				                             					<input type="text" th:field="*{name}" id="project-name" required="required" class="form-control col-md-7 col-xs-12"/>
-			                           					</div>
-			                         				</div>
-				                         				
-			                         				<div class="form-group">
-				                           				<label class="control-label col-md-3 col-sm-3 col-xs-12" for="project-description">Description <span class="required">*</span></label>
-				                           				<div class="col-md-6 col-sm-6 col-xs-12">
-				                             					<input type="text" th:field="*{description}" id="project-description" required="required" class="form-control col-md-7 col-xs-12"/>
-			                           					</div>
-			                         				</div>
-				                         				
-			                         				<div class="form-group">
-				                           				<label class="control-label col-md-3 col-sm-3 col-xs-12" for="project-year">Year <span class="required">*</span></label>
-				                           				<div class="col-md-6 col-sm-6 col-xs-12">
-				                            					<input type="text" th:field="*{Year}" id="project-year" required="required" class="form-control col-md-7 col-xs-12"/>
-			                           					</div>
-			                         				</div>
-												</div>
-							                      
-							                    <div id="step-2">
-							                    	<h2 class="StepTitle">Step 2 Content</h2>
-												</div>
-							 
-						                    	<div id="step-3">
-							                    	<h2 class="StepTitle">Step 3 Content</h2>
-														<button type="submit" class="btn btn-primary">Add</button>
-							                    </div>									
-											</form>
-										</div>
-									
-								</div>
-							</div>
+						<div class="modal-body">
+
+							<label for="projectName">Name:</label>
+							<input type="text" th:field="*{name}" id="userName" class="form-control" />
+							
+							<label for="projectDescription">Description:</label>
+							<input type="text" th:field="*{description}" id="projectDescription" class="form-control" />
+							
+							<label for="projectYear">Year:</label>
+							<input type="text" th:field="*{year}" id="projectYear" class="form-control" />
+							
+							<label for="projectStatus">Status:</label>
+							<select th:field="*{status}" id="projectStatus" class="form-control">
+		                        <option value="">Choose..</option>
+		                        <option value="Planning">Planning</option>
+		                        <option value="Open">Open</option>
+		                        <option value="Closed">Closed</option>
+	                        </select>
+										
+							<label for="projectType" class="control-label">Type:</label>
+	                        <select th:field="*{type}" id="projectType" class="form-control">
+		                        <option value="">Choose..</option>
+		                        <option value="Infrastructure">Infrastructure</option>
+		                        <option value="Project">Project</option>
+		                        <option value="Special">Special</option>
+	                        </select>
+																			
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Add</button>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
+		</form>
+	<!-- Project-Modal-Add End -->
+	<!-- Project-Modal-Edit Start -->
+		<form action="#" th:action="@{/project}" th:object="${project}" method="post">
+			<div class="modal fade" id="project-modal-edit" tabindex="-1" role="dialog" aria-labellefby="editProject">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="addUser">Edit Project</h4>
+						</div>
+						
+						<div class="modal-body">
+
+							<input class="form-control project-id" type="hidden" th:field="*{id}" name="id"/>
+
+							<label for="projectName">Name:</label>
+							<input type="text" th:field="*{name}" id="userName" class="form-control project-name" />
+							
+							<label for="projectDescription">Description:</label>
+							<input type="text" th:field="*{description}" id="projectDescription" class="form-control project-description" />
+							
+							<label for="projectYear">Year:</label>
+							<input type="text" th:field="*{year}" id="projectYear" class="form-control project-year" />
+							
+							<label for="projectStatus">Status:</label>
+							<select th:field="*{status}" id="projectStatus" class="form-control project-status">
+		                        <option value="">Choose..</option>
+		                        <option value="Planning">Planning</option>
+		                        <option value="Open">Open</option>
+		                        <option value="Closed">Closed</option>
+	                        </select>
+										
+							<label for="projectType" class="control-label">Type:</label>
+	                        <select th:field="*{type}" id="projectType" class="form-control project-type">
+		                        <option value="">Choose..</option>
+		                        <option value="Infrastructure">Infrastructure</option>
+		                        <option value="Project">Project</option>
+		                        <option value="Special">Special</option>
+	                        </select>
+																			
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	<!-- Project-Modal-Edit End -->
+	<!-- Project-Modal-Delete Start -->
+		
+			<div class="modal fade" id="project-modal-delete" tabindex="-1" role="dialog" aria-labellefby="deleteProject">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="bg-danger" id="addUser">Delete Project</h4>
+							</div>
+							
+							<div class="modal-body">
+	
+								<input class="form-control project-id" type="hidden" name="id" disabled="true"/>
+	
+								<label for="projectName">Name:</label>
+								<input type="text" class="form-control project-name" disabled="true"/>
+								
+								<label for="projectDescription">Description:</label>
+								<input type="text" id="projectDescription" class="form-control project-description" disabled="true"/>
+								
+								<label for="projectYear">Year:</label>
+								<input type="text" id="projectYear" class="form-control project-year" disabled="true"/>
+								
+								<label for="projectStatus">Status:</label>
+								<select id="projectStatus" class="form-control project-status" disabled="true">
+			                        <option value="">Choose..</option>
+			                        <option value="Planning">Planning</option>
+			                        <option value="Open">Open</option>
+			                        <option value="Closed">Closed</option>
+		                        </select>
+											
+								<label for="projectType" class="control-label">Type:</label>
+		                        <select id="projectType" class="form-control project-type" disabled="true">
+			                        <option value="">Choose..</option>
+			                        <option value="Infrastructure">Infrastructure</option>
+			                        <option value="Project">Project</option>
+			                        <option value="Special">Special</option>
+		                        </select>
+																				
+							</div>
+							
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-danger delete-button">Delete</button>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+	<!-- Project-Modal-Delete End -->
+	
+	
+	
 	<!-- Page End -->
 	<th:block th:include="/layout/footer :: footer"></th:block>
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
+		<!-- Populate Project Start -->
+	    <script>
+	    	var id;
+		    $(document).on("click", '.popProject',function(e) {
+				id = $(this).data('id');
+				var name = $(this).data('name');
+				var description = $(this).data('description');
+				var status = $(this).data('status');
+				var type = $(this).data('type');
+				var year = $(this).data('year');
 
+				console.log(year);
+
+				$(".project-id").val(id);
+				$(".project-name").val(name);
+				$(".project-description").val(description);
+				$(".project-status").val(status);
+				$(".project-type").val(type);
+				$(".project-year").val(year);
+
+				
+			});
+	    </script>
+	    <!-- Populate Project End -->
+	    <!-- Delete Project Start  -->
+	    <script>
+	    	$(document).on("click", '.delete-button',function(e) {
+	    		location.href = "/project/delete/"+id;
+	    	});
+	    </script>
+	    <!-- Delete Project End -->
+	    
 	
 
 

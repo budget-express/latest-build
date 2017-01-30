@@ -8,10 +8,13 @@ import java.util.Date;
 
 import javax.transaction.Transactional;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,9 @@ public class ProjectService {
 		private final Logger logger = LoggerFactory.getLogger(this.getClass());
 		
 		private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		
+		private static final int PAGE_SIZE = 20;
+		
 	
 		@Autowired
 		private ProjectRepository projectRepository;
@@ -47,6 +53,11 @@ public class ProjectService {
 		
 		public Project findById(int id){
 			return projectRepository.findById(id);
+		}
+		
+		public Page<Project> getProjectbyYear(Integer pageNumber){
+			PageRequest pageable = new PageRequest(pageNumber -1, PAGE_SIZE, Sort.Direction.DESC, "Year");
+			return projectRepository.findAll(pageable);
 		}
 		
 		public void save(Project project) {
@@ -114,8 +125,10 @@ public class ProjectService {
 			}
 		}
 		
+		@PreAuthorize("hasRole('ROLE_ADMIN')")
 		public void delete(int id) {
 			projectRepository.delete(findById(id));
+			
 		}
 		
 }

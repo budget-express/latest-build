@@ -22,7 +22,7 @@ public class Project {
 	
 	private boolean enabled;
 	
-	private String Year;
+	private String year;
 	
 	private double requested_budget;
 	
@@ -84,11 +84,11 @@ public class Project {
 	}
 
 	public String getYear() {
-		return Year;
+		return year;
 	}
 
 	public void setYear(String year) {
-		Year = year;
+		this.year = year;
 	}
 
 	public List<Budget> getBudgets() {
