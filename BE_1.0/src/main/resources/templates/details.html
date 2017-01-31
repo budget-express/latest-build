@@ -36,8 +36,6 @@
 						<div class="x_panel">
 							<div class="x_title">
 								<h2><th:body th:text="${project.name}"></th:body></h2>
-								<div th:if="${param.success ne null and param.success[0] eq 'true'}" class="alert alert-success">Budget Added!</div>
-						    	
 								<div class="clearfix"></div>
 							</div>
 
@@ -46,7 +44,7 @@
                     		<!-- <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p> -->
 
                     		<div class="table-responsive">
-								<table class="table table-striped jambo_table bulk_action">
+								<table class="table table-striped jambo_table">
 									<thead>
 								    	<tr class="headings">
 											<th class="column-title">Project Name </th>
@@ -61,7 +59,13 @@
 												<td th:text="${project.name}"></td>
 											<td th:text="${project.description}"></td>
 											<td th:text="${project.year}"></td>
-											<td th:text="${project.enabled}"></td>
+											<td>
+					                          	<div th:switch="${project.status}">
+					                            	<button th:case="'Open'" type="button" class="btn btn-success btn-xs">Open</button>
+					                            	<button th:case="'Closed'" type="button" class="btn btn-secondary btn-xs">Closed</button>
+					                            	<button th:case="'Planning'" type="button" class="btn btn-warning btn-xs">Planning</button>
+					                            </div>
+											</td>
 										</tr>			
 									</tbody>
            						</table>
@@ -82,26 +86,49 @@
 							    	<thead>
 							        	<tr class="headings">
 									    	<th class="column-title">Budget Name </th>
-					                       	<th class="column-title">Description - Short </th>
+					                       	<th class="column-title">Description</th>
 											<th class="column-title">Amount Requested</th>
 											<th class="column-title">Amount Approved</th>
-											<th class="column-title">Q1</th>
-											<th class="column-title">Q2</th>
-											<th class="column-title">Q3</th>
-											<th class="column-title">Q4</th>
+											<th class="column-title">Region</th>
+											<th class="column-title">Status</th>
+											<th class="column-title">Action</th>
 										</tr>
 						            </thead>
 									<tbody>
 										<th:block th:each="budget, rowStat : ${project.budgets}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
-											<tr class="toprow pointer clickable-row" th:attr="data-href=@{/budget/}, data-id=${budget.id}">
+											<tr class="toprow pointer">
 												<td th:text="${budget.name}"></td>
 												<td th:text="${budget.descriptionShort}"></td>				
 												<td>$ <span th:text="${#numbers.formatDecimal(budget.requested_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
 												<td>$ <span th:text="${#numbers.formatDecimal(budget.approved_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
-												<td>$ <span th:text="${#numbers.formatDecimal(budget.q1, 0, 'COMMA', 2, 'POINT')}"></span></td>
-												<td>$ <span th:text="${#numbers.formatDecimal(budget.q2, 0, 'COMMA', 2, 'POINT')}"></span></td>
-												<td>$ <span th:text="${#numbers.formatDecimal(budget.q3, 0, 'COMMA', 2, 'POINT')}"></span></td>
-												<td>$ <span th:text="${#numbers.formatDecimal(budget.q4, 0, 'COMMA', 2, 'POINT')}"></span></td>
+												<td th:text="${budget.region}"></td>
+												<td>
+						                          	<div th:switch="${budget.status}">
+						                            	<button th:case="'Open'" type="button" class="btn btn-success btn-xs">Open</button>
+						                            	<button th:case="'Closed'" type="button" class="btn btn-secondary btn-xs">Closed</button>
+						                            	<button th:case="'Planning'" type="button" class="btn btn-warning btn-xs">Planning</button>
+						                            </div>
+												</td>
+												<td class=" last">
+													<a th:href="@{/budget/}+${budget.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+													<a  data-toggle="modal" href="#budget-modal-edit" class="btn btn-info btn-xs popProject" sec:authorize="hasAuthority('ROLE_ADMIN')" 
+														th:attr="data-id=${project.id},
+														data-name=${project.name},
+														data-description=${project.description},
+														data-status=${project.status},
+														data-type=${project.type},
+														data-year=${project.year}">
+														<i class=" fa fa-pencil"></i>Edit
+													</a>
+													<a data-toggle="modal" href="#budget-modal-delete" class="btn btn-danger btn-xs popProject" sec:authorize="hasAuthority('ROLE_ADMIN')"
+													   th:attr="data-id=${project.id},
+													   data-name=${project.name},
+													   data-description=${project.description},
+													   data-status=${project.status},
+													   data-type=${project.type},
+													   data-year=${project.year}">
+													  <i class="fa fa-trash-o"></i> Delete </a>
+												</td>
 											</tr>
 										</th:block>			
 									</tbody>
