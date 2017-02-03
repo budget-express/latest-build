@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<head>
+	<th:block th:include="/layout/header :: header-meta"></th:block>
+</head>
+
+<body class="nav-md">
+	<div class="container body">
+		<div class="main_container">
+			<th:block th:include="/layout/side_nav :: side_nav"></th:block>
+			<th:block th:include="/layout/top_nav :: top_nav"></th:block>
+			
+			<!-- Page Start -->
+			<div class="right_col" role="main">
+          		<div class="">
+					
+					<div class="page-title">	
+						<div class="title_right">
+							<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+								<div class="input-group">
+									<input type="text" class="form-control"	placeholder="Search for..." /> 
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button">Go!</button>
+										</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="clearfix"></div>
+					<div class="clearfix"></div>
+
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2><th:body th:text="${project.name}"></th:body></h2>
+								<div class="clearfix"></div>
+							</div>
+
+                  			<div class="x_content">
+
+                    		<div class="table-responsive">
+								<table class="table table-striped jambo_table">
+									<thead>
+								    	<tr class="headings">
+											<th class="column-title">Project Name </th>
+											<th class="column-title">Description </th>
+											<th class="column-title">Year</th>
+											<th class="column-title">Status</th>
+							  			</tr>
+									</thead>
+
+                        			<tbody>
+										<tr class="toprow pointer"> 
+												<td th:text="${project.name}"></td>
+											<td th:text="${project.description}"></td>
+											<td th:text="${project.year}"></td>
+											<td>
+					                          	<div th:switch="${project.status}">
+					                            	<button th:case="'Open'" type="button" class="btn btn-success btn-xs">Open</button>
+					                            	<button th:case="'Closed'" type="button" class="btn btn-secondary btn-xs">Closed</button>
+					                            	<button th:case="'Planning'" type="button" class="btn btn-warning btn-xs">Planning</button>
+					                            </div>
+											</td>
+										</tr>			
+									</tbody>
+           						</table>
+       						</div>
+       					</div>
+   					</div>
+   				</div>
+   					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2><th:body th:text="${project.name}+' - Budgets'"></th:body></h2>
+								<div class="clearfix"></div>
+							</div>
+
+                  			<div class="x_content">
+							<div class="table-responsive">
+								<table class="table table-striped jambo_table bulk_action">
+							    	<thead>
+							        	<tr class="headings">
+									    	<th class="column-title">Budget Name </th>
+					                       	<th class="column-title">Description</th>
+											<th class="column-title">Amount Requested</th>
+											<th class="column-title">Amount Approved</th>
+											<th class="column-title">Region</th>
+											<th class="column-title">Status</th>
+											<th class="column-title">Action</th>
+										</tr>
+						            </thead>
+									<tbody>
+										<th:block th:each="budget, rowStat : ${project.budgets}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
+											<tr class="toprow pointer">
+												<td th:text="${budget.name}"></td>
+												<td th:text="${budget.descriptionShort}"></td>				
+												<td>$ <span th:text="${#numbers.formatDecimal(budget.requested_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+												<td>$ <span th:text="${#numbers.formatDecimal(budget.approved_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+												<td th:text="${budget.region}"></td>
+												<td>
+						                          	<div th:switch="${budget.status}">
+						                            	<button th:case="'Open'" type="button" class="btn btn-success btn-xs">Open</button>
+						                            	<button th:case="'Closed'" type="button" class="btn btn-secondary btn-xs">Closed</button>
+						                            	<button th:case="'Planning'" type="button" class="btn btn-warning btn-xs">Planning</button>
+						                            </div>
+												</td>
+												<td class=" last">
+													<a th:href="@{/budget/}+${budget.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+													<a  data-toggle="modal" href="#budget-modal-edit" class="btn btn-info btn-xs popProject" sec:authorize="hasAuthority('ROLE_ADMIN')" 
+														th:attr="data-id=${project.id},
+														data-name=${project.name},
+														data-description=${project.description},
+														data-status=${project.status},
+														data-type=${project.type},
+														data-year=${project.year}">
+														<i class=" fa fa-pencil"></i>Edit
+													</a>
+													<a data-toggle="modal" href="#budget-modal-delete" class="btn btn-danger btn-xs popProject" sec:authorize="hasAuthority('ROLE_ADMIN')"
+													   th:attr="data-id=${project.id},
+													   data-name=${project.name},
+													   data-description=${project.description},
+													   data-status=${project.status},
+													   data-type=${project.type},
+													   data-year=${project.year}">
+													  <i class="fa fa-trash-o"></i> Delete </a>
+												</td>
+											</tr>
+										</th:block>			
+									</tbody>
+						       	</table>
+						    </div>
+                    		
+       					</div>
+   					</div>
+   				</div>
+			</div>
+		</div>
+	</div>
+									
+	<!-- Page End -->
+	<th:block th:include="/layout/footer :: footer"></th:block>
+	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
+	
+	</div>
+</body>
+</html>
+
+
+

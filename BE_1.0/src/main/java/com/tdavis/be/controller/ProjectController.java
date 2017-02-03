@@ -44,11 +44,11 @@ public class ProjectController {
 	}
 	
 	@ModelAttribute("budget")
-	public Budget bconstruct() {
+		public Budget bconstruct() {
 		return new Budget();
 	}
 	
-
+	//1-Project List - Admin
 	@RequestMapping()
 	public String showProjects(Model model) {
 		Page<Project> page = projectService.getProjectbyYear(1);
@@ -61,6 +61,7 @@ public class ProjectController {
 		return "project";
 	}
 	
+	//1-Project List - Admin Details
 	@RequestMapping("/{id}")
 	public String ShowProjectDetails(Model model, @PathVariable String id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -68,9 +69,23 @@ public class ProjectController {
     	model.addAttribute("username", name);
     	model.addAttribute("project", projectService.findById(Integer.parseInt(id)));
     	model.addAttribute("title", "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
-		return "details";
+		return "project-details";
 	}
 	
+	//2-Project List
+	@RequestMapping("/list") 
+	public String listProjects(Model model) {
+		Page<Project> page = projectService.getProjectbyYear(1);
+
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String name = auth.getName(); //get logged in username
+    	model.addAttribute("username", name);
+    	model.addAttribute("projects", page);
+		model.addAttribute("title", "Projects");
+		return "project-list";
+	}
+	
+	//2-Project List - View Details
 	@RequestMapping("/details/{id}")
 	public String projectDetails(Model model, @PathVariable String id) {
 		//int id = 1;
@@ -89,20 +104,9 @@ public class ProjectController {
 		model.addAttribute("title", "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
 		return "project_details";
 	}
-
-	@RequestMapping("/list") 
-	public String listProjects(Model model) {
-		Page<Project> page = projectService.getProjectbyYear(1);
-
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	model.addAttribute("username", name);
-    	model.addAttribute("projects", page);
-		model.addAttribute("title", "Projects");
-		return "project-list";
-	}
 	
 	
+	//Update Calculations
 	@RequestMapping("/refresh") 
 	public String projectRefresh(Model model) {
 		budgetService.refresh();
@@ -111,6 +115,7 @@ public class ProjectController {
 		return "index";
 	}
 	
+	//Delete Project
 	@RequestMapping("/delete/{id}")
 	public String projectDelete(Model model, @PathVariable int id){
 		projectService.delete(id);
@@ -125,6 +130,7 @@ public class ProjectController {
 		return "project";
 	}
 	
+	//Add Project
 	@PostMapping()
 	public String saveUser(@ModelAttribute @Valid Project project, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
