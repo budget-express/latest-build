@@ -67,7 +67,7 @@ public class ProjectController {
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
     	model.addAttribute("project", projectService.findById(Integer.parseInt(id)));
-		model.addAttribute("title", "Project");
+    	model.addAttribute("title", "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
 		return "details";
 	}
 	
