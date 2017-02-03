@@ -116,6 +116,7 @@ public class ProjectService {
 			
 			historyRepository.save(history);
 			projectRepository.save(project);
+			logger.info("Saved Project");
 		}
 		
 		public void refresh() {

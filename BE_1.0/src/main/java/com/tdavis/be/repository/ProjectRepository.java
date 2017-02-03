@@ -7,7 +7,7 @@ import com.tdavis.be.entity.Project;
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
 	Project findByName(String name);
 	
-	Project findById(int id);
+	Project findById(Integer id);
 	
 	
 }

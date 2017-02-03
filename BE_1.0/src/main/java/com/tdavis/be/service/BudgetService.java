@@ -110,6 +110,7 @@ public class BudgetService {
 			
 			budgetRepository.save(budget);
 			historyRepository.save(history);
+			logger.info("Saved Budget");
 		}
 		
 		public Budget findById(int id){

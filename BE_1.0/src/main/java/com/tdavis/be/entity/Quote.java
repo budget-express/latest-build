@@ -1,6 +1,5 @@
 package com.tdavis.be.entity;
 
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

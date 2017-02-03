@@ -9,5 +9,5 @@ import com.tdavis.be.entity.Budget;
 public interface BudgetRepository extends JpaRepository<Budget, Integer> {
 	Budget findByName(String name);
 	
-	Budget findById(int id);
+	Budget findById(Integer id);
 }
