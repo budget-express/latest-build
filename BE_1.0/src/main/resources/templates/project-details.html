@@ -75,6 +75,12 @@
 						<div class="x_panel">
 							<div class="x_title">
 								<h2><th:body th:text="${project.name}+' - Budgets'"></th:body></h2>
+								<ul class="nav navbar-right panel_toolbox">
+						      		<li>
+						      			<!--  Modal work here for Add Project -->
+						  				<button type="button" data-toggle="modal" data-target="#budget-modal-add" class="btn btn-primary btn-sm">Add Budget</button>
+									</li>
+								</ul>
 								<div class="clearfix"></div>
 							</div>
 
@@ -139,7 +145,54 @@
 			</div>
 		</div>
 	</div>
+	<!-- budget-Modal-Add Start -->
+		<form action="#" th:action="@{/budget}" th:object="${budget}" method="post">
+			<div class="modal fade" id="budget-modal-add" tabindex="-1" role="dialog" aria-labellefby="addBudget">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="addUser">Add Budget</h4>
+						</div>
+						
+						<div class="modal-body">
+							<div class="container col-md-12">
+								<div class="row">
 									
+										<div class="col-md-4">
+											<!-- sidebar menu -->
+											<ul class="nav nav-pills nav-stacked" role="tablist">
+											    <li class="active"><a href="#">Profile</a></li>
+											    <li><a href="#">Details</a></li>
+											    <li><a href="#">Finish</a></li>        
+											  </ul>
+											<!-- /sidebar menu -->
+										</div>
+										<div class="col-md-8">
+											<input class="form-control project-id" type="hidden" th:field="*{project.id}" name="id" readonly="readonly" th:value="${project.id}" />
+											<br />
+											<div class="form-group">
+					                        	<label class="control-label col-md-3 col-sm-3 col-xs-12">Budget Name</label>
+					                        	<div class="col-md-9 col-sm-9 col-xs-12">
+					                          		<input type="text" th:field="*{name}" class="form-control" />
+													<!-- ><span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</span> -->
+					                        	</div>
+					                      	</div>
+										</div>
+								
+								</div>
+							</div>						
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Add</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	<!-- Budget-Modal-Add End -->								
 	<!-- Page End -->
 	<th:block th:include="/layout/footer :: footer"></th:block>
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
