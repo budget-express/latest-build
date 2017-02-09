@@ -18,15 +18,21 @@ public class Budget {
 	@GeneratedValue
 	private Integer id;
 
+	//Profile 
 	private String name;
     private String descriptionShort;
     private String descriptionLong;
+    private String year;
+    private String budget_code;
+    
+    //Details
+    private String status;
     private String category;
     private String region;
     private String criticality;
     private int ranking;
-    private double requested_amount;
-    private double approved_amount;
+    
+    //Breakout
     private double q1;
     private boolean q1_enabled;
     private double q2;
@@ -35,16 +41,25 @@ public class Budget {
     private boolean q3_enabled;
     private double q4;
     private boolean q4_enabled;
-    private String year;
+    
+    //Variables
     private double quote_spent;
     private double quote_pending;
     private double quote_staged;
     private double remaining_budget;
-    private String budget_code;
-    private String status;
+    private double requested_amount;
+    private double approved_amount;
+    
+    //Timestamp
     private String created;
     private String edited;
-	
+    //private String date_open; 
+    //private String date_closed;
+    //private String date_q1_enabled;
+    //private String date_q2_enabled;
+    //private String date_q3_enabled;
+    //private String date_q4_enabled;
+    
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
 	private Project project;

@@ -156,32 +156,58 @@
 						</div>
 						
 						<div class="modal-body">
-							<div class="container col-md-12">
-								<div class="row">
-									
-										<div class="col-md-4">
-											<!-- sidebar menu -->
-											<ul class="nav nav-pills nav-stacked" role="tablist">
-											    <li class="active"><a href="#">Profile</a></li>
-											    <li><a href="#">Details</a></li>
-											    <li><a href="#">Finish</a></li>        
-											  </ul>
-											<!-- /sidebar menu -->
-										</div>
-										<div class="col-md-8">
-											<input class="form-control project-id" type="hidden" th:field="*{project.id}" name="id" readonly="readonly" th:value="${project.id}" />
-											<br />
-											<div class="form-group">
-					                        	<label class="control-label col-md-3 col-sm-3 col-xs-12">Budget Name</label>
-					                        	<div class="col-md-9 col-sm-9 col-xs-12">
-					                          		<input type="text" th:field="*{name}" class="form-control" />
-													<!-- ><span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</span> -->
-					                        	</div>
-					                      	</div>
-										</div>
+						
+							<ul class="nav nav-pills nav-stacked col-md-2">
+							  <li class="active"><a href="#tab_a" data-toggle="pill">Profile</a></li>
+							  <li><a href="#tab_b" data-toggle="pill">Details</a></li>
+							  <li><a href="#tab_c" data-toggle="pill">Breakout</a></li>
+							  <li><a href="#tab_d" data-toggle="pill">Finish</a></li>
+							</ul>
+							
+							<div class="tab-content col-md-10">
 								
-								</div>
-							</div>						
+								<div class="tab-pane active" id="tab_a">
+							    	<div class="form-group">
+				                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Budget Name</label>
+				                        <div class="col-md-9 col-sm-9 col-xs-12">
+				                          	<input type="text" th:field="*{name}" class="form-control" />
+											<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</span>
+				                        </div>
+				                      </div>
+				                      
+				                      <div class="form-group">
+				                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Budget Description - Short</label>
+				                        <div class="col-md-9 col-sm-9 col-xs-12">
+				                          	<input type="text" th:field="*{descriptionShort}" class="form-control" />
+											<span th:if="${#fields.hasErrors('descriptionShort')}" th:errors="*{descriptionShort}">error</span>
+				                        </div>
+				                      </div>
+				                      
+				                      <div class="form-group">
+				                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Budget Description - Long <span class="required">*</span>
+				                        </label>
+				                        <div class="col-md-9 col-sm-9 col-xs-12">
+				                          	<textarea th:field="*{descriptionLong}" class="form-control" rows="3"></textarea>
+											<span th:if="${#fields.hasErrors('descriptionLong')}" th:errors="*{descriptionLong}">error</span>
+				                        </div>
+				                      </div>    
+							    </div>
+							        <div class="tab-pane" id="tab_b">
+							             <h4>Pane B</h4>
+							            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames
+							                ac turpis egestas.</p>
+							        </div>
+							        <div class="tab-pane" id="tab_c">
+							             <h4>Pane C</h4>
+							            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames
+							                ac turpis egestas.</p>
+							        </div>
+							        <div class="tab-pane" id="tab_d">
+							             <h4>Pane D</h4>
+							            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames
+							                ac turpis egestas.</p>
+							        </div>
+							</div><!-- tab content -->				
 						</div>
 						
 						<div class="modal-footer">
