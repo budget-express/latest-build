@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tdavis.be.entity.Budget;
+import com.tdavis.be.entity.Project;
+import com.tdavis.be.repository.ProjectRepository;
 import com.tdavis.be.service.BudgetService;
 import com.tdavis.be.service.ProjectService;
 
@@ -45,6 +48,25 @@ public class BudgetController {
 		return "budget";
 	}
 	
+	@RequestMapping("/delete/{id}")
+	public String deleteBudget (Model model, @PathVariable int id) {
+		Project project = budgetService.findById(id).getProject();
+		int project_id = project.getId();
+		
+		budgetService.delete(id);
+		projectService.save(project);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String name = auth.getName(); //get logged in username
+    	model.addAttribute("username", name);
+    	model.addAttribute("project", projectService.findById(project_id));
+    	model.addAttribute("title", "Project Details -" + projectService.findById(project_id).getName());
+		
+		
+		
+		return "project-details";
+	}
+	
 	@PostMapping()
 	public String saveBudget(@ModelAttribute @Valid Budget budget, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
@@ -54,7 +76,7 @@ public class BudgetController {
 		int id = budget.getProject().getId();
 		logger.info("id= " +id);
 		budgetService.save(budget);
-		
+			
 		double approved = projectService.findById(id).getApproved_budget();
 		double spent = projectService.findById(id).getSpent_budget();
 		double balance = 0;
@@ -69,6 +91,6 @@ public class BudgetController {
 		model.addAttribute("spent",balance);
 		model.addAttribute("success", true);
 		//Change to budget-detail when built
-		return "project_details";
+		return "project-details";
 	}
 }

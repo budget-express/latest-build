@@ -78,7 +78,7 @@
 								<ul class="nav navbar-right panel_toolbox">
 						      		<li>
 						      			<!--  Modal work here for Add Project -->
-						  				<button type="button" data-toggle="modal" data-target="#budget-modal-add" class="btn btn-primary btn-sm">Add Budget</button>
+						  				<button type="button" data-toggle="modal" data-target="#budget-modal-add" class="btn btn-primary btn-sm add_budget" th:attr="data-id=${project.id},data-year=${project.year}">Add Budget</button>
 									</li>
 								</ul>
 								<div class="clearfix"></div>
@@ -157,56 +157,111 @@
 						
 						<div class="modal-body">
 						
+							<input class="form-control project-id" type="hidden" th:field="*{project.id}" name="id" readonly="readonly" th:value="${project.id}" />
+						
 							<ul class="nav nav-pills nav-stacked col-md-2">
-							  <li class="active"><a href="#tab_a" data-toggle="pill">Profile</a></li>
-							  <li><a href="#tab_b" data-toggle="pill">Details</a></li>
-							  <li><a href="#tab_c" data-toggle="pill">Breakout</a></li>
-							  <li><a href="#tab_d" data-toggle="pill">Finish</a></li>
+							  <li class="active"><a href="#tab_profile" data-toggle="pill">Profile</a></li>
+							  <li><a href="#tab_details" data-toggle="pill">Details</a></li>
+							  <li><a href="#tab_breakout" data-toggle="pill">Breakout</a></li>
 							</ul>
 							
 							<div class="tab-content col-md-10">
 								
-								<div class="tab-pane active" id="tab_a">
-							    	<div class="form-group">
-				                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Budget Name</label>
-				                        <div class="col-md-9 col-sm-9 col-xs-12">
-				                          	<input type="text" th:field="*{name}" class="form-control" />
-											<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</span>
-				                        </div>
-				                      </div>
-				                      
-				                      <div class="form-group">
-				                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Budget Description - Short</label>
-				                        <div class="col-md-9 col-sm-9 col-xs-12">
-				                          	<input type="text" th:field="*{descriptionShort}" class="form-control" />
-											<span th:if="${#fields.hasErrors('descriptionShort')}" th:errors="*{descriptionShort}">error</span>
-				                        </div>
-				                      </div>
-				                      
-				                      <div class="form-group">
-				                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Budget Description - Long <span class="required">*</span>
-				                        </label>
-				                        <div class="col-md-9 col-sm-9 col-xs-12">
-				                          	<textarea th:field="*{descriptionLong}" class="form-control" rows="3"></textarea>
-											<span th:if="${#fields.hasErrors('descriptionLong')}" th:errors="*{descriptionLong}">error</span>
-				                        </div>
-				                      </div>    
+								<div class="tab-pane active" id="tab_profile">
+							    	<label for="budgetName">Name:</label>
+									<input type="text" th:field="*{name}" id="budgetName" class="form-control" />
+									
+									<label for="budgetDescriptionShort">Short Description:</label>
+									<input type="text" th:field="*{descriptionShort}" id="budgetDescriptionShort" class="form-control" />
+									
+									<label for="budgetDescriptionLong">Long Description:</label>
+									<textarea style="resize:none" th:field="*{descriptionLong}" class="form-control" rows="3" id="budgetDescriptionLong"></textarea>
+									
+									<label for="budgetYear">Year:</label>
+									<input type="text" th:field="*{year}" id="budgetYear" class="form-control project-year" name="year" readonly="readonly" th:value="${project.year}" />
+									
+									<label for="budgetCode">Budget Code:</label>
+									<input type="text" th:field="*{budget_code}" id="budgetCode" class="form-control" />
+									<br />
+									
 							    </div>
-							        <div class="tab-pane" id="tab_b">
-							             <h4>Pane B</h4>
-							            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames
-							                ac turpis egestas.</p>
-							        </div>
-							        <div class="tab-pane" id="tab_c">
-							             <h4>Pane C</h4>
-							            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames
-							                ac turpis egestas.</p>
-							        </div>
-							        <div class="tab-pane" id="tab_d">
-							             <h4>Pane D</h4>
-							            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames
-							                ac turpis egestas.</p>
-							        </div>
+							    
+						        <div class="tab-pane" id="tab_details">
+						             <label for="budgetStatus">Status:</label>
+									<select th:field="*{status}" id="budgetStatus" class="form-control">
+				                        <option value="">Choose..</option>
+				                        <option value="Planning">Planning</option>
+				                        <option value="Open">Open</option>
+				                        <option value="Closed">Closed</option>
+			                        </select>
+												
+									<label for="budgetCategory" class="control-label">Category:</label>
+			                        <select th:field="*{category}" id="budgetCategory" class="form-control">
+				                        <option value="">Choose..</option>
+				                        <option value="Datacenter">Datacenter</option>
+                            			<option value="License">License</option>
+                           				<option value="Software">Software</option>
+                           				<option value="Opex">Opex</option>
+			                        </select>
+			                        
+			                        <label for="budgetRegion" class="control-label">Region:</label>
+			                        <select th:field="*{region}" id="budgetRegion" class="form-control">
+				                        <option value="">Choose..</option>
+				                       	<option value="Global">Global</option>
+			                            <option value="US">US</option>
+			                            <option value="EMEA">EMEA</option>
+			                            <option value="APAC">APAC</option>
+			                            <option value="LATAM">LATAM</option>
+			                        </select>
+			                        
+			                        <label for="budgetCriticality" class="control-label">Criticality:</label>
+			                        <select th:field="*{criticality}" id="budgetCriticality" class="form-control">
+				                        <option value="">Choose..</option>
+				                        <option value="1- Lights Out">1- Lights Out</option>
+			                            <option value="2 - Critical">2 - Critical</option>
+			                            <option value="3 - Project">3 - Project</option>
+			                        </select>
+			                        
+			                        <label for="budgetRanking" class="control-label">Ranking:</label>
+			                        <select th:field="*{ranking}" id="budgetRanking" class="form-control">
+				                        <option value="0">Choose..</option>
+				                        <option value="1">1</option>
+			                            <option value="2">2</option>
+			                            <option value="3">3</option>
+			                            <option value="4">4</option>
+			                        </select>
+			                        
+			                        <br />
+						        </div>
+						        
+						        <div class="tab-pane" id="tab_breakout">
+						        	<label for="budgetQ1amount">Q1 amount:</label>
+									<input type="text" th:field="*{q1}" id="budgetQ1amount" class="form-control" />
+									<div class="checkbox">
+										<label><input type="checkbox" th:field="*{q1_enabled}" />Q1 enabled</label>
+									</div>
+									
+									<label for="budgetQ2amount">Q2 amount:</label>
+									<input type="text" th:field="*{q2}" id="budgetQ2amount" class="form-control" />
+									<div class="checkbox">
+										<label><input type="checkbox" th:field="*{q2_enabled}" />Q2 enabled</label>
+									</div>
+									
+									<label for="budgetQ3amount">Q3 amount:</label>
+									<input type="text" th:field="*{Q3}" id="budgetQ3amount" class="form-control" />
+									<div class="checkbox">
+										<label><input type="checkbox" th:field="*{Q3_enabled}" />Q3 enabled</label>
+									</div>
+									
+									<label for="budgetQ4amount">Q4 amount:</label>
+									<input type="text" th:field="*{Q4}" id="budgetQ4amount" class="form-control" />
+									<div class="checkbox">
+										<label><input type="checkbox" th:field="*{Q4_enabled}" />Q4 enabled</label>
+									</div>
+									
+									<br />
+						        </div>
+							        
 							</div><!-- tab content -->				
 						</div>
 						
@@ -222,7 +277,46 @@
 	<!-- Page End -->
 	<th:block th:include="/layout/footer :: footer"></th:block>
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
-	
+	<script>
+		    $(document).on("click", '.add_budget',function(e) {
+				var id = $(this).data('id');
+				var year = $(this).data('year');
+				console.log(id);
+				$(".project-id").val(id);
+				$(".project-year").val(year);
+			});
+	</script>
+	<!-- Populate Budget Start -->
+    <script>
+    	var id;
+	    $(document).on("click", '.popProject',function(e) {
+			id = $(this).data('id');
+			var name = $(this).data('name');
+			var description = $(this).data('description');
+			var status = $(this).data('status');
+			var type = $(this).data('type');
+			var year = $(this).data('year');
+
+			console.log(year);
+
+			$(".project-id").val(id);
+			$(".project-name").val(name);
+			$(".project-description").val(description);
+			$(".project-status").val(status);
+			$(".project-type").val(type);
+			$(".project-year").val(year);
+
+			
+		});
+    </script>
+    <!-- Populate Budget End -->
+    <!-- Delete Budget Start  -->
+    <script>
+    	$(document).on("click", '.delete-button',function(e) {
+    		location.href = "/project/delete/"+id;
+    	});
+    </script>
+    <!-- Delete Budget End -->
 	</div>
 </body>
 </html>

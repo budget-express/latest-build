@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,9 @@ public class BudgetService {
 		@Autowired
 		private ProjectRepository projectRepository;
 		
+		@Autowired
+		private ProjectService projectService;
+		
 		public Iterable<Budget> findAll () {
 			
 			return budgetRepository.findAll();
@@ -68,6 +72,9 @@ public class BudgetService {
 			double quote_pending=0;
 			double quote_staged=0;
 			double remaining_budget=0;
+			double requested_amount=0;
+			
+			
 			
 			if (budget.getQuotes() != null) {
 				for (Quote quote : budget.getQuotes()){
@@ -95,6 +102,9 @@ public class BudgetService {
 			if (budget.isQ2_enabled()) {approved_amount += budget.getQ2();}
 			if (budget.isQ3_enabled()) {approved_amount += budget.getQ3();}
 			if (budget.isQ4_enabled()) {approved_amount += budget.getQ4();}
+			
+			requested_amount = budget.getQ1()+budget.getQ2() + budget.getQ3() + budget.getQ4();
+			budget.setRequested_amount(requested_amount);
 
 			budget.setApproved_amount(approved_amount);
 			
@@ -108,7 +118,9 @@ public class BudgetService {
 			
 			budget.setEdited(time);			
 			
+			budget.setProject(project);
 			budgetRepository.save(budget);
+			projectService.save(project);
 			historyRepository.save(history);
 			logger.info("Saved Budget");
 		}
@@ -122,6 +134,12 @@ public class BudgetService {
 			for (Budget budget : findAll()) {
 				save(budget);
 			}
+		}
+		
+		@PreAuthorize("hasRole('ROLE_ADMIN')")
+		public void delete(int id) {
+			budgetRepository.delete(findById(id));
+			
 		}
 		
 }
