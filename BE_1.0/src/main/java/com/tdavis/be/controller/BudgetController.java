@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tdavis.be.entity.Budget;
 import com.tdavis.be.entity.Project;
-import com.tdavis.be.repository.ProjectRepository;
+
 import com.tdavis.be.service.BudgetService;
 import com.tdavis.be.service.ProjectService;
 
@@ -39,11 +39,20 @@ public class BudgetController {
 	}
 	
 	@RequestMapping("/{id}")
-	public String showBudget (Model model, @PathVariable String id) {
+	public String showBudget (Model model, @PathVariable int id) {
+		
+		double approved = budgetService.findById(id).getApproved_amount();
+		double spent = budgetService.findById(id).getQuote_spent();
+		double balance = 0;
+		
+		balance = approved - spent;
+		
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
-    	model.addAttribute("budget", budgetService.findById(Integer.parseInt(id)));
+    	model.addAttribute("budget", budgetService.findById(id));
+    	model.addAttribute("spent",balance);
 		model.addAttribute("title", "Budget");
 		return "budget";
 	}

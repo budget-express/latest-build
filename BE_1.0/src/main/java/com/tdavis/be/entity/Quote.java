@@ -1,12 +1,17 @@
 package com.tdavis.be.entity;
 
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 
 @Entity
 public class Quote {
@@ -21,8 +26,6 @@ public class Quote {
 	
 	private double opex;
 	
-	//private List<Byte []> quote_files;
-	
 	private String justification;
 	
 	private String vendor;
@@ -35,11 +38,13 @@ public class Quote {
 	
 	private String edited;
 	
-	//private List<Byte []> po_files;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "budget_id")
 	private Budget budget;
+	
+	@OneToMany(cascade = CascadeType.REMOVE)
+	@JoinColumn(name="quote_id")
+	private List<QuoteFile> files;
 	
 	
 
@@ -75,14 +80,6 @@ public class Quote {
 		this.opex = opex;
 	}
 
-	//public List<Byte[]> getQuote_files() {
-	//	return quote_files;
-	//}
-
-	//public void setQuote_files(List<Byte[]> quote_files) {
-	//	this.quote_files = quote_files;
-	//}
-
 	public String getJustification() {
 		return justification;
 	}
@@ -106,14 +103,6 @@ public class Quote {
 	public void setPo(String po) {
 		this.po = po;
 	}
-
-	//public List<Byte[]> getPo_files() {
-	//	return po_files;
-	//}
-
-	//public void setPo_files(List<Byte[]> po_files) {
-	//	this.po_files = po_files;
-	//}
 
 	public Budget getBudget() {
 		return budget;
@@ -146,6 +135,15 @@ public class Quote {
 	public void setEdited(String edited) {
 		this.edited = edited;
 	}
+
+	public List<QuoteFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<QuoteFile> files) {
+		this.files = files;
+	}
+	
 	
 	
 }

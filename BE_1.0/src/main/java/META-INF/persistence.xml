@@ -7,5 +7,6 @@
 		<class>com.tdavis.be.entity.Quote</class>
 		<class>com.tdavis.be.entity.Role</class>
 		<class>com.tdavis.be.entity.User</class>
+		<class>com.tdavis.be.entity.QuoteFile</class>
 	</persistence-unit>
 </persistence>

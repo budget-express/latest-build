@@ -15,26 +15,9 @@
 			<!-- Page Start -->
 			<div class="right_col" role="main">
           		<div class="">
+					
 					<div class="page-title">
-						<div class="title_left">
-							<div class="dropdown">
-								<button class="btn btn-default dropdown-toggle" type="button"
-									id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="true">
-									<th:body th:if="${year == null}" th:text="All"></th:body>
-									<th:body th:if="${year != null}" th:text="${year}"></th:body>
-
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-									<th:body th:each="link : ${links}">
-										<li><a th:href="@{/budget-details(year=${link})}"
-											th:text="${link}"></a></li>
-									</th:body>
-								</ul>
-							</div>
-						</div>
-
+						<div class="title-left"></div>
 						<div class="title_right">
 							<div
 								class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
@@ -47,49 +30,31 @@
 							</div>
 						</div>
 					</div>
-
-					<div class="clearfix"></div>
-
             
 
               <div class="clearfix"></div>
 
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
+                  
                   <div class="x_title">
-                    <h2>Budget</h2><div th:if="${param.success ne null and param.success[0] eq 'true'}" class="alert alert-success">Budget Added!</div>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li>
-                      	<a th:href="@{/budget/add}" class="btn btn-default btn-sm">Add</a>
-                      </li>
-                    </ul>
+                    <h2 th:text="${budget.name}"></h2>
                     <div class="clearfix"></div>
                   </div>
 
                   <div class="x_content">
-
-                    <!-- <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p> -->
-
                     <div class="table-responsive">
-                      <table class="table table-striped jambo_table bulk_action">
+                      <table class="table table-striped jambo_table">
                         <thead>
                           <tr class="headings">
-                            <th class="column-title">Project Name </th>
-                            <th class="column-title">Description - Short </th>
-                            <th class="column-title">Portfolio Category </th>
-                            <th class="column-title">Region or Segment </th>
-                            <th class="column-title">Business Criticality</th>
-                            <th class="column-title">Priority Ranking </th>
-							<th class="column-title">Amount Requested</th>
-							<th class="column-title">Q1</th>
-							<th class="column-title">Q2</th>
-							<th class="column-title">Q3</th>
-							<th class="column-title">Q4</th>
-                            <th class="column-title no-link last"><span class="nobr">Action</span>
-                            </th>
-                            <th class="bulk-actions" colspan="7">
-                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                            </th>
+                            <th class="column-title">Budget Name </th>
+                            <th class="column-title">Description </th>
+                            <th class="column-title">Category </th>
+                            <th class="column-title">Region </th>
+                            <th class="column-title">Criticality</th>
+							<th class="column-title">Requested</th>
+							<th class="column-title">Approved</th>
+							<th class="column-title">Spent</th>
                           </tr>
                         </thead>
 
@@ -97,18 +62,14 @@
 							
 							<tr class="toprow pointer"> <!-- Change This Odd/Even -->
 								<td th:text="${budget.name}"></td>
-								<!-- <td th:text="${budget.descriptionShort}"></td> -->
-								<td></td>
+								<td th:text="${budget.descriptionShort}"></td>
 								<td th:text="${budget.category}"></td>
 								<td th:text="${budget.region}"></td>
 								<td th:text="${budget.criticality}"></td>
-								<td th:text="${budget.ranking}"></td>						
 								<td>$ <span th:text="${#numbers.formatDecimal(budget.requested_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
-								<td>$ <span th:text="${#numbers.formatDecimal(budget.q1, 0, 'COMMA', 2, 'POINT')}"></span></td>
-								<td>$ <span th:text="${#numbers.formatDecimal(budget.q2, 0, 'COMMA', 2, 'POINT')}"></span></td>
-								<td>$ <span th:text="${#numbers.formatDecimal(budget.q3, 0, 'COMMA', 2, 'POINT')}"></span></td>
-								<td>$ <span th:text="${#numbers.formatDecimal(budget.q4, 0, 'COMMA', 2, 'POINT')}"></span></td>
-								<td class=" last"><a href="#">Edit</a></td>
+								<td>$ <span th:text="${#numbers.formatDecimal(budget.approved_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+								<td class="last">$ <span th:text="${#numbers.formatDecimal(spent, 0, 'COMMA', 2, 'POINT')}"></span></td>
+								
 							</tr>
 										
 											  				  
@@ -121,10 +82,10 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Quotes</h2><div th:if="${param.success ne null and param.success[0] eq 'true'}" class="alert alert-success">Budget Added!</div>
+                    <h2>Quotes</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li>
-                      	<a th:href="@{/budget/add}" class="btn btn-default btn-sm">Add</a>
+                      	<button type="button" data-toggle="modal" data-target="#budget-modal-add" class="btn btn-primary btn-sm add_budget">Add Quote</button>
                       </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -142,9 +103,7 @@
                             <th class="column-title">Vendor </th>
                             <th class="column-title">Capex </th>
                             <th class="column-title">Opex</th>
-                            <th class="bulk-actions" colspan="7">
-                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                            </th>
+                            <th class="column-title">Action</th>
                           </tr>
                         </thead>
 
@@ -155,6 +114,16 @@
 												<td th:text="${quote.vendor}"></td>				
 												<td>$ <span th:text="${#numbers.formatDecimal(quote.capex, 0, 'COMMA', 2, 'POINT')}"></span></td>
 												<td>$ <span th:text="${#numbers.formatDecimal(quote.opex, 0, 'COMMA', 2, 'POINT')}"></span></td>
+												<td class=" last">
+													<a th:href="@{/budget/}+${budget.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+													<a  data-toggle="modal" href="#budget-modal-add" class="btn btn-info btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')" 
+														>
+														<i class=" fa fa-pencil"></i>Edit
+													</a>
+													<a data-toggle="modal" href="#budget-modal-delete" class="btn btn-danger btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')"
+													   >
+													  <i class="fa fa-trash-o"></i> Delete </a>
+												</td>
 											</tr>
 										</th:block>			
 									</tbody>
