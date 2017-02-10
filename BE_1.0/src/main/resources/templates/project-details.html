@@ -115,22 +115,35 @@
 												</td>
 												<td class=" last">
 													<a th:href="@{/budget/}+${budget.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-													<a  data-toggle="modal" href="#budget-modal-edit" class="btn btn-info btn-xs popProject" sec:authorize="hasAuthority('ROLE_ADMIN')" 
+													<a  data-toggle="modal" href="#budget-modal-add" class="btn btn-info btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')" 
 														th:attr="data-id=${project.id},
-														data-name=${project.name},
-														data-description=${project.description},
-														data-status=${project.status},
-														data-type=${project.type},
-														data-year=${project.year}">
+														data-name=${budget.name},
+														data-sdescription=${budget.descriptionShort},
+														data-ldescription=${budget.descriptionLong},
+														data-year=${budget.year},
+														data-code=${budget.budget_code},
+														data-status=${budget.status},
+														data-category=${budget.category},
+														data-region=${budget.region},
+														data-criticality=${budget.criticality},
+														data-ranking=${budget.ranking},
+														data-q1=${budget.q1},
+														data-q1e=${budget.q1_enabled},
+														data-q2=${budget.q2},
+														data-q2e=${budget.q2_enabled},
+														data-q3=${budget.q3},
+														data-q3e=${budget.q3_enabled},
+														data-q4=${budget.q4},
+														data-q4e=${budget.q4_enabled}">
 														<i class=" fa fa-pencil"></i>Edit
 													</a>
-													<a data-toggle="modal" href="#budget-modal-delete" class="btn btn-danger btn-xs popProject" sec:authorize="hasAuthority('ROLE_ADMIN')"
+													<a data-toggle="modal" href="#budget-modal-delete" class="btn btn-danger btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')"
 													   th:attr="data-id=${project.id},
-													   data-name=${project.name},
-													   data-description=${project.description},
-													   data-status=${project.status},
-													   data-type=${project.type},
-													   data-year=${project.year}">
+														data-name=${budget.name},
+														data-sdescription=${budget.descriptionShort},
+														data-year=${budget.year},
+														data-code=${budget.budget_code},
+														data-status=${budget.status}">
 													  <i class="fa fa-trash-o"></i> Delete </a>
 												</td>
 											</tr>
@@ -145,135 +158,138 @@
 			</div>
 		</div>
 	</div>
+	
 	<!-- budget-Modal-Add Start -->
-		<form action="#" th:action="@{/budget}" th:object="${budget}" method="post">
-			<div class="modal fade" id="budget-modal-add" tabindex="-1" role="dialog" aria-labellefby="addBudget">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="addUser">Add Budget</h4>
-						</div>
+	<form action="#" th:action="@{/budget}" th:object="${budget}" method="post">
+		<div class="modal fade clearfix" id="budget-modal-add" tabindex="-1" role="dialog" aria-labellefby="addBudget">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4><label class="modal-title addBudget" id="addBudget">Add budget</label></h4>
+					</div>
+					
+					<div class="modal-body">
+					
+						<input class="form-control project-id" type="hidden" th:field="*{project.id}" name="id" readonly="readonly" th:value="${project.id}" />
+					
+						<ul class="nav nav-pills nav-stacked col-md-4">
+						  <li class="active"><a href="#tab_profile" data-toggle="pill">Profile</a></li>
+						  <li><a href="#tab_details" data-toggle="pill">Details</a></li>
+						  <li><a href="#tab_breakout" data-toggle="pill">Breakout</a></li>
+						</ul>
 						
-						<div class="modal-body">
-						
-							<input class="form-control project-id" type="hidden" th:field="*{project.id}" name="id" readonly="readonly" th:value="${project.id}" />
-						
-							<ul class="nav nav-pills nav-stacked col-md-2">
-							  <li class="active"><a href="#tab_profile" data-toggle="pill">Profile</a></li>
-							  <li><a href="#tab_details" data-toggle="pill">Details</a></li>
-							  <li><a href="#tab_breakout" data-toggle="pill">Breakout</a></li>
-							</ul>
+						<div class="tab-content col-md-8">
 							
-							<div class="tab-content col-md-10">
+							<div class="tab-pane active" id="tab_profile">
+						    	<label for="budgetName">Name:</label>
+								<input type="text" th:field="*{name}" id="budgetName" class="form-control budget-name" />
 								
-								<div class="tab-pane active" id="tab_profile">
-							    	<label for="budgetName">Name:</label>
-									<input type="text" th:field="*{name}" id="budgetName" class="form-control" />
-									
-									<label for="budgetDescriptionShort">Short Description:</label>
-									<input type="text" th:field="*{descriptionShort}" id="budgetDescriptionShort" class="form-control" />
-									
-									<label for="budgetDescriptionLong">Long Description:</label>
-									<textarea style="resize:none" th:field="*{descriptionLong}" class="form-control" rows="3" id="budgetDescriptionLong"></textarea>
-									
-									<label for="budgetYear">Year:</label>
-									<input type="text" th:field="*{year}" id="budgetYear" class="form-control project-year" name="year" readonly="readonly" th:value="${project.year}" />
-									
-									<label for="budgetCode">Budget Code:</label>
-									<input type="text" th:field="*{budget_code}" id="budgetCode" class="form-control" />
-									<br />
-									
-							    </div>
-							    
-						        <div class="tab-pane" id="tab_details">
-						             <label for="budgetStatus">Status:</label>
-									<select th:field="*{status}" id="budgetStatus" class="form-control">
-				                        <option value="">Choose..</option>
-				                        <option value="Planning">Planning</option>
-				                        <option value="Open">Open</option>
-				                        <option value="Closed">Closed</option>
-			                        </select>
-												
-									<label for="budgetCategory" class="control-label">Category:</label>
-			                        <select th:field="*{category}" id="budgetCategory" class="form-control">
-				                        <option value="">Choose..</option>
-				                        <option value="Datacenter">Datacenter</option>
-                            			<option value="License">License</option>
-                           				<option value="Software">Software</option>
-                           				<option value="Opex">Opex</option>
-			                        </select>
-			                        
-			                        <label for="budgetRegion" class="control-label">Region:</label>
-			                        <select th:field="*{region}" id="budgetRegion" class="form-control">
-				                        <option value="">Choose..</option>
-				                       	<option value="Global">Global</option>
-			                            <option value="US">US</option>
-			                            <option value="EMEA">EMEA</option>
-			                            <option value="APAC">APAC</option>
-			                            <option value="LATAM">LATAM</option>
-			                        </select>
-			                        
-			                        <label for="budgetCriticality" class="control-label">Criticality:</label>
-			                        <select th:field="*{criticality}" id="budgetCriticality" class="form-control">
-				                        <option value="">Choose..</option>
-				                        <option value="1- Lights Out">1- Lights Out</option>
-			                            <option value="2 - Critical">2 - Critical</option>
-			                            <option value="3 - Project">3 - Project</option>
-			                        </select>
-			                        
-			                        <label for="budgetRanking" class="control-label">Ranking:</label>
-			                        <select th:field="*{ranking}" id="budgetRanking" class="form-control">
-				                        <option value="0">Choose..</option>
-				                        <option value="1">1</option>
-			                            <option value="2">2</option>
-			                            <option value="3">3</option>
-			                            <option value="4">4</option>
-			                        </select>
-			                        
-			                        <br />
-						        </div>
+								<label for="budgetDescriptionShort">Short Description:</label>
+								<input type="text" th:field="*{descriptionShort}" id="budgetDescriptionShort" class="form-control budget-sdescription" />
+								
+								<label for="budgetDescriptionLong">Long Description:</label>
+								<textarea style="resize:none" th:field="*{descriptionLong}" class="form-control budget-ldescription" rows="3" id="budgetDescriptionLong"></textarea>
+								
+								<label for="budgetYear">Year:</label>
+								<input type="text" th:field="*{year}" id="budgetYear" class="form-control project-year" name="year" readonly="readonly" th:value="${project.year}" />
+								
+								<label for="budgetCode">Budget Code:</label>
+								<input type="text" th:field="*{budget_code}" id="budgetCode" class="form-control budget-code" />
+								<br />
+								
+						    </div>
+						    
+					        <div class="tab-pane" id="tab_details">
+					             <label for="budgetStatus">Status:</label>
+								<select th:field="*{status}" id="budgetStatus" class="form-control budget-status">
+			                        <option value="">Choose..</option>
+			                        <option value="Planning">Planning</option>
+			                        <option value="Open">Open</option>
+			                        <option value="Closed">Closed</option>
+		                        </select>
+											
+								<label for="budgetCategory" class="control-label">Category:</label>
+		                        <select th:field="*{category}" id="budgetCategory" class="form-control budget-category">
+			                        <option value="">Choose..</option>
+			                        <option value="Datacenter">Datacenter</option>
+                           			<option value="License">License</option>
+                          				<option value="Software">Software</option>
+                          				<option value="Opex">Opex</option>
+		                        </select>
+		                        
+		                        <label for="budgetRegion" class="control-label">Region:</label>
+		                        <select th:field="*{region}" id="budgetRegion" class="form-control budget-region">
+			                        <option value="">Choose..</option>
+			                       	<option value="Global">Global</option>
+		                            <option value="USA">USA</option>
+		                            <option value="EMEA">EMEA</option>
+		                            <option value="APAC">APAC</option>
+		                            <option value="LATAM">LATAM</option>
+		                        </select>
+		                        
+		                        <label for="budgetCriticality" class="control-label">Criticality:</label>
+		                        <select th:field="*{criticality}" id="budgetCriticality" class="form-control budget-criticality">
+			                        <option value="">Choose..</option>
+			                        <option value="1 - Lights Out">1 - Lights Out</option>
+		                            <option value="2 - Critical">2 - Critical</option>
+		                            <option value="3 - Project">3 - Project</option>
+		                        </select>
+		                        
+		                        <label for="budgetRanking" class="control-label">Ranking:</label>
+		                        <select th:field="*{ranking}" id="budgetRanking" class="form-control budget-ranking">
+			                        <option value="0">Choose..</option>
+			                        <option value="1">1</option>
+		                            <option value="2">2</option>
+		                            <option value="3">3</option>
+		                            <option value="4">4</option>
+		                        </select>
+		                        
+		                        <br />
+					        </div>
+					        
+					        <div class="tab-pane" id="tab_breakout">
+					        	<label for="budgetQ1amount">Q1 amount:</label>
+								<input type="text" th:field="*{q1}" id="budgetQ1amount" class="form-control budget-q1" />
+								<div class="checkbox">
+									<label><input type="checkbox" th:field="*{q1_enabled}" class="budget-q1e" />Q1 enabled</label>
+								</div>
+								
+								<label for="budgetQ2amount">Q2 amount:</label>
+								<input type="text" th:field="*{q2}" id="budgetQ2amount" class="form-control budget-q2" />
+								<div class="checkbox">
+									<label><input type="checkbox" th:field="*{q2_enabled}" class="budget-q1e" />Q2 enabled</label>
+								</div>
+								
+								<label for="budgetQ3amount">Q3 amount:</label>
+								<input type="text" th:field="*{Q3}" id="budgetQ3amount" class="form-control budget-q3" />
+								<div class="checkbox">
+									<label><input type="checkbox" th:field="*{Q3_enabled}" class="budget-q1e" />Q3 enabled</label>
+								</div>
+								
+								<label for="budgetQ4amount">Q4 amount:</label>
+								<input type="text" th:field="*{Q4}" id="budgetQ4amount" class="form-control budget-q4" />
+								<div class="checkbox">
+									<label><input type="checkbox" th:field="*{Q4_enabled}" class="budget-q1e" />Q4 enabled</label>
+								</div>
+								
+								<br />
+					        </div>
 						        
-						        <div class="tab-pane" id="tab_breakout">
-						        	<label for="budgetQ1amount">Q1 amount:</label>
-									<input type="text" th:field="*{q1}" id="budgetQ1amount" class="form-control" />
-									<div class="checkbox">
-										<label><input type="checkbox" th:field="*{q1_enabled}" />Q1 enabled</label>
-									</div>
-									
-									<label for="budgetQ2amount">Q2 amount:</label>
-									<input type="text" th:field="*{q2}" id="budgetQ2amount" class="form-control" />
-									<div class="checkbox">
-										<label><input type="checkbox" th:field="*{q2_enabled}" />Q2 enabled</label>
-									</div>
-									
-									<label for="budgetQ3amount">Q3 amount:</label>
-									<input type="text" th:field="*{Q3}" id="budgetQ3amount" class="form-control" />
-									<div class="checkbox">
-										<label><input type="checkbox" th:field="*{Q3_enabled}" />Q3 enabled</label>
-									</div>
-									
-									<label for="budgetQ4amount">Q4 amount:</label>
-									<input type="text" th:field="*{Q4}" id="budgetQ4amount" class="form-control" />
-									<div class="checkbox">
-										<label><input type="checkbox" th:field="*{Q4_enabled}" />Q4 enabled</label>
-									</div>
-									
-									<br />
-						        </div>
-							        
-							</div><!-- tab content -->				
-						</div>
-						
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<button type="submit" class="btn btn-primary">Add</button>
-						</div>
+						</div><!-- tab content -->				
+					</div>
+					
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Add</button>
 					</div>
 				</div>
 			</div>
-		</form>
-	<!-- Budget-Modal-Add End -->								
+		</div>
+	</form>
+	<!-- Budget-Modal-Add/Edit End -->
+			
+									
 	<!-- Page End -->
 	<th:block th:include="/layout/footer :: footer"></th:block>
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
@@ -284,28 +300,73 @@
 				console.log(id);
 				$(".project-id").val(id);
 				$(".project-year").val(year);
+				$(".addBudget").val('Add Budget');
 			});
 	</script>
 	<!-- Populate Budget Start -->
     <script>
     	var id;
-	    $(document).on("click", '.popProject',function(e) {
+	    $(document).on("click", '.popBudget',function(e) {
 			id = $(this).data('id');
 			var name = $(this).data('name');
-			var description = $(this).data('description');
-			var status = $(this).data('status');
-			var type = $(this).data('type');
+			var sdescription = $(this).data('sdescription');
+			var ldescription = $(this).data('ldescription');
 			var year = $(this).data('year');
+			var code = $(this).data('code');
+			var status = $(this).data('status');
+			var category = $(this).data('category');
+			var region = $(this).data('region');
+			var criticality = $(this).data('criticality');
+			var ranking = $(this).data('ranking');
+			var q1 = $(this).data('q1');
+			var q1e = $(this).data('q1e');
+			var q2 = $(this).data('q2');
+			var q2e = $(this).data('q2e');
+			var q3 = $(this).data('q3');
+			var q3e = $(this).data('q3e');
+			var q4 = $(this).data('q4');
+			var q4e = $(this).data('q4e');
 
-			console.log(year);
-
+			if (q1e == true){
+				$('.budget-q1e').prop('checked', true);
+			}else {$('.budget-q1e').prop('checked', false);}
+			
+			if (q2e == true){
+				$('.budget-q2e').prop('checked', true);
+			}else {$('.budget-q2e').prop('checked', false);}
+			
+			if (q3e == true){
+				$('.budget-q3e').prop('checked', true);
+			}else {$('.budget-q3e').prop('checked', false);}
+			
+			if (q4e == true){
+				$('.budget-q4e').prop('checked', true);
+			}else {$('.budget-q4e').prop('checked', false);}
+			
+			console.log(criticality);
+			
 			$(".project-id").val(id);
-			$(".project-name").val(name);
-			$(".project-description").val(description);
-			$(".project-status").val(status);
-			$(".project-type").val(type);
-			$(".project-year").val(year);
-
+			$(".budget-name").val(name);
+			$(".budget-sdescription").val(sdescription);
+			$(".budget-ldescription").val(ldescription);
+			$(".budget-year").val(year);
+			$(".budget-code").val(code);
+			$(".budget-status").val(status);
+			$(".budget-category").val(category);
+			$(".budget-region").val(region);
+			$(".budget-criticality").val(criticality);
+			$(".budget-ranking").val(ranking);
+			$(".budget-q1").val(q1);
+			
+			$(".budget-q2").val(q2);
+			
+			$(".budget-q3").val(q3);
+			
+			$(".budget-q4").val(q4);
+			
+			
+			$(".addBudget").val('Edit Budget');
+			
 			
 		});
     </script>

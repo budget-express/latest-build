@@ -108,6 +108,7 @@
 			</div>
 		</div>
 	</div>
+	
 	<!-- Project-Modal-Add Start -->
 		<form action="#" th:action="@{/project}" th:object="${project}" method="post">
 			<div class="modal fade" id="project-modal-add" tabindex="-1" role="dialog" aria-labellefby="addProject">
@@ -171,7 +172,7 @@
 							<input class="form-control project-id" type="hidden" th:field="*{id}" name="id"/>
 
 							<label for="projectName">Name:</label>
-							<input type="text" th:field="*{name}" id="userName" class="form-control project-name" />
+							<input type="text" th:field="*{name}" id="projectName" class="form-control project-name" />
 							
 							<label for="projectDescription">Description:</label>
 							<input type="text" th:field="*{description}" id="projectDescription" class="form-control project-description" />
