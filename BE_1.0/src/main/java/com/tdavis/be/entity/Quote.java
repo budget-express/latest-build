@@ -44,7 +44,7 @@ public class Quote {
 	
 	@OneToMany(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="quote_id")
-	private List<QuoteFile> files;
+	private List<FileUpload> files;
 	
 	
 
@@ -136,11 +136,11 @@ public class Quote {
 		this.edited = edited;
 	}
 
-	public List<QuoteFile> getFiles() {
+	public List<FileUpload> getFiles() {
 		return files;
 	}
 
-	public void setFiles(List<QuoteFile> files) {
+	public void setFiles(List<FileUpload> files) {
 		this.files = files;
 	}
 	

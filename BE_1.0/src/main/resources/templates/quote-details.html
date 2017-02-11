@@ -38,7 +38,7 @@
                 <div class="x_panel">
                   
                   <div class="x_title">
-                    <h2 th:text="${budget.name}"></h2>
+                    <h2 th:text="${quote.name}"></h2>
                     <div class="clearfix"></div>
                   </div>
 
@@ -47,29 +47,22 @@
                       <table class="table table-striped jambo_table">
                         <thead>
                           <tr class="headings">
-                            <th class="column-title">Budget Name </th>
-                            <th class="column-title">Description </th>
-                            <th class="column-title">Category </th>
-                            <th class="column-title">Region </th>
-                            <th class="column-title">Criticality</th>
-							<th class="column-title">Requested</th>
-							<th class="column-title">Approved</th>
-							<th class="column-title">Spent</th>
+                            <th class="column-title">Quote Name </th>
+                            <th class="column-title">Vendor </th>
+                            <th class="column-title">Status </th>
+                            <th class="column-title">Capex </th>
+                            <th class="column-title">Opex</th>
                           </tr>
                         </thead>
 
                         <tbody>
 							
 							<tr class="toprow pointer"> <!-- Change This Odd/Even -->
-								<td th:text="${budget.name}"></td>
-								<td th:text="${budget.descriptionShort}"></td>
-								<td th:text="${budget.category}"></td>
-								<td th:text="${budget.region}"></td>
-								<td th:text="${budget.criticality}"></td>
-								<td>$ <span th:text="${#numbers.formatDecimal(budget.requested_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
-								<td>$ <span th:text="${#numbers.formatDecimal(budget.approved_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
-								<td class="last">$ <span th:text="${#numbers.formatDecimal(spent, 0, 'COMMA', 2, 'POINT')}"></span></td>
-								
+								<td th:text="${quote.name}"></td>
+								<td th:text="${quote.vendor}"></td>
+								<td th:text="${quote.status}"></td>
+								<td th:text="${quote.capex}"></td>
+								<td th:text="${quote.opex}"></td>
 							</tr>
 										
 											  				  
@@ -82,10 +75,10 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Quotes</h2>
+                    <h2>Files</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li>
-                      	<button type="button" data-toggle="modal" data-target="#quote-modal-add" class="btn btn-primary btn-sm add_quote" th:attr="data-budgetid=${budget.id}">Add Quote</button>
+                      	<button type="button" data-toggle="modal" data-target="#file-modal-add" class="btn btn-primary btn-sm add_budget">Upload File</button>
                       </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -99,28 +92,22 @@
                       <table class="table table-striped jambo_table bulk_action">
                         <thead>
                           <tr class="headings">
-                            <th class="column-title">Quote Name </th>
-                            <th class="column-title">Vendor </th>
-                            <th class="column-title">Capex </th>
-                            <th class="column-title">Opex</th>
-                            <th class="column-title">Action</th>
+                            <th class="column-title">File Name </th>
+                            <th class="column-title">Type </th>
+                            <th class="column-title">Created </th>
+							<th class="column-title">Action</th>
                           </tr>
                         </thead>
 
 									<tbody>
-										<th:block th:each="quote, rowStat : ${budget.quotes}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
+										<th:block th:each="file, rowStat : ${quote.files}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
 											<tr class="toprow pointer clickable-row" th:attr="data-href=@{/quote/}, data-id=${quote.id}">
-												<td th:text="${quote.name}"></td>
-												<td th:text="${quote.vendor}"></td>				
-												<td>$ <span th:text="${#numbers.formatDecimal(quote.capex, 0, 'COMMA', 2, 'POINT')}"></span></td>
-												<td>$ <span th:text="${#numbers.formatDecimal(quote.opex, 0, 'COMMA', 2, 'POINT')}"></span></td>
+												<td th:text="${file.name}"></td>
+												<td th:text="${file.type}"></td>				
+												<td th:text="${file.created}"></td>
 												<td class=" last">
-													<a th:href="@{/quote/}+${quote.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-													<a  data-toggle="modal" href="#budget-modal-add" class="btn btn-info btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')" 
-														>
-														<i class=" fa fa-pencil"></i>Edit
-													</a>
-													<a data-toggle="modal" href="#budget-modal-delete" class="btn btn-danger btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')"
+													<a data-toggle="modal" href="#file-modal-delete" class="btn btn-danger btn-xs" sec:authorize="hasAuthority('ROLE_ADMIN')"
+													   th:attr="data-fileid=${file.id}"
 													   >
 													  <i class="fa fa-trash-o"></i> Delete </a>
 												</td>

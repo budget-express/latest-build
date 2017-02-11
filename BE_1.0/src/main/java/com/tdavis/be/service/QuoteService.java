@@ -37,6 +37,10 @@ public class QuoteService {
 			return quoteRepository.findAll();
 		}
 		
+		public Quote findById(int id) {
+			return quoteRepository.findById(id);
+		}
+		
 		public void save(Quote quote) {
 			History history = new History();
 			Project project = quote.getBudget().getProject();

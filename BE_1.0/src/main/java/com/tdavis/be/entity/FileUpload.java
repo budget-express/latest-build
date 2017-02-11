@@ -8,15 +8,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class QuoteFile {
-
-
+public class FileUpload {
 	@Id
 	@GeneratedValue
 	private Integer id;
 	private String type;
-	private String fileName;
+	private String name;
 	private byte[] filedata;
+	private String created;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "quote_id")
@@ -35,10 +34,10 @@ public class QuoteFile {
 		this.id = id;
 	}
 	public String getFileName() {
-		return fileName;
+		return name;
 	}
 	public void setFileName(String fileName) {
-		this.fileName = fileName;
+		this.name = fileName;
 	}
 	public byte[] getFiledata() {
 		return filedata;
@@ -52,8 +51,13 @@ public class QuoteFile {
 	public void setType(String type) {
 		this.type = type;
 	}
+	public String getCreated() {
+		return created;
+	}
+	public void setCreated(String created) {
+		this.created = created;
+	}
 	 
 	
 	
 }
-
