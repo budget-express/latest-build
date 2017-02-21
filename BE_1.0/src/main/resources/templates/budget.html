@@ -66,8 +66,8 @@
 								<td th:text="${budget.category}"></td>
 								<td th:text="${budget.region}"></td>
 								<td th:text="${budget.criticality}"></td>
-								<td>$ <span th:text="${#numbers.formatDecimal(budget.requested_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
-								<td>$ <span th:text="${#numbers.formatDecimal(budget.approved_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+								<td>$ <span th:text="${#numbers.formatDecimal(budget.budgetRequested, 0, 'COMMA', 2, 'POINT')}"></span></td>
+								<td>$ <span th:text="${#numbers.formatDecimal(budget.budgetApproved, 0, 'COMMA', 2, 'POINT')}"></span></td>
 								<td class="last">$ <span th:text="${#numbers.formatDecimal(spent, 0, 'COMMA', 2, 'POINT')}"></span></td>
 								
 							</tr>
@@ -107,26 +107,37 @@
                           </tr>
                         </thead>
 
-									<tbody>
-										<th:block th:each="quote, rowStat : ${budget.quotes}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
-											<tr class="toprow pointer clickable-row" th:attr="data-href=@{/quote/}, data-id=${quote.id}">
-												<td th:text="${quote.name}"></td>
-												<td th:text="${quote.vendor}"></td>				
-												<td>$ <span th:text="${#numbers.formatDecimal(quote.capex, 0, 'COMMA', 2, 'POINT')}"></span></td>
-												<td>$ <span th:text="${#numbers.formatDecimal(quote.opex, 0, 'COMMA', 2, 'POINT')}"></span></td>
-												<td class=" last">
-													<a th:href="@{/quote/}+${quote.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-													<a  data-toggle="modal" href="#budget-modal-add" class="btn btn-info btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')" 
-														>
-														<i class=" fa fa-pencil"></i>Edit
-													</a>
-													<a data-toggle="modal" href="#budget-modal-delete" class="btn btn-danger btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')"
-													   >
-													  <i class="fa fa-trash-o"></i> Delete </a>
-												</td>
-											</tr>
-										</th:block>			
-									</tbody>
+							<tbody>
+								<th:block th:each="quote, rowStat : ${budget.quotes}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
+									<tr class="toprow pointer" th:attr="data-href=@{/quote/}, data-id=${quote.id}">
+										<td th:text="${quote.name}"></td>
+										<td th:text="${quote.vendor}"></td>				
+										<td>$ <span th:text="${#numbers.formatDecimal(quote.capex, 0, 'COMMA', 2, 'POINT')}"></span></td>
+										<td>$ <span th:text="${#numbers.formatDecimal(quote.opex, 0, 'COMMA', 2, 'POINT')}"></span></td>
+										<td class=" last">
+											<a th:href="@{/quote/}+${quote.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+											<a  data-toggle="modal" href="#quote-modal-edit" class="btn btn-info btn-xs popQuote" sec:authorize="hasAuthority('ROLE_ADMIN')" 
+												th:attr="data-id=${quote.id},
+													   data-budgetid=${budget.id},
+													   data-name=${quote.name},
+													   data-justification=${quote.justification},
+													   data-vendor=${quote.vendor},
+													   data-vcontact=${quote.vendorContact},
+													   data-vemail=${quote.vendorEmail},
+													   data-status=${quote.status},
+													   data-capex=${quote.capex},
+													   data-opex=${quote.opex}">
+												<i class=" fa fa-pencil"></i>Edit
+											</a>
+											<a data-toggle="modal" href="#quote-modal-delete" class="btn btn-danger btn-xs popQuote" sec:authorize="hasAuthority('ROLE_ADMIN')"
+											   th:attr="data-id=${quote.id},
+													   data-name=${quote.name},
+													   data-status=${quote.status}">
+											  <i class="fa fa-trash-o"></i> Delete </a>
+										</td>
+									</tr>
+								</th:block>			
+							</tbody>
                       </table>
                     </div>
                   </div>
@@ -134,13 +145,192 @@
               </div>
             </div>
           </div>
-
+					
+					<!-- Quote-Modal-Add/Edit Start -->
+					<form action="#" th:action="@{/quote}" th:object="${quote}" method="post">
+						<div class="modal fade" id="quote-modal-add" tabindex="-1" role="dialog" aria-labellefby="addQuote">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h4 class="modal-title" id="addQuote">Add Quote</h4>
+									</div>
+									
+									<div class="modal-body">
+										<input class="form-control budget-id" type="hidden" th:field="*{budget.id}" name="id" readonly="readonly" />
+										
+										<label for="quoteName">Name:</label>
+										<input type="text" th:field="*{name}" id="quoteName" class="form-control quote-name" />
+										
+										<label for="quoteJustification">Justification:</label>
+										<textarea style="resize:none" th:field="*{justification}" id="quoteJustification" class="form-control quote-justification" rows="3"></textarea>
+										
+										<label for="quoteVendor">Vendor:</label>
+										<input type="text" th:field="*{vendor}" id="quoteVendor" class="form-control quote-vendor" />
+										
+										<label for="quoteVendorContact">Vendor Contact:</label>
+										<input type="text" th:field="*{vendorContact}" id="quoteVendorContact" class="form-control quote-vendorContact" />
+										
+										<label for="quoteVendorEmail">Vendor Email:</label>
+										<input type="text" th:field="*{vendorEmail}" id="quoteVendorEmail" class="form-control quote-vendorEmail" />
+										
+										<label for="quoteStatus">Status:</label>
+										<select th:field="*{status}" id="quoteStatus" class="form-control quote-status">
+					                        <option value="">Choose..</option>
+					                        <option value="Planning">Planning</option>
+					                        <option value="Open">Open</option>
+					                        <option value="Closed">Closed</option>
+				                        </select>
+										
+										<label for="quoteCapex">Capex Amount:</label>
+										<input type="text" th:field="*{capex}" id="quoteCapex" class="form-control quote-capex" />
+										
+										<label for="quoteOpex">Opex Amount:</label>
+										<input type="text" th:field="*{opex}" id="quoteOpex" class="form-control quote-opex" />			
+																																
+									</div>
+									
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Add</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- Quote-Modal-Add/Edit End -->
+					<!-- Quote-Modal-Add/Edit Start -->
+					<form action="#" th:action="@{/quote}" th:object="${quote}" method="post">
+						<div class="modal fade" id="quote-modal-edit" tabindex="-1" role="dialog" aria-labellefby="editQuote">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h4 class="modal-title" id="addQuote">Edit Quote</h4>
+									</div>
+									
+									<div class="modal-body">
+										<input class="form-control budget-id" type="hidden" th:field="*{budget.id}" name="budgetid" readonly="readonly" />
+										<input class="form control quote-id" type="hidden" th:field="*{id}" name="id" readonly="readonly" />
+										
+										<label for="quoteName">Name:</label>
+										<input type="text" th:field="*{name}" id="quoteName" class="form-control quote-name" />
+										
+										<label for="quoteJustification">Justification:</label>
+										<textarea style="resize:none" th:field="*{justification}" id="quoteJustification" class="form-control quote-justification" rows="3"></textarea>
+										
+										<label for="quoteVendor">Vendor:</label>
+										<input type="text" th:field="*{vendor}" id="quoteVendor" class="form-control quote-vendor" />
+										
+										<label for="quoteVendorContact">Vendor Contact:</label>
+										<input type="text" th:field="*{vendorContact}" id="quoteVendorContact" class="form-control quote-vendorContact" />
+										
+										<label for="quoteVendorEmail">Vendor Email:</label>
+										<input type="text" th:field="*{vendorEmail}" id="quoteVendorEmail" class="form-control quote-vendorEmail" />
+										
+										<label for="quoteStatus">Status:</label>
+										<select th:field="*{status}" id="quoteStatus" class="form-control quote-status">
+					                        <option value="">Choose..</option>
+					                        <option value="Planning">Planning</option>
+					                        <option value="Open">Open</option>
+					                        <option value="Closed">Closed</option>
+				                        </select>
+										
+										<label for="quoteCapex">Capex Amount:</label>
+										<input type="text" th:field="*{capex}" id="quoteCapex" class="form-control quote-capex" />
+										
+										<label for="quoteOpex">Opex Amount:</label>
+										<input type="text" th:field="*{opex}" id="quoteOpex" class="form-control quote-opex" />			
+																																
+									</div>
+									
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Add</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- Quote-Modal-Add/Edit End -->
+					<!-- Quote-Modal-delete Start -->
+					<div class="modal fade" id="quote-modal-delete" tabindex="-1" role="dialog" aria-labellefby="deleteQuote">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="bg-danger" id="deleteQuote">Delete Quote</h4>
+								</div>
+								
+								<div class="modal-body">
+		
+									<input class="form-control quote-id" type="hidden" name="id" disabled="true"/>
+		
+									<label for="quoteName">Name:</label>
+									<input type="text" class="form-control quote-name" disabled="true"/>
+																					
+								</div>
+								
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-danger delete-button">Delete</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Quote-Modal-delete End -->
 				<!-- Page End -->
 				<th:block th:include="/layout/footer :: footer"></th:block>
 			</div>
 		</div>
 
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
+		<script>
+		    $(document).on("click", '.add_quote',function(e) {
+				var bud_id = $(this).data('budgetid');
+				$(".budget-id").val(bud_id);
+			});
+	</script>
+	<script>
+	    	var id;
+		    $(document).on("click", '.popQuote',function(e) {
+				id = $(this).data('id');
+				var bud_id = $(this).data('budgetid');
+				var name = $(this).data('name');
+				var justification = $(this).data('justification');
+				var vendor = $(this).data('vendor');
+				var vcontact = $(this).data('vcontact');
+				var vemail = $(this).data('vemail');
+				var status = $(this).data('status');
+				var capex = $(this).data('capex');
+				var opex = $(this).data('opex');
+
+				console.log('Contact: '+ vcontact);
+				console.log('Email: ' + vemail);
+				
+				$(".quote-id").val(id);
+				$(".budget-id").val(bud_id);
+				$(".quote-name").val(name);
+				$(".quote-justification").val(justification);
+				$(".quote-vendor").val(vendor);
+				$(".quote-vendorContact").val(vcontact);
+				$(".quote-vendorEmail").val(vemail);
+				$(".quote-status").val(status);
+				$(".quote-capex").val(capex);
+				$(".quote-opex").val(opex);
+
+				console.log("jScript Called")
+			});
+	    </script>
+	    <!-- Populate Quote End -->
+	    <!-- Delete Quote Start  -->
+	    <script>
+	    	$(document).on("click", '.delete-button',function(e) {
+	    		location.href = "/quote/delete/"+id;
+	    	});
+	    </script>
+	    <!-- Delete Quote End -->
+	
 </body>
 </html>
 

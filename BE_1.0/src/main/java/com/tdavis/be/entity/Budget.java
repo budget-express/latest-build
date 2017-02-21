@@ -23,7 +23,7 @@ public class Budget {
     private String descriptionShort;
     private String descriptionLong;
     private String year;
-    private String budget_code;
+    private String budgetCode;
     
     //Details
     private String status;
@@ -34,38 +34,37 @@ public class Budget {
     
     //Breakout
     private double q1;
-    private boolean q1_enabled;
+    private boolean enabledQ1;
     private double q2;
-    private boolean q2_enabled;
+    private boolean enabledQ2;
     private double q3;
-    private boolean q3_enabled;
+    private boolean enabledQ3;
     private double q4;
-    private boolean q4_enabled;
+    private boolean enabledQ4;
     
     //Variables
-    private double quote_spent;
-    private double quote_pending;
-    private double quote_staged;
-    private double remaining_budget;
-    private double requested_amount;
-    private double approved_amount;
+    private double quoteSpent;
+    private double quotePending;
+    private double quoteStaged;
+    private double budgetRemaining;
+    private double budgetRequested;
+    private double budgetApproved;
     
     //Timestamp
-    private String created;
-    private String edited;
-    //private String date_open; 
-    //private String date_closed;
-    //private String date_q1_enabled;
-    //private String date_q2_enabled;
-    //private String date_q3_enabled;
-    //private String date_q4_enabled;
+    private String dateCreated;
+    private String dateEdited;
+    private String dateEnabled; 
+    private String dateDisabled;
+    private String dateQ1Enabled;
+    private String dateQ2Enabled;
+    private String dateQ3Enabled;
+    private String dateQ4Enabled;
     
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
 	private Project project;
 	
 	@OneToMany(cascade = CascadeType.REMOVE)
-	@JoinColumn(name="budget_id")
 	private List<Quote> quotes;
 
 	public Integer getId() {
@@ -100,6 +99,30 @@ public class Budget {
 		this.descriptionLong = descriptionLong;
 	}
 
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public String getBudgetCode() {
+		return budgetCode;
+	}
+
+	public void setBudgetCode(String budgetCode) {
+		this.budgetCode = budgetCode;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getCategory() {
 		return category;
 	}
@@ -132,22 +155,6 @@ public class Budget {
 		this.ranking = ranking;
 	}
 
-	public double getRequested_amount() {
-		return requested_amount;
-	}
-
-	public void setRequested_amount(double requested_amount) {
-		this.requested_amount = requested_amount;
-	}
-
-	public double getApproved_amount() {
-		return approved_amount;
-	}
-
-	public void setApproved_amount(double approved_amount) {
-		this.approved_amount = approved_amount;
-	}
-
 	public double getQ1() {
 		return q1;
 	}
@@ -156,12 +163,12 @@ public class Budget {
 		this.q1 = q1;
 	}
 
-	public boolean isQ1_enabled() {
-		return q1_enabled;
+	public boolean isEnabledQ1() {
+		return enabledQ1;
 	}
 
-	public void setQ1_enabled(boolean q1_enabled) {
-		this.q1_enabled = q1_enabled;
+	public void setEnabledQ1(boolean enabledQ1) {
+		this.enabledQ1 = enabledQ1;
 	}
 
 	public double getQ2() {
@@ -172,12 +179,12 @@ public class Budget {
 		this.q2 = q2;
 	}
 
-	public boolean isQ2_enabled() {
-		return q2_enabled;
+	public boolean isEnabledQ2() {
+		return enabledQ2;
 	}
 
-	public void setQ2_enabled(boolean q2_enabled) {
-		this.q2_enabled = q2_enabled;
+	public void setEnabledQ2(boolean enabledQ2) {
+		this.enabledQ2 = enabledQ2;
 	}
 
 	public double getQ3() {
@@ -188,12 +195,12 @@ public class Budget {
 		this.q3 = q3;
 	}
 
-	public boolean isQ3_enabled() {
-		return q3_enabled;
+	public boolean isEnabledQ3() {
+		return enabledQ3;
 	}
 
-	public void setQ3_enabled(boolean q3_enabled) {
-		this.q3_enabled = q3_enabled;
+	public void setEnabledQ3(boolean enabledQ3) {
+		this.enabledQ3 = enabledQ3;
 	}
 
 	public double getQ4() {
@@ -204,20 +211,124 @@ public class Budget {
 		this.q4 = q4;
 	}
 
-	public boolean isQ4_enabled() {
-		return q4_enabled;
+	public boolean isEnabledQ4() {
+		return enabledQ4;
 	}
 
-	public void setQ4_enabled(boolean q4_enabled) {
-		this.q4_enabled = q4_enabled;
+	public void setEnabledQ4(boolean enabledQ4) {
+		this.enabledQ4 = enabledQ4;
 	}
 
-	public String getYear() {
-		return year;
+	public double getQuoteSpent() {
+		return quoteSpent;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setQuoteSpent(double quoteSpent) {
+		this.quoteSpent = quoteSpent;
+	}
+
+	public double getQuotePending() {
+		return quotePending;
+	}
+
+	public void setQuotePending(double quotePending) {
+		this.quotePending = quotePending;
+	}
+
+	public double getQuoteStaged() {
+		return quoteStaged;
+	}
+
+	public void setQuoteStaged(double quoteStaged) {
+		this.quoteStaged = quoteStaged;
+	}
+
+	public double getBudgetRemaining() {
+		return budgetRemaining;
+	}
+
+	public void setBudgetRemaining(double budgetRemaining) {
+		this.budgetRemaining = budgetRemaining;
+	}
+
+	public double getBudgetRequested() {
+		return budgetRequested;
+	}
+
+	public void setBudgetRequested(double budgetRequested) {
+		this.budgetRequested = budgetRequested;
+	}
+
+	public double getBudgetApproved() {
+		return budgetApproved;
+	}
+
+	public void setBudgetApproved(double budgetApproved) {
+		this.budgetApproved = budgetApproved;
+	}
+
+	public String getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public String getDateEdited() {
+		return dateEdited;
+	}
+
+	public void setDateEdited(String dateEdited) {
+		this.dateEdited = dateEdited;
+	}
+
+	public String getDateEnabled() {
+		return dateEnabled;
+	}
+
+	public void setDateEnabled(String dateEnabled) {
+		this.dateEnabled = dateEnabled;
+	}
+
+	public String getDateDisabled() {
+		return dateDisabled;
+	}
+
+	public void setDateDisabled(String dateDisabled) {
+		this.dateDisabled = dateDisabled;
+	}
+
+	public String getDateQ1Enabled() {
+		return dateQ1Enabled;
+	}
+
+	public void setDateQ1Enabled(String dateQ1Enabled) {
+		this.dateQ1Enabled = dateQ1Enabled;
+	}
+
+	public String getDateQ2Enabled() {
+		return dateQ2Enabled;
+	}
+
+	public void setDateQ2Enabled(String dateQ2Enabled) {
+		this.dateQ2Enabled = dateQ2Enabled;
+	}
+
+	public String getDateQ3Enabled() {
+		return dateQ3Enabled;
+	}
+
+	public void setDateQ3Enabled(String dateQ3Enabled) {
+		this.dateQ3Enabled = dateQ3Enabled;
+	}
+
+	public String getDateQ4Enabled() {
+		return dateQ4Enabled;
+	}
+
+	public void setDateQ4Enabled(String dateQ4Enabled) {
+		this.dateQ4Enabled = dateQ4Enabled;
 	}
 
 	public Project getProject() {
@@ -235,72 +346,5 @@ public class Budget {
 	public void setQuotes(List<Quote> quotes) {
 		this.quotes = quotes;
 	}
-
-	public double getQuote_spent() {
-		return quote_spent;
-	}
-
-	public void setQuote_spent(double quote_spent) {
-		this.quote_spent = quote_spent;
-	}
-
-	public double getQuote_pending() {
-		return quote_pending;
-	}
-
-	public void setQuote_pending(double quote_pending) {
-		this.quote_pending = quote_pending;
-	}
-
-	public double getQuote_staged() {
-		return quote_staged;
-	}
-
-	public void setQuote_staged(double quote_staged) {
-		this.quote_staged = quote_staged;
-	}
-
-	public String getBudget_code() {
-		return budget_code;
-	}
-
-	public void setBudget_code(String budget_code) {
-		this.budget_code = budget_code;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getCreated() {
-		return created;
-	}
-
-	public void setCreated(String created) {
-		this.created = created;
-	}
-
-	public String getEdited() {
-		return edited;
-	}
-
-	public void setEdited(String edited) {
-		this.edited = edited;
-	}
-
-	public double getRemaining_budget() {
-		return remaining_budget;
-	}
-
-	public void setRemaining_budget(double remaining_budget) {
-		this.remaining_budget = remaining_budget;
-	}
-	
-
-	
 	
 }

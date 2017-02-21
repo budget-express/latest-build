@@ -78,7 +78,7 @@
                     <h2>Files</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li>
-                      	<button type="button" data-toggle="modal" data-target="#file-modal-add" class="btn btn-primary btn-sm add_budget">Upload File</button>
+                      	<button type="button" data-toggle="modal" data-target="#file-modal-add" class="btn btn-primary btn-sm add_file" th:attr="data-quoteid=${quote.id}">Upload File</button>
                       </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -100,14 +100,18 @@
                         </thead>
 
 									<tbody>
-										<th:block th:each="file, rowStat : ${quote.files}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
-											<tr class="toprow pointer clickable-row" th:attr="data-href=@{/quote/}, data-id=${quote.id}">
-												<td th:text="${file.name}"></td>
+										<th:block th:each="file, rowStat : ${quote.fileUploads}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
+											<tr class="toprow pointer" th:attr="data-href=@{/quote/}, data-id=${quote.id}">
+												<td th:text="${file.name}" class="glyphicon glyphicon-paperclip"></td>
 												<td th:text="${file.type}"></td>				
 												<td th:text="${file.created}"></td>
 												<td class=" last">
-													<a data-toggle="modal" href="#file-modal-delete" class="btn btn-danger btn-xs" sec:authorize="hasAuthority('ROLE_ADMIN')"
+													<a th:href="@{/file/download/}+${file.id}" class="btn btn-info btn-xs" sec:authorize="hasAuthority('ROLE_USER')"
 													   th:attr="data-fileid=${file.id}"
+													   >
+													  <i class="fa fa-trash-o"></i> Download </a>
+													<a data-toggle="modal" href="#file-modal-delete" class="btn btn-danger btn-xs delete_file" sec:authorize="hasAuthority('ROLE_ADMIN')"
+													   th:attr="data-fileid=${file.id}, data-name=${file.name}"
 													   >
 													  <i class="fa fa-trash-o"></i> Delete </a>
 												</td>
@@ -121,13 +125,94 @@
               </div>
             </div>
           </div>
-
+				<!-- File-Modal-Add Start -->
+				<form action="#" th:action="@{/file}" method="post" enctype="multipart/form-data">
+					<div class="modal fade" id="file-modal-add" tabindex="-1" role="dialog" aria-labellefby="addFile">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="addFile">Add File</h4>
+								</div>
+								
+								<div class="modal-body">
+		
+									<input class="form-control quote-id" type="hidden" name="id" readonly="readonly" />
+		
+									<label for="fileName">File:</label>
+									<input type="file" id="fileName" class="form-control" name="myFile"/>
+																										
+									<label for="fileType">Type:</label>
+									<select id="fileType" class="form-control" name="fileType">
+				                        <option value="">Choose..</option>
+				                        <option value="Quote">Quote</option>
+				                        <option value="PO">PO</option>
+			                        </select>
+																														
+								</div>
+								
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									<button type="submit" class="btn btn-primary">Add</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				<!-- File-Modal-Add End -->
+				<!-- File-Modal-Delete Start -->
+				<div class="modal fade" id="file-modal-delete" tabindex="-1" role="dialog" aria-labellefby="deleteFile">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="bg-danger" id="deleteQuote">Delete File</h4>
+								</div>
+								
+								<div class="modal-body">
+		
+									<input class="form-control file-id" type="hidden" name="id" disabled="true"/>
+		
+									<label for="fileName">Name:</label>
+									<input type="text" class="form-control file-name" disabled="true"/>
+																					
+								</div>
+								
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-danger delete-button">Delete</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				<!-- File-Modal-Delete Start -->
+				
 				<!-- Page End -->
 				<th:block th:include="/layout/footer :: footer"></th:block>
 			</div>
 		</div>
 
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
+	<script>
+		    var id;
+	
+			$(document).on("click", '.add_file',function(e) {
+				var quoteid = $(this).data('quoteid');
+				$(".quote-id").val(quoteid);
+			});
+		    
+		    $(document).on("click", '.delete_file',function(e) {
+				id = $(this).data('fileid');
+				var name = $(this).data('name');
+				
+				$(".file-id").val(id);
+				$(".file-name").val(name);
+			});
+		    
+		    $(document).on("click", '.delete-button',function(e) {
+	    		location.href = "/file/delete/"+id;
+	    	});
+	</script>
 </body>
 </html>
 

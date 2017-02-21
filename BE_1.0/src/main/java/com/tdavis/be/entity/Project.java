@@ -16,27 +16,24 @@ public class Project {
 	@GeneratedValue
 	private Integer id;
 
+	//Profile Variables
 	private String name;
-	
 	private String description;
-	
 	private boolean enabled;
-	
 	private String year;
 	
-	private double requested_budget;
+	//Budget Variables
+	private double budgetRequested;
+	private double budgetApproved;
+	private double budgetSpent;
+	private double budgetPending;	
+	private double budgetStaged;
 	
-	private double approved_budget;
-	
-	private double spent_budget;
-	
-	private double pending_budget;
-	
-	private double staged_budget;
-	
-	private String created;
-	
-	private String edited;
+	//Date Variables
+	private String dateCreated;
+	private String dateEdited;
+	private String dateEnabled;
+	private String dateDisabled;
 	
 	//Project/Infrastructure
 	private String type;
@@ -45,7 +42,6 @@ public class Project {
 	private String status;
 	
 	@OneToMany(cascade = CascadeType.REMOVE)
-	@JoinColumn(name="project_id")
 	private List<Budget> budgets;
 	
 	@OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
@@ -99,53 +95,7 @@ public class Project {
 		this.budgets = budgets;
 	}
 
-	public double getAproved_budget() {
-		return approved_budget;
-	}
-
-	public void setAproved_budget(double aproved_budget) {
-		this.approved_budget = aproved_budget;
-	}
-
-	public double getSpent_budget() {
-		return spent_budget;
-	}
-
-	public void setSpent_budget(double spent_budget) {
-		this.spent_budget = spent_budget;
-	}
-
-	public double getRequested_budget() {
-		return requested_budget;
-	}
-
-	public void setRequested_budget(double requested_budget) {
-		this.requested_budget = requested_budget;
-	}
-
-	public double getPending_budget() {
-		return pending_budget;
-	}
-
-	public void setPending_budget(double pending_budget) {
-		this.pending_budget = pending_budget;
-	}
-
-	public double getStaged_budget() {
-		return staged_budget;
-	}
-
-	public void setStaged_budget(double staged_budget) {
-		this.staged_budget = staged_budget;
-	}
-
-	public double getApproved_budget() {
-		return approved_budget;
-	}
-
-	public void setApproved_budget(double approved_budget) {
-		this.approved_budget = approved_budget;
-	}
+	
 
 	public String getStatus() {
 		return status;
@@ -155,20 +105,26 @@ public class Project {
 		this.status = status;
 	}
 
-	public String getCreated() {
-		return created;
+
+
+	public String getDateCreated() {
+		return dateCreated;
 	}
 
-	public void setCreated(String created) {
-		this.created = created;
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
-	public String getEdited() {
-		return edited;
+	public String getDateEdited() {
+		return dateEdited;
 	}
 
-	public void setEdited(String edited) {
-		this.edited = edited;
+	public void setDateEdited(String dateEdited) {
+		this.dateEdited = dateEdited;
+	}
+
+	public String getDateEnabled() {
+		return dateEnabled;
 	}
 
 	public String getType() {
@@ -186,6 +142,63 @@ public class Project {
 	public void setHistorys(List<History> historys) {
 		this.historys = historys;
 	}
+
+	public String getDateEnablede() {
+		return dateEnabled;
+	}
+
+	public void setDateEnabled(String dateEnabled) {
+		this.dateEnabled = dateEnabled;
+	}
+
+	public String getDateDisabled() {
+		return dateDisabled;
+	}
+
+	public void setDateDisabled(String dateDisabled) {
+		this.dateDisabled = dateDisabled;
+	}
+
+	public double getBudgetRequested() {
+		return budgetRequested;
+	}
+
+	public void setBudgetRequested(double budgetRequested) {
+		this.budgetRequested = budgetRequested;
+	}
+
+	public double getBudgetApproved() {
+		return budgetApproved;
+	}
+
+	public void setBudgetApproved(double budgetApproved) {
+		this.budgetApproved = budgetApproved;
+	}
+
+	public double getBudgetSpent() {
+		return budgetSpent;
+	}
+
+	public void setBudgetSpent(double budgetSpent) {
+		this.budgetSpent = budgetSpent;
+	}
+
+	public double getBudgetPending() {
+		return budgetPending;
+	}
+
+	public void setBudgetPending(double budgetPending) {
+		this.budgetPending = budgetPending;
+	}
+
+	public double getBudgetStaged() {
+		return budgetStaged;
+	}
+
+	public void setBudgetStaged(double budgetStaged) {
+		this.budgetStaged = budgetStaged;
+	}
+	
 	
 	
 }

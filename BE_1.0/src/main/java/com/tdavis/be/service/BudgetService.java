@@ -52,76 +52,86 @@ public class BudgetService {
 		}
 		
 		public void save(Budget budget) {
-			History history = new History();
+			String time = sdf.format(new Date());
 			Project project = projectRepository.findById(budget.getProject().getId());
+			logger.info("Project ID: " + budget.getProject().getId());
+			if (budget.getId() != null) {logger.info("Budget ID: " + budget.getId());}
+			/*History history = new History();
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    	String name = auth.getName(); //get logged in username
-			
-	    	String time = sdf.format(new Date());
-	    	
+				    	
 			history.setName("Adding Project");
 			history.setType("success");
 			history.setLog("Adding Budget: "+budget.getName() +" By user: "+name);
 			history.setUser(userRepository.findByName(name));
 			history.setDate(time);
-			history.setProject(project);
+			history.setProject(project);*/
 			
 			
 			//Amount Spent/Pending/Staged
-			double quote_spent=0;
-			double quote_pending=0;
-			double quote_staged=0;
-			double remaining_budget=0;
-			double requested_amount=0;
-			
+			double quoteSpent=0;
+			double quotePending=0;
+			double quoteStaged=0;
+			double budgetRemaining=0;
+			double budgetRequested=0;
+			double budgetApproved=0;
 			
 			
 			if (budget.getQuotes() != null) {
 				for (Quote quote : budget.getQuotes()){
 					switch(quote.getStatus().toLowerCase()) {
 						case "complete" :
-							quote_spent += quote.getCapex();
+							quoteSpent += quote.getCapex();
 							break;
 						case "pending" :
-							quote_pending += quote.getCapex();
+							quotePending += quote.getCapex();
 							break;
 						case "staged" :
-							quote_staged += quote.getCapex();
+							quoteStaged += quote.getCapex();
+							break;
+						default :
 							break;
 					}
 				}
 			}
 						
-			budget.setQuote_spent(quote_spent);
-			budget.setQuote_pending(quote_pending);
-			budget.setQuote_staged(quote_staged);
+			budget.setQuoteSpent(quoteSpent);
+			budget.setQuotePending(quotePending);
+			budget.setQuoteStaged(quoteStaged);
 
 			//Approved Amount
-			double approved_amount=0;
-			if (budget.isQ1_enabled()) {approved_amount += budget.getQ1();}
-			if (budget.isQ2_enabled()) {approved_amount += budget.getQ2();}
-			if (budget.isQ3_enabled()) {approved_amount += budget.getQ3();}
-			if (budget.isQ4_enabled()) {approved_amount += budget.getQ4();}
-			
-			requested_amount = budget.getQ1()+budget.getQ2() + budget.getQ3() + budget.getQ4();
-			budget.setRequested_amount(requested_amount);
-
-			budget.setApproved_amount(approved_amount);
-			
-			remaining_budget = approved_amount - quote_spent;
-			
-			budget.setRemaining_budget(remaining_budget);
-	
-			if (budget.getCreated() == null){
-				budget.setCreated(time);
+			if (budget.isEnabledQ1()) {
+				budgetApproved += budget.getQ1();
+			}
+			if (budget.isEnabledQ2()) {
+				budgetApproved += budget.getQ2();
+			}
+			if (budget.isEnabledQ3()) {
+				budgetApproved += budget.getQ3();
+			}
+			if (budget.isEnabledQ4()) {
+				budgetApproved += budget.getQ4();
 			}
 			
-			budget.setEdited(time);			
+			budgetRequested = budget.getQ1()+budget.getQ2() + budget.getQ3() + budget.getQ4();
+			budget.setBudgetRequested(budgetRequested);
+
+			budget.setBudgetApproved(budgetApproved);
 			
-			budget.setProject(project);
+			budgetRemaining = budgetApproved - quoteSpent;
+			
+			budget.setBudgetRemaining(budgetRemaining);
+	
+			if (budget.getDateCreated() == null){
+				budget.setDateCreated(time);
+			}
+			
+			budget.setDateEdited(time);			
+			
+			//budget.setProject(project);
 			budgetRepository.save(budget);
 			projectService.save(project);
-			historyRepository.save(history);
+			//historyRepository.save(history);
 			logger.info("Saved Budget");
 		}
 		

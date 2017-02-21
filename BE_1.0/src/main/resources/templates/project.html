@@ -56,7 +56,7 @@
 								    	<tr class="headings">
 											<th class="column-title">Project Name </th>
 											<th class="column-title">Description </th>
-											<th class="column-title">Remainging Balance</th>
+											<th class="column-title">Remaining Balance</th>
 											<th class="column-title">Year</th>
 											<th class="column-title">Status</th>
 											<th class="column-title no-link last"><span class="nobr">Action</span></th>
@@ -68,7 +68,7 @@
 											<tr class="toprow pointer" th:attr="data-href=@{/project/}, data-id=${project.id}"> <!-- Change This Odd/Even -->
 												<td th:text="${project.name}"></td>
 												<td th:text="${project.description}"></td>
-												<td th:text="${project.approved_budget-project.spent_budget}"></td>
+												<td th:text="${project.budgetApproved-project.budgetSpent}"></td>
 												<td th:text="${project.year}"></td>
 												<td>
 						                          	<div th:switch="${project.status}">
@@ -95,7 +95,8 @@
 													   data-status=${project.status},
 													   data-type=${project.type},
 													   data-year=${project.year}">
-													  <i class="fa fa-trash-o"></i> Delete </a>
+													  <i class="fa fa-trash-o"></i> Delete 
+													 </a>
 												</td>
 											</tr>
 										</th:block>			

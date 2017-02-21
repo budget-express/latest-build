@@ -5,6 +5,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -14,6 +15,8 @@ public class FileUpload {
 	private Integer id;
 	private String type;
 	private String name;
+	
+	@Lob
 	private byte[] filedata;
 	private String created;
 	
@@ -33,12 +36,14 @@ public class FileUpload {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getFileName() {
+	
+	public String getName() {
 		return name;
 	}
-	public void setFileName(String fileName) {
-		this.name = fileName;
+	public void setName(String name) {
+		this.name = name;
 	}
+
 	public byte[] getFiledata() {
 		return filedata;
 	}

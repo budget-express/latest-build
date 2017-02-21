@@ -78,7 +78,7 @@
 								<ul class="nav navbar-right panel_toolbox">
 						      		<li>
 						      			<!--  Modal work here for Add Project -->
-						  				<button type="button" data-toggle="modal" data-target="#budget-modal-add" class="btn btn-primary btn-sm add_budget" th:attr="data-id=${project.id},data-year=${project.year}">Add Budget</button>
+						  				<button type="button" data-toggle="modal" data-target="#budget-modal-add" class="btn btn-primary btn-sm add_budget" th:attr="data-projectid=${project.id},data-year=${project.year}">Add Budget</button>
 									</li>
 								</ul>
 								<div class="clearfix"></div>
@@ -103,8 +103,8 @@
 											<tr class="toprow pointer">
 												<td th:text="${budget.name}"></td>
 												<td th:text="${budget.descriptionShort}"></td>				
-												<td>$ <span th:text="${#numbers.formatDecimal(budget.requested_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
-												<td>$ <span th:text="${#numbers.formatDecimal(budget.approved_amount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+												<td>$ <span th:text="${#numbers.formatDecimal(budget.budgetRequested, 0, 'COMMA', 2, 'POINT')}"></span></td>
+												<td>$ <span th:text="${#numbers.formatDecimal(budget.budgetApproved, 0, 'COMMA', 2, 'POINT')}"></span></td>
 												<td th:text="${budget.region}"></td>
 												<td>
 						                          	<div th:switch="${budget.status}">
@@ -115,34 +115,35 @@
 												</td>
 												<td class=" last">
 													<a th:href="@{/budget/}+${budget.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-													<a  data-toggle="modal" href="#budget-modal-add" class="btn btn-info btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')" 
-														th:attr="data-id=${project.id},
+													<a  data-toggle="modal" href="#budget-modal-add" class="btn btn-info btn-xs popBudget edit_budget" sec:authorize="hasAuthority('ROLE_ADMIN')" 
+														th:attr="data-id=${budget.id},
+														data-projectid=${project.id},
 														data-name=${budget.name},
 														data-sdescription=${budget.descriptionShort},
 														data-ldescription=${budget.descriptionLong},
 														data-year=${budget.year},
-														data-code=${budget.budget_code},
+														data-code=${budget.budgetCode},
 														data-status=${budget.status},
 														data-category=${budget.category},
 														data-region=${budget.region},
 														data-criticality=${budget.criticality},
 														data-ranking=${budget.ranking},
 														data-q1=${budget.q1},
-														data-q1e=${budget.q1_enabled},
+														data-q1e=${budget.enabledQ1},
 														data-q2=${budget.q2},
-														data-q2e=${budget.q2_enabled},
+														data-q2e=${budget.enabledQ2},
 														data-q3=${budget.q3},
-														data-q3e=${budget.q3_enabled},
+														data-q3e=${budget.enabledQ3},
 														data-q4=${budget.q4},
-														data-q4e=${budget.q4_enabled}">
+														data-q4e=${budget.enabledQ4}">
 														<i class=" fa fa-pencil"></i>Edit
 													</a>
 													<a data-toggle="modal" href="#budget-modal-delete" class="btn btn-danger btn-xs popBudget" sec:authorize="hasAuthority('ROLE_ADMIN')"
-													   th:attr="data-id=${project.id},
+													   th:attr="data-id=${budget.id},
 														data-name=${budget.name},
 														data-sdescription=${budget.descriptionShort},
 														data-year=${budget.year},
-														data-code=${budget.budget_code},
+														data-code=${budget.budgetCode},
 														data-status=${budget.status}">
 													  <i class="fa fa-trash-o"></i> Delete </a>
 												</td>
@@ -166,13 +167,14 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4><label class="modal-title addBudget" id="addBudget">Add budget</label></h4>
+						<h4><label class="modal-title addBudget" id="titleModal">Add budget</label></h4>
 					</div>
-					
+					 
 					<div class="modal-body">
 					
-						<input class="form-control project-id" type="hidden" th:field="*{project.id}" name="id" readonly="readonly" th:value="${project.id}" />
-					
+						<input class="form-control project-id" type="hidden" th:field="*{project.id}" name="project-id" readonly="readonly" />
+						<input class="form-control id" type="hidden" th:field="*{id}" name="id" readonly="readonly" />
+						
 						<ul class="nav nav-pills nav-stacked col-md-4">
 						  <li class="active"><a href="#tab_profile" data-toggle="pill">Profile</a></li>
 						  <li><a href="#tab_details" data-toggle="pill">Details</a></li>
@@ -195,7 +197,7 @@
 								<input type="text" th:field="*{year}" id="budgetYear" class="form-control project-year" name="year" readonly="readonly" th:value="${project.year}" />
 								
 								<label for="budgetCode">Budget Code:</label>
-								<input type="text" th:field="*{budget_code}" id="budgetCode" class="form-control budget-code" />
+								<input type="text" th:field="*{budgetCode}" id="budgetCode" class="form-control budget-code" />
 								<br />
 								
 						    </div>
@@ -251,27 +253,24 @@
 					        <div class="tab-pane" id="tab_breakout">
 					        	<label for="budgetQ1amount">Q1 amount:</label>
 								<input type="text" th:field="*{q1}" id="budgetQ1amount" class="form-control budget-q1" />
-								<div class="checkbox">
-									<label><input type="checkbox" th:field="*{q1_enabled}" class="budget-q1e" />Q1 enabled</label>
-								</div>
-								
+								<label for="budget-q1e" class="control-label">Enabled?</label>
+								<input type="checkbox" th:field="*{enabledQ1}" id="budget-q1e" class="flat budget-q1e" />
+								<br />								
 								<label for="budgetQ2amount">Q2 amount:</label>
 								<input type="text" th:field="*{q2}" id="budgetQ2amount" class="form-control budget-q2" />
-								<div class="checkbox">
-									<label><input type="checkbox" th:field="*{q2_enabled}" class="budget-q1e" />Q2 enabled</label>
-								</div>
-								
+								<label for="budget-q2e" class="control-label">Enabled?</label>
+								<input type="checkbox" th:field="*{enabledQ2}" id="budget-q2e" class="flat budget-q2e" />
+								<br />
 								<label for="budgetQ3amount">Q3 amount:</label>
-								<input type="text" th:field="*{Q3}" id="budgetQ3amount" class="form-control budget-q3" />
-								<div class="checkbox">
-									<label><input type="checkbox" th:field="*{Q3_enabled}" class="budget-q1e" />Q3 enabled</label>
-								</div>
-								
+								<input type="text" th:field="*{q3}" id="budgetQ3amount" class="form-control budget-q3" />
+								<label for="budget-q3e" class="control-label">Enabled?</label>
+								<input type="checkbox" th:field="*{enabledQ3}" id="budget-q3e" class="flat budget-q3e" />
+								<br />
 								<label for="budgetQ4amount">Q4 amount:</label>
-								<input type="text" th:field="*{Q4}" id="budgetQ4amount" class="form-control budget-q4" />
-								<div class="checkbox">
-									<label><input type="checkbox" th:field="*{Q4_enabled}" class="budget-q1e" />Q4 enabled</label>
-								</div>
+								<input type="text" th:field="*{q4}" id="budgetQ4amount" class="form-control budget-q4" />
+								<br />
+								<label for="budget-q4e" class="control-label">Enabled?</label>
+								<input type="checkbox" th:field="*{enabledQ4}" id="budget-q4e" class="flat budget-q4e" />
 								
 								<br />
 					        </div>
@@ -281,26 +280,60 @@
 					
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Add</button>
+						<button type="submit" class="btn btn-primary submitButton">Add</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</form>
 	<!-- Budget-Modal-Add/Edit End -->
-			
+	<!-- Project-Modal-Delete Start -->
+		
+			<div class="modal fade" id="budget-modal-delete" tabindex="-1" role="dialog" aria-labellefby="deleteBudget">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="bg-danger" id="deleteBudget">Delete Budget</h4>
+							</div>
+							
+							<div class="modal-body">
+	
+								<input class="form-control budget-id" type="hidden" name="id" disabled="true"/>
+	
+								<label for="projectName">Name:</label>
+								<input type="text" class="form-control budget-name" disabled="true"/>
+																				
+							</div>
+							
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-danger delete-button">Delete</button>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+	<!-- Project-Modal-Delete End -->		
 									
 	<!-- Page End -->
 	<th:block th:include="/layout/footer :: footer"></th:block>
 	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
 	<script>
 		    $(document).on("click", '.add_budget',function(e) {
-				var id = $(this).data('id');
 				var year = $(this).data('year');
+				var projectid = $(this).data('projectid');
 				console.log(id);
-				$(".project-id").val(id);
+				$(".project-id").val(projectid);
 				$(".project-year").val(year);
-				$(".addBudget").val('Add Budget');
+				$(".submitButton").val('Add');
+				$(".titleModal").text('Add Budget')
+			});
+	</script>
+	<script>
+		    $(document).on("click", '.edit_budget',function(e) {
+				$(".submitButton").val('Edit');
+				$(".titleModal").text('Edit Budget')
 			});
 	</script>
 	<!-- Populate Budget Start -->
@@ -308,6 +341,7 @@
     	var id;
 	    $(document).on("click", '.popBudget',function(e) {
 			id = $(this).data('id');
+			var projectid = $(this).data('projectid');
 			var name = $(this).data('name');
 			var sdescription = $(this).data('sdescription');
 			var ldescription = $(this).data('ldescription');
@@ -326,7 +360,7 @@
 			var q3e = $(this).data('q3e');
 			var q4 = $(this).data('q4');
 			var q4e = $(this).data('q4e');
-
+			console.log(q1e+':'+q2e+':'+q3e+':'+q4e);
 			if (q1e == true){
 				$('.budget-q1e').prop('checked', true);
 			}else {$('.budget-q1e').prop('checked', false);}
@@ -343,7 +377,8 @@
 				$('.budget-q4e').prop('checked', true);
 			}else {$('.budget-q4e').prop('checked', false);}
 			
-			$(".project-id").val(id);
+			$(".budget-id").val(id);
+			$(".project-id").val(projectid);
 			$(".budget-name").val(name);
 			$(".budget-sdescription").val(sdescription);
 			$(".budget-ldescription").val(ldescription);
@@ -372,7 +407,7 @@
     <!-- Delete Budget Start  -->
     <script>
     	$(document).on("click", '.delete-button',function(e) {
-    		location.href = "/project/delete/"+id;
+    		location.href = "/budget/delete/"+id;
     	});
     </script>
     <!-- Delete Budget End -->

@@ -21,30 +21,30 @@ public class Quote {
 	private Integer id;
 
 	private String name;
-	
 	private double capex;
-	
 	private double opex;
-	
 	private String justification;
-	
 	private String vendor;
-	
 	private String po;
 	
+	//Planning/Open/Closed
 	private String status;
+	private String vendorContact;
+	private String vendorEmail;
 	
+	//Timestamps
 	private String created;
-	
 	private String edited;
+	private String dateEnabled; 
+    private String dateDisabled;
+    
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "budget_id")
 	private Budget budget;
 	
 	@OneToMany(cascade = CascadeType.REMOVE)
-	@JoinColumn(name="quote_id")
-	private List<FileUpload> files;
+	private List<FileUpload> fileUploads;
 	
 	
 
@@ -136,12 +136,46 @@ public class Quote {
 		this.edited = edited;
 	}
 
-	public List<FileUpload> getFiles() {
-		return files;
+
+
+	public List<FileUpload> getFileUploads() {
+		return fileUploads;
 	}
 
-	public void setFiles(List<FileUpload> files) {
-		this.files = files;
+	public void setFileUploads(List<FileUpload> fileUploads) {
+		this.fileUploads = fileUploads;
+	}
+
+	public String getVendorContact() {
+		return vendorContact;
+	}
+
+	public void setVendorContact(String vendorContact) {
+		this.vendorContact = vendorContact;
+	}
+
+	public String getVendorEmail() {
+		return vendorEmail;
+	}
+
+	public void setVendorEmail(String vendorEmail) {
+		this.vendorEmail = vendorEmail;
+	}
+
+	public String getDateEnabled() {
+		return dateEnabled;
+	}
+
+	public void setDateEnabled(String dateEnabled) {
+		this.dateEnabled = dateEnabled;
+	}
+
+	public String getDateDisabled() {
+		return dateDisabled;
+	}
+
+	public void setDateDisabled(String dateDisabled) {
+		this.dateDisabled = dateDisabled;
 	}
 	
 	

@@ -29,6 +29,16 @@ import com.tdavis.be.service.QuoteService;
 public class ProjectController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	//Model Configuration
+	private String modelProjectTitle = "Projects";
+	private String modelUsername = "username";
+	private String modelProjects = "projects";
+	private String modelProject = "project";
+	private String modelTitle = "title";
+	
+	//HTML output file
+	private String sourceProject = "project";
+	
 	@Autowired
 	private ProjectService projectService;
 	
@@ -39,12 +49,12 @@ public class ProjectController {
 	private QuoteService quoteService;
 	
 	@ModelAttribute("project")
-	public Project construct() {
+	public Project projectConstruct() {
 		return new Project();
 	}
 	
 	@ModelAttribute("budget")
-		public Budget bconstruct() {
+		public Budget budgetConstruct() {
 		return new Budget();
 	}
 	
@@ -55,20 +65,20 @@ public class ProjectController {
 				
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
-    	model.addAttribute("username", name);
-    	model.addAttribute("projects", page);//projectService.findAll());
-		model.addAttribute("title", "Projects");
-		return "project";
+    	model.addAttribute(modelUsername, name);
+    	model.addAttribute(modelProjects, page);
+		model.addAttribute(modelTitle, modelProjectTitle);
+		return sourceProject;
 	}
 	
 	//1-Project List - Admin Details
 	@RequestMapping("/{id}")
-	public String ShowProjectDetails(Model model, @PathVariable String id) {
+	public String showProjectDetails(Model model, @PathVariable String id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
-    	model.addAttribute("username", name);
-    	model.addAttribute("project", projectService.findById(Integer.parseInt(id)));
-    	model.addAttribute("title", "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
+    	model.addAttribute(modelUsername, name);
+    	model.addAttribute(modelProject, projectService.findById(Integer.parseInt(id)));
+    	model.addAttribute(modelTitle, "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
 		return "project-details";
 	}
 	
@@ -79,29 +89,28 @@ public class ProjectController {
 
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
-    	model.addAttribute("username", name);
-    	model.addAttribute("projects", page);
-		model.addAttribute("title", "Projects");
+    	model.addAttribute(modelUsername, name);
+    	model.addAttribute(modelProjects, page);
+		model.addAttribute(modelTitle, modelProjectTitle);
 		return "project-list";
 	}
 	
 	//2-Project List - View Details
 	@RequestMapping("/details/{id}")
 	public String projectDetails(Model model, @PathVariable String id) {
-		//int id = 1;
 
-		double approved = projectService.findById(Integer.parseInt(id)).getApproved_budget();
-		double spent = projectService.findById(Integer.parseInt(id)).getSpent_budget();
-		double balance = 0;
-		
-		balance = approved - spent;
+		double approved = projectService.findById(Integer.parseInt(id)).getBudgetApproved();
+		double spent = projectService.findById(Integer.parseInt(id)).getBudgetSpent();
+		double balance;
+		 
+		balance = approved - spent; 
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
-    	model.addAttribute("username", name);
-    	model.addAttribute("project", projectService.findById(Integer.parseInt(id)));
+    	model.addAttribute(modelUsername, name);
+    	model.addAttribute(modelProject, projectService.findById(Integer.parseInt(id)));
     	model.addAttribute("spent",balance);
-		model.addAttribute("title", "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
+		model.addAttribute(modelTitle, "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
 		return "project_details";
 	}
 	
@@ -124,10 +133,10 @@ public class ProjectController {
 		
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
-    	model.addAttribute("username", name);
-    	model.addAttribute("projects", page);
-		model.addAttribute("title", "Projects");
-		return "project";
+    	model.addAttribute(modelUsername, name);
+    	model.addAttribute(modelProjects, page);
+		model.addAttribute(modelTitle, modelProjectTitle);
+		return sourceProject;
 	}
 	
 	//Add Project
@@ -135,7 +144,7 @@ public class ProjectController {
 	public String saveUser(@ModelAttribute @Valid Project project, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			
-			return "project";
+			return sourceProject;
 		}
 		logger.info("Saving Project: "+project.getName()+project.getYear());
 		projectService.save(project);
@@ -145,10 +154,10 @@ public class ProjectController {
 		
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
-    	model.addAttribute("username", name);
-    	model.addAttribute("projects", page);
-		model.addAttribute("title", "Projects");		
+    	model.addAttribute(modelUsername, name);
+    	model.addAttribute(modelProjects, page);
+		model.addAttribute(modelTitle, modelProjectTitle);		
 		model.addAttribute("success", true);
-		return "project";
+		return sourceProject;
 	}
 }

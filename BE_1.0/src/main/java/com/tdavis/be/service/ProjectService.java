@@ -77,26 +77,26 @@ public class ProjectService {
 			
 			
 			//Requested/Approved/Spent/Pending/Staged Amount
-			double requested_budget=0;
-			double approved_budget=0;
-			double spent_budget=0;
-			double pending_budget=0;
-			double staged_budget=0;
+			double budgetRequested = 0;
+			double budgetApproved = 0;
+			double budgetSpent = 0;
+			double budgetPending = 0;
+			double budgetStaged = 0;
 			
 			if (project.getBudgets() != null){
 				for (Budget budget : project.getBudgets()){
-					requested_budget += budget.getRequested_amount();
-					approved_budget += budget.getApproved_amount();
-					spent_budget += budget.getQuote_spent();
-					pending_budget += budget.getQuote_pending();
-					staged_budget += budget.getQuote_staged();
+					budgetRequested += budget.getBudgetRequested();
+					budgetApproved += budget.getBudgetApproved();
+					budgetSpent += budget.getQuoteSpent();
+					budgetPending += budget.getQuotePending();
+					budgetStaged += budget.getQuoteStaged();
 				}
 
-				project.setAproved_budget(approved_budget);
-				project.setRequested_budget(requested_budget);
-				project.setSpent_budget(spent_budget);
-				project.setStaged_budget(staged_budget);
-				project.setPending_budget(pending_budget);
+				project.setBudgetApproved(budgetApproved);
+				project.setBudgetRequested(budgetRequested);
+				project.setBudgetSpent(budgetSpent);
+				project.setBudgetStaged(budgetStaged);
+				project.setBudgetPending(budgetPending);
 			}
 			
 			
@@ -107,12 +107,12 @@ public class ProjectService {
 				case "Closed" : project.setEnabled(false);break;
 			}
 			
-			if (project.getCreated() == null){
+			if (project.getDateCreated() == null){
 				
-				project.setCreated(time);
+				project.setDateCreated(time);
 			}
 
-			project.setEdited(time);
+			project.setDateEdited(time);
 			
 			historyRepository.save(history);
 			projectRepository.save(project);
