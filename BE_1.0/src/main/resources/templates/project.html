@@ -111,7 +111,7 @@
 	</div>
 	
 	<!-- Project-Modal-Add Start -->
-		<form action="#" th:action="@{/project}" th:object="${project}" method="post">
+		<form action="#" th:action="@{/project/save}" th:object="${project}" method="post">
 			<div class="modal fade" id="project-modal-add" tabindex="-1" role="dialog" aria-labellefby="addProject">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -159,7 +159,7 @@
 		</form>
 	<!-- Project-Modal-Add End -->
 	<!-- Project-Modal-Edit Start -->
-		<form action="#" th:action="@{/project}" th:object="${project}" method="post">
+		<form action="#" th:action="@{/project/update}" th:object="${project}" method="post">
 			<div class="modal fade" id="project-modal-edit" tabindex="-1" role="dialog" aria-labellefby="editProject">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">

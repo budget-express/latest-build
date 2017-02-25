@@ -118,9 +118,7 @@ public class ProjectController {
 	//Update Calculations
 	@RequestMapping("/refresh") 
 	public String projectRefresh(Model model) {
-		budgetService.refresh();
 		projectService.refresh();
-		quoteService.refresh();
 		return "index";
 	}
 	
@@ -140,15 +138,37 @@ public class ProjectController {
 	}
 	
 	//Add Project
-	@PostMapping()
-	public String saveUser(@ModelAttribute @Valid Project project, BindingResult bindingResult, Model model) {
+	@PostMapping("/save")
+	public String saveProject(@ModelAttribute @Valid Project project, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			
 			return sourceProject;
 		}
-		logger.info("Saving Project: "+project.getName()+project.getYear());
+
 		projectService.save(project);
-		logger.info("Saved Project: "+project.getName()+project.getYear());
+
+		
+		Page<Project> page = projectService.getProjectbyYear(1);
+		
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String name = auth.getName(); //get logged in username
+    	model.addAttribute(modelUsername, name);
+    	model.addAttribute(modelProjects, page);
+		model.addAttribute(modelTitle, modelProjectTitle);		
+		model.addAttribute("success", true);
+		return sourceProject;
+	}
+	
+	//Update Project
+	@PostMapping("/update")
+	public String updateProject(@ModelAttribute @Valid Project project, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			
+			return sourceProject;
+		}
+
+		projectService.update(project);
+
 		
 		Page<Project> page = projectService.getProjectbyYear(1);
 		

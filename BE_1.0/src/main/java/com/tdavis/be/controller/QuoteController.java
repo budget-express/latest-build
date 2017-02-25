@@ -81,11 +81,12 @@ public class QuoteController {
 			return "project";
 		}
 		
+		quote.setBudget(budgetService.findById(quote.getBudget().getId()));
 		quoteService.save(quote);
-		logger.info(quote.getName() + " saved");
+		
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	model.addAttribute("username", name);
+
+    	model.addAttribute("username", auth.getName());
     	model.addAttribute("quote", quote);
 		model.addAttribute("title", "Quote");		
 		model.addAttribute("success", true);

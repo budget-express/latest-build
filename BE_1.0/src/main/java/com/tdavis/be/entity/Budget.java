@@ -65,6 +65,7 @@ public class Budget {
 	private Project project;
 	
 	@OneToMany(cascade = CascadeType.REMOVE)
+	@JoinColumn(name="budget_id")
 	private List<Quote> quotes;
 
 	public Integer getId() {

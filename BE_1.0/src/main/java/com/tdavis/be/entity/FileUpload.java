@@ -18,7 +18,9 @@ public class FileUpload {
 	
 	@Lob
 	private byte[] filedata;
-	private String created;
+	
+	//Timestamps
+	private String dateCreated;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "quote_id")
@@ -56,12 +58,14 @@ public class FileUpload {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public String getCreated() {
-		return created;
+	public String getDateCreated() {
+		return dateCreated;
 	}
-	public void setCreated(String created) {
-		this.created = created;
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
 	}
+
+	
 	 
 	
 	

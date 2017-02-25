@@ -42,6 +42,7 @@ public class Project {
 	private String status;
 	
 	@OneToMany(cascade = CascadeType.REMOVE)
+	@JoinColumn(name="project_id")
 	private List<Budget> budgets;
 	
 	@OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)

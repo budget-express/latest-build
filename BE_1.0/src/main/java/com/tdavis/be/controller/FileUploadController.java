@@ -49,7 +49,7 @@ public class FileUploadController {
 	
 	@RequestMapping("/delete/{id}")
 	public String deleteFile(@PathVariable int id, Model model) {
-		Quote quote = quoteService.findById(id);
+		Quote quote = fileUploadService.findById(id).getQuote();
 		fileUploadService.delete(id);
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -77,7 +77,7 @@ public class FileUploadController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);
-    	model.addAttribute("quote", quote);
+    	model.addAttribute("quote", quoteService.findById(Integer.parseInt(id)));
 		model.addAttribute("title", "Quote");
 		
 		return "quote-details";

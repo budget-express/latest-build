@@ -8,4 +8,5 @@ public interface QuoteRepository extends JpaRepository<Quote, Integer> {
 	Quote findByName(String name);
 	
 	Quote findById(int id);
+
 }

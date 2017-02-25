@@ -33,8 +33,8 @@ public class Quote {
 	private String vendorEmail;
 	
 	//Timestamps
-	private String created;
-	private String edited;
+	private String dateCreated;
+	private String dateEdited;
 	private String dateEnabled; 
     private String dateDisabled;
     
@@ -44,6 +44,7 @@ public class Quote {
 	private Budget budget;
 	
 	@OneToMany(cascade = CascadeType.REMOVE)
+	@JoinColumn(name = "quote_id")
 	private List<FileUpload> fileUploads;
 	
 	
@@ -120,23 +121,21 @@ public class Quote {
 		this.status = status;
 	}
 
-	public String getCreated() {
-		return created;
+	public String getDateCreated() {
+		return dateCreated;
 	}
 
-	public void setCreated(String created) {
-		this.created = created;
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
-	public String getEdited() {
-		return edited;
+	public String getDateEdited() {
+		return dateEdited;
 	}
 
-	public void setEdited(String edited) {
-		this.edited = edited;
+	public void setDateEdited(String dateEdited) {
+		this.dateEdited = dateEdited;
 	}
-
-
 
 	public List<FileUpload> getFileUploads() {
 		return fileUploads;
