@@ -59,51 +59,54 @@ public class QuoteService {
 		 ***************************************************************************************************************************/
 		
 		/*
-		 * Save Quote + Update Budget
+		 * Save/Update Quote + Update Budget
 		 */
 		public void save(Quote quote) {
 			
 			//Find Budget
 			Budget budget = budgetService.findById(quote.getBudget().getId());
 			
-			//Set Created Timestamp
-			String time = sdf.format(new Date());
-			if (quote.getDateCreated() == null){
-				quote.setDateCreated(time);
-			}
-
-			//Set Parent Budget
-			quote.setBudget(budget);
-			
-			//Save Quote to Repository
-			quoteRepository.save(quote);
-			logger.info("*Service* Saved Quote: " + quote.getName()+" to Budget: " + budget.getName());
-			
-			//Update Budget
-			budgetService.update(quote.getBudget());
-
-		}
-		
-		/*
-		 * Update Quote
-		 */
-		public void update(Quote quote) {
-			
 			//Temp Quote
 			Quote temp = quote;
 			
-			//Set Edited Timestamp
+			//Set Current Time for Timestamp
 			String time = sdf.format(new Date());
-			temp.setDateEdited(time);
-					
-			//Save Quote to Repository
-			quoteRepository.save(quote);
-			logger.info("*Service* Updated Quote: " + temp.getName());
 			
-			//Update Budget
-			budgetService.update(quote.getBudget());
+			//If...Existing Quote...Update Quote in Repository
+			if (temp.getId() != null){
+				
+				//!!!!!!Not sure why I have to do this????
+				temp.setDateCreated(findById(quote.getId()).getDateCreated());
+				
+				//Set Edited Timestamp
+				temp.setDateEdited(time);
+				
+				//Save Quote to Repository
+				quoteRepository.save(temp);
+				logger.info("*Service* Updated Quote: " + temp.getName());
+				
+				//Set Parent Budget
+				temp.setBudget(budget);
+				
+				//Update Budget
+				budgetService.save(budget);
+				
+			} else {
+				//Set Created Timestamp
+				temp.setDateCreated(time);
+				
+				//Set Parent Budget
+				temp.setBudget(budget);
+				
+				//Save Quote to Repository
+				quoteRepository.save(temp);
+				logger.info("*Service* Saved Quote: " + temp.getName()+" to Budget: " + budget.getName());
+				
+				//Update Budget
+				budgetService.save(budget);
+			}
 		}
-		
+			
 		/*
 		 * Delete Quote
 		 */
@@ -117,7 +120,7 @@ public class QuoteService {
 			logger.info("*Service* Deleted Quote "+ temp.getName()+" from Budget: " + temp.getBudget().getName());
 			
 			//Update Budget
-			budgetService.update(temp.getBudget());
+			budgetService.save(temp.getBudget());
 		}
 		
 		/*
@@ -125,7 +128,7 @@ public class QuoteService {
 		 */
 		public void refresh() {
 			for (Quote quote : findAll()) {
-				update(quote);
+				save(quote);
 			}
 			logger.info("*Service* Refreshing Quotes!");
 		}

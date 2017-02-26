@@ -1,21 +1,22 @@
 package com.tdavis.be.service;
 
 
+import javax.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
-import javax.transaction.Transactional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
 import com.tdavis.be.entity.Budget;
 import com.tdavis.be.entity.Project;
@@ -41,6 +42,11 @@ public class ProjectService {
 	@Autowired
 	private BudgetService budgetService;
 
+	/***************************************************************************************************************************
+	 * 
+	 * Recall Data from Repository 
+	 * 
+	 ***************************************************************************************************************************/
 	
 	/* Recall Data
 	 * Project findAll
@@ -65,21 +71,47 @@ public class ProjectService {
 		return projectRepository.findAll(pageable);
 	}
 	
+	/***************************************************************************************************************************
+	 * 
+	 * Interacting With Repository 
+	 * 
+	 ***************************************************************************************************************************/
+	
 	/*
 	 * Save Project
 	 */
 	public void save(Project project) {
-		
-		//Set Created Timestamp
-    	String time = sdf.format(new Date());
-		if (project.getDateCreated() == null){
 			
-			project.setDateCreated(time);
-		}
+		//Set Current Time for Timestamp
+    	String time = sdf.format(new Date());
+    	
+    	//If...Existing Project...Update Project in Repository
+		if (project.getId() != null){
+			
+			//Not sure why I have to do this????
+			project.setDateCreated(findById(project.getId()).getDateCreated());
+			
+			//Temp Project
+			Project temp;
+			temp = budgetCal(project);
 
-		//Save Project to Repository
-		projectRepository.save(project);
-		logger.info("*Service* Saved Project "+ project.getName());
+			//Set Edited timestamp
+			temp.setDateEdited(time);
+			
+			//Update Project in Repository
+			projectRepository.save(temp);
+			logger.info("*Service* Updated Project: " + temp.getName());
+
+		//Else...New Record...Save to Repository
+		} else {
+
+			//Set Created Timestamp
+			project.setDateCreated(time);
+			
+			//Save Project to Repository
+			projectRepository.save(project);
+			logger.info("*Service* Saved Project "+ project.getName());
+		}
 	}
 	
 	/*
@@ -91,27 +123,31 @@ public class ProjectService {
 		budgetService.refresh();
 		
 		for (Project project : findAll()) {
-			update(project);
+			save(project);
 		}
 		logger.info("*Service* Refreshing Projects!");
 	}
 	
 	/*
-	 * Update Project
+	 * Delete Project
 	 */
-	public void update(Project project) {
-		
-		//Temp Project
-		Project temp = budgetCal(project);
-
-		//Set Edited timestamp
-		String time = sdf.format(new Date());
-		temp.setDateEdited(time);
-
-		projectRepository.save(project);
-		logger.info("*Service* Updated Project: " + temp.getName());
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public void delete(int id) {
+		Project temp = projectRepository.findById(id);
+		projectRepository.delete(temp);
+		logger.info("*Service* Deleted Project "+ temp.getName());
+			
 	}
 	
+	/***************************************************************************************************************************
+	 * 
+	 * Utility Functions
+	 * 
+	 ***************************************************************************************************************************/
+	
+	/*
+	 * Calculate Budget for Project
+	 */
 	public Project budgetCal(Project project) {
 		//Requested/Approved/Spent/Pending/Staged Amount
 		double budgetRequested = 0;
@@ -147,17 +183,5 @@ public class ProjectService {
 		}
 		
 		return project;
-	}
-	
-	/*
-	 * Delete Project
-	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public void delete(int id) {
-		Project temp = projectRepository.findById(id);
-		projectRepository.delete(temp);
-		logger.info("*Service* Deleted Project "+ temp.getName());
-			
-	}
-		
+	}		
 }

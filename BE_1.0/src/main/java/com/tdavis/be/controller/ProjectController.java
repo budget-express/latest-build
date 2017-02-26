@@ -3,8 +3,8 @@ package com.tdavis.be.controller;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -19,15 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tdavis.be.entity.Budget;
 import com.tdavis.be.entity.Project;
-import com.tdavis.be.service.BudgetService;
 import com.tdavis.be.service.ProjectService;
-import com.tdavis.be.service.QuoteService;
+
 
 
 @Controller
 @RequestMapping("/project")
 public class ProjectController {
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	//private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	//Model Configuration
 	private String modelProjectTitle = "Projects";
@@ -41,12 +40,6 @@ public class ProjectController {
 	
 	@Autowired
 	private ProjectService projectService;
-	
-	@Autowired
-	private BudgetService budgetService;
-	
-	@Autowired
-	private QuoteService quoteService;
 	
 	@ModelAttribute("project")
 	public Project projectConstruct() {
@@ -74,11 +67,18 @@ public class ProjectController {
 	//1-Project List - Admin Details
 	@RequestMapping("/{id}")
 	public String showProjectDetails(Model model, @PathVariable String id) {
+		
+		//Find Project
+		Project project = projectService.findById(Integer.parseInt(id));
+		
+		//Set Model Variables
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute(modelUsername, name);
-    	model.addAttribute(modelProject, projectService.findById(Integer.parseInt(id)));
-    	model.addAttribute(modelTitle, "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
+    	model.addAttribute(modelProject, project);
+    	model.addAttribute(modelTitle, "Project Details -" + project.getName());
+    	
+    	//Return project-details.html
 		return "project-details";
 	}
 	
@@ -118,23 +118,23 @@ public class ProjectController {
 	//Update Calculations
 	@RequestMapping("/refresh") 
 	public String projectRefresh(Model model) {
+		
+		//Call Project Service to Refresh all Calculations
 		projectService.refresh();
-		return "index";
+		
+		//Redirect to Index
+		return "redirect:/index";
 	}
 	
 	//Delete Project
 	@RequestMapping("/delete/{id}")
 	public String projectDelete(Model model, @PathVariable int id){
+
+		//Call Project Service to Delete Project
 		projectService.delete(id);
-		
-		Page<Project> page = projectService.getProjectbyYear(1);
-		
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	model.addAttribute(modelUsername, name);
-    	model.addAttribute(modelProjects, page);
-		model.addAttribute(modelTitle, modelProjectTitle);
-		return sourceProject;
+
+		//Redirect to Project
+		return "redirect:/project";
 	}
 	
 	//Add Project
@@ -144,40 +144,11 @@ public class ProjectController {
 			
 			return sourceProject;
 		}
-
+		
+		//Call Project Service to Save Project
 		projectService.save(project);
-
 		
-		Page<Project> page = projectService.getProjectbyYear(1);
-		
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	model.addAttribute(modelUsername, name);
-    	model.addAttribute(modelProjects, page);
-		model.addAttribute(modelTitle, modelProjectTitle);		
-		model.addAttribute("success", true);
-		return sourceProject;
-	}
-	
-	//Update Project
-	@PostMapping("/update")
-	public String updateProject(@ModelAttribute @Valid Project project, BindingResult bindingResult, Model model) {
-		if (bindingResult.hasErrors()) {
-			
-			return sourceProject;
-		}
-
-		projectService.update(project);
-
-		
-		Page<Project> page = projectService.getProjectbyYear(1);
-		
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	model.addAttribute(modelUsername, name);
-    	model.addAttribute(modelProjects, page);
-		model.addAttribute(modelTitle, modelProjectTitle);		
-		model.addAttribute("success", true);
-		return sourceProject;
+		//Redirect to Project
+		return "redirect:/project";
 	}
 }

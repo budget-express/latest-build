@@ -27,7 +27,6 @@ public class FileUploadService {
 	//Setup Date Format
 	private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	
-	
 	@Autowired
 	private FileUploadRepository fileuploadRepository;
 	

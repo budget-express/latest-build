@@ -105,8 +105,22 @@ public class Project {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public String getType() {
+		return type;
+	}
 
+	public void setType(String type) {
+		this.type = type;
+	}
 
+	public List<History> getHistorys() {
+		return historys;
+	}
+
+	public void setHistorys(List<History> historys) {
+		this.historys = historys;
+	}
 
 	public String getDateCreated() {
 		return dateCreated;
@@ -125,26 +139,6 @@ public class Project {
 	}
 
 	public String getDateEnabled() {
-		return dateEnabled;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public List<History> getHistorys() {
-		return historys;
-	}
-
-	public void setHistorys(List<History> historys) {
-		this.historys = historys;
-	}
-
-	public String getDateEnablede() {
 		return dateEnabled;
 	}
 

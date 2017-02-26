@@ -1,44 +1,40 @@
 package com.tdavis.be.controller;
 
+import org.springframework.stereotype.Controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tdavis.be.entity.Budget;
-import com.tdavis.be.entity.Project;
 import com.tdavis.be.entity.Quote;
 import com.tdavis.be.service.BudgetService;
-import com.tdavis.be.service.ProjectService;
 
 @Controller
 @RequestMapping("/budget")
 public class BudgetController {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	//private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private String modelBudgetTitle = "Budget";
 	private String modelUsername = "username";
 	private String modelBudget = "budget";
-	private String modelProject = "project";
 	private String modelTitle = "title";
 	
 	@Autowired
 	private BudgetService budgetService;
-	
-	@Autowired
-	private ProjectService projectService;
-	
+		
 	@ModelAttribute("budget")
 	public Budget budgetConstruct() {
 		return new Budget();
@@ -68,49 +64,36 @@ public class BudgetController {
 		return modelBudget;
 	}
 	
+	/*
+	 * Delete Budget
+	 */
 	@RequestMapping("/delete/{id}")
 	public String deleteBudget (Model model, @PathVariable int id) {
-		Project project = budgetService.findById(id).getProject();
-		int projectId = project.getId();
 		
+		//Get Project ID
+		int projectId = budgetService.findById(id).getProject().getId();
+		
+		//Call Budget Services to Delete Budget from Project
 		budgetService.delete(id);
-		projectService.save(project);
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	model.addAttribute(modelUsername, name);
-    	model.addAttribute(modelProject, projectService.findById(projectId));
-    	model.addAttribute(modelTitle, "Project Details -" + projectService.findById(projectId).getName());
-		
-		
-		
-		return "project-details";
+
+		//Redirect to Project Details
+		return "redirect:/project/" + projectId;
 	}
 	
+	/*
+	 * Save Budget
+	 */
 	@PostMapping()
 	public String saveBudget(@ModelAttribute @Valid Budget budget, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			
-			return modelProject;
+			return "redirect:index";
 		}
-		int id = budget.getProject().getId();
-		logger.info("id= " +id);
+		
+		//Call Budget Service to Save Budget to Project
 		budgetService.save(budget);
-			
-		double approved = projectService.findById(id).getBudgetApproved();
-		double spent = projectService.findById(id).getBudgetSpent();
-		double balance;
 		
-		balance = approved - spent;
-		
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	model.addAttribute(modelUsername, name);
-    	model.addAttribute(modelProject, projectService.findById(id));
-		model.addAttribute(modelTitle, "Projects");
-		model.addAttribute("spent",balance);
-		model.addAttribute("success", true);
-		//Change to budget-detail when built
-		return "project-details";
+		//Redirect to Project Details
+		return "redirect:/project/" + budget.getProject().getId();
 	}
 }

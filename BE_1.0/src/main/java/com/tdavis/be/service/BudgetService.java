@@ -75,27 +75,45 @@ public class BudgetService {
 		//Find Project
 		Project project = projectService.findById(budget.getProject().getId());
 		
-		//Set Created Timestamp
+		//Temp Budget
+		Budget temp = update(budget);
+		
+		//Set Current Time for Timestamp
 		String time = sdf.format(new Date());
-		if (budget.getDateCreated() == null){
-			budget.setDateCreated(time);
+		
+		//If...Existing Budget...Update Budget in Repository
+		if (temp.getId() != null){
+			
+			//!!!!!!Not sure why I have to do this????
+			temp.setDateCreated(findById(budget.getId()).getDateCreated());
+			
+			//Set Edited Timestamp
+			temp.setDateEdited(time);
+			
+			//Save Budget
+			budgetRepository.save(temp);
+			logger.info("*Service* Updated Budget: " + temp.getName());
+			
+			//Set Parent Project
+			temp.setProject(project);
+			
+			//Update Project
+			projectService.save(project);
+		} else {
+						
+			//Set Created Timestamp
+			temp.setDateCreated(time);
+			
+			//Set Parent Project
+			temp.setProject(project);
+			
+			//Save Budget to Repository
+			budgetRepository.save(temp);
+			logger.info("*Service* Saved Budget: " + temp.getName()+" to Project: " + project.getName());
+			
+			//Update Project
+			projectService.save(project);
 		}
-		
-		//Calculations for Quote
-		budget = quoteCal(budget);
-	
-		//Calculations for Budget
-		budget = budgetCal(budget);
-		
-		//Set Parent Project
-		budget.setProject(project);
-		
-		//Save Budget to Repository
-		budgetRepository.save(budget);
-		logger.info("*Service* Saved Budget: " + budget.getName()+" to Project: " + project.getName());
-		
-		//Update Project
-		projectService.update(budget.getProject());
 	}
 	
 	/*
@@ -107,7 +125,7 @@ public class BudgetService {
 		quoteService.refresh();
 		
 		for (Budget budget : findAll()) {
-			update(budget);
+			save(budget);
 		}
 		logger.info("*Service* Refreshing Budgets!");
 	}
@@ -115,27 +133,18 @@ public class BudgetService {
 	/*
 	 * Update Budget
 	 */
-	public void update(Budget budget) {
+	public Budget update(Budget budget) {
 		
 		//Temp Budget
 		Budget temp = budget;
-		
-		//Set Edited Timestamp
-		String time = sdf.format(new Date());
-		temp.setDateEdited(time);	
-		
+				
 		//Calculations for Quote
 		temp = quoteCal(temp);
 	
 		//Calculations for Budget
 		temp = budgetCal(temp);
-		
-		//Save Budget
-		budgetRepository.save(temp);
-		logger.info("*Service* Updated Budget: " + temp.getName());
-		
-		//Update Project
-		projectService.update(temp.getProject());
+				
+		return temp;
 	}
 	
 	/*
@@ -147,12 +156,12 @@ public class BudgetService {
 		//Temp Budget
 		Budget temp = budgetRepository.getOne(id);
 		
-		//Delete File
+		//Delete Budget
 		budgetRepository.delete(temp);
 		logger.info("*Service* Deleted Budget "+ temp.getName()+" from Project: " + temp.getProject().getName());
 		
 		//Update Project
-		projectService.update(temp.getProject());
+		projectService.save(temp.getProject());
 		
 	}
 	
