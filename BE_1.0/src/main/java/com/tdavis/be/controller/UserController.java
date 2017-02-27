@@ -1,5 +1,7 @@
 package com.tdavis.be.controller;
 
+import java.util.ArrayList;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,4 +87,33 @@ public class UserController {
 		model.addAttribute("success", true);
 		return "admin";
 	}
+	
+	/*
+	 * New Code
+	 * 
+	 */
+	
+	@RequestMapping("/users")
+	public String listUsers(Model model) {
+		
+		ArrayList<String> navigation = new ArrayList<String>();
+		String t0 = "Home";
+		String t1 = "Settings";
+		String t2 = "Users";
+		navigation.add(t0);
+		navigation.add(t1);
+		navigation.add(t2);
+				
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String name = auth.getName(); //get logged in username
+    	model.addAttribute("username", name);
+    	model.addAttribute("fname", userService.findByName(name).getFname());
+    	model.addAttribute("lname", userService.findByName(name).getLname());
+    	model.addAttribute("navigation",navigation);
+    	model.addAttribute("users", userService.findAll());
+		model.addAttribute("title", "Settings>>Users");
+		
+		return "users";
+	}
+	
 }

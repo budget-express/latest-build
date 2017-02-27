@@ -4,7 +4,7 @@
 		<div class="col-md-3 left_col">
 			<div class="left_col scroll-view">
 				<div class="navbar nav_title" style="border: 0;">
-					<a th:href="@{/}" class="site_title"><i class="fa fa-money"></i>
+					<a th:href="@{/index2}" class="site_title"><i class="fa fa-money"></i>
 						<span>vBudget</span></a>
 				</div>
 
@@ -57,19 +57,75 @@
 					</div>
 				</div>
 				<!-- /sidebar menu -->
-
-				<!-- /menu footer buttons 
-				<div class="sidebar-footer hidden-small">
-					<a data-toggle="tooltip" data-placement="top" title="Settings">
-						<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-					</a> <a data-toggle="tooltip" data-placement="top" title="Lock"> <span
-						class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-					</a> <a data-toggle="tooltip" data-placement="top" title="Logout">
-						<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-					</a>
-				</div>
-				 /menu footer buttons -->
 			</div>
 		</div>
 	</th:block>
+	
+	<th:block th:fragment="side_nav-inspinia">
+		
+		<nav class="navbar-default navbar-static-side" role="navigation">
+        	<div class="sidebar-collapse">
+            	<ul class="nav metismenu" id="side-menu">
+                	<li class="nav-header">
+                    	<div class="dropdown profile-element"> 
+              
+                    		<span>
+                        		<img alt="image" class="img-circle" src="/images/profile_small.jpg" />
+                           	</span>
+                          	
+                          	<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                          		<span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"  th:text="'Welcome, ' + ${username}"></strong></span> 
+                           		<span class="text-muted text-xs block" ><b class="caret"><th:block th:if="${usertitle != null}" th:text="${usertitle}" /></b></span> </span> 
+                           	</a>
+                          	
+                          	<ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            	<li><a href="">Profile</a></li>
+                                <li class="divider"></li>
+                              	<li><a th:href="@{/logout}">Logout</a></li>
+                          	</ul>
+                      	</div>
+						
+						<div class="logo-element">
+                        	BT
+                      	</div>
+                  	</li>
+                  	
+                  	<li>
+                    	<a th:href="@{/index2}"><i class="fa fa-home"></i> <span class="nav-label">Home</span> <span class="fa home"></span></a>	
+                  	</li>
+                  		
+                  	<li>
+                  		<a href="#"><i class="fa fa-tachometer"></i> <span class="nav-label">Dashboards</span> <span class="fa home"></span></a>
+                  		<ul class="nav nav-second-level">
+                          		<li><a href="index.html">Dashboards</a></li>
+                          		<li><a href="dashboard_2.html">Project</a></li>
+                          		<li><a href="dashboard_3.html">Budget</a></li>
+                      		</ul>
+                  	</li>
+                  	
+                  	<li>
+                  		<a href="#"><i class="fa fa-folder-o"></i> <span class="nav-label">Projects</span> <span class="fa folder-o"></span></a>
+                  		<ul class="nav nav-second-level">
+                          		<li><a href="index.html">All Projects</a></li>
+                          		<li><a href="dashboard_2.html">Active Projects</a></li>
+                          		<li><a href="dashboard_3.html">Planning Projects</a></li>
+                          		<li><a href="dashboard_3.html">Closed Projects</a></li>
+                      		</ul>
+                  	</li>
+                  	
+                  	<li sec:authorize="hasAuthority('ROLE_ADMIN')">
+                  		<a href="#"><i class="fa fa-cogs"></i> <span class="nav-label">Settings</span> <span class="fa folder-o"></span></a>
+                  		<ul class="nav nav-second-level">
+                          		<li><a th:href="@{/users}">Users</a></li>
+                          		<li><a href="dashboard_2.html">Roles</a></li>
+                          		<li><a href="dashboard_3.html">Projects</a></li>
+                      		</ul>
+                  	</li>
+                  	
+				</ul>
+			</div>
+        </nav>			
+	</th:block>
+	
+	
 </th:block>

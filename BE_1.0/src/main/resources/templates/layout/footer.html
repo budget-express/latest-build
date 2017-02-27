@@ -10,6 +10,39 @@
 		<!-- /footer content -->
 	</th:block>
 	
+	<th:block th:fragment="footer-inspinia">
+		<div class="footer">
+        	<div class="pull-right">
+            	
+            	<span th:text="'Logged in as ' + ${username}"></span>
+        	</div>
+        	<div>
+            	<strong>Budget Tracker</strong> by Tim Davis
+        	</div>
+    	</div>
+	</th:block>
+	
+	<th:block th:fragment="js-inspinia">
+		
+		<!-- jQuery -->
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	    <!-- Bootstrap -->
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	    <!-- MetisMenu -->
+	    <script src="/build/js/plugins/metismenu/jquery.metisMenu.js"></script>
+	    <!-- Slim Scroll -->
+	    <script src="/build/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	
+	    <!-- Custom and plugin javascript -->
+	    <script src="/build/js/inspinia.js"></script>
+	    <script src="/build/js/plugins/pace/pace.min.js"></script>
+	    
+	</th:block>
+	
+	<th:block th:fragment="customjs-inspinia">
+	
+	</th:block>
+	
 	<th:block th:fragment="footer-jscript">
 		<!-- jQuery -->
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

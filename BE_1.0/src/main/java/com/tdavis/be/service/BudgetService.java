@@ -90,12 +90,12 @@ public class BudgetService {
 			//Set Edited Timestamp
 			temp.setDateEdited(time);
 			
+			//Set Parent Project
+			temp.setProject(project);
+			
 			//Save Budget
 			budgetRepository.save(temp);
 			logger.info("*Service* Updated Budget: " + temp.getName());
-			
-			//Set Parent Project
-			temp.setProject(project);
 			
 			//Update Project
 			projectService.save(project);

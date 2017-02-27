@@ -44,7 +44,7 @@ public class QuoteController {
 	}
 	
 	@RequestMapping("/delete/{id}")
-	public String deleteBudget (Model model, @PathVariable int id) {
+	public String deleteQuote (Model model, @PathVariable int id) {
 		
 		//Find Budget ID
 		int budgetId = quoteService.findById(id).getBudget().getId();
@@ -57,7 +57,7 @@ public class QuoteController {
 	}
 	
 	@PostMapping()
-	public String saveUser(@ModelAttribute @Valid Quote quote, BindingResult bindingResult, Model model) {
+	public String saveQuote(@ModelAttribute @Valid Quote quote, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			
 			return "project";

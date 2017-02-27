@@ -29,6 +29,10 @@ public class UserService {
 		return userRepository.findAll();
 		
 	}
+	
+	public User findByName(String name) {
+		return userRepository.findByName(name);
+	}
  
 	
 	public void save(User user) {

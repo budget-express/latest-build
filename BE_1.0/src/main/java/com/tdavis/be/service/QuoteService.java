@@ -81,12 +81,12 @@ public class QuoteService {
 				//Set Edited Timestamp
 				temp.setDateEdited(time);
 				
+				//Set Parent Budget
+				temp.setBudget(budget);
+				
 				//Save Quote to Repository
 				quoteRepository.save(temp);
 				logger.info("*Service* Updated Quote: " + temp.getName());
-				
-				//Set Parent Budget
-				temp.setBudget(budget);
 				
 				//Update Budget
 				budgetService.save(budget);

@@ -1,0 +1,23 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<th:block th:fragment="page_nav-inspinia">
+		
+		<div class="row wrapper border-bottom white-bg page-heading">
+        	<div class="col-lg-10">
+            	<h2 th:text="${navigation.get(2)}"></h2>
+               	<ol class="breadcrumb">
+                   	<li>
+                       	<a th:href="@{/index2}"><span th:text="${navigation.get(0)}"></span></a>
+                   	</li>
+                   	<li>
+                       	<a><span th:text="${navigation.get(1)}"></span></a>
+                   	</li>
+                   	<li class="active">
+                       	<strong><span th:text="${navigation.get(2)}"></span></strong>
+                   	</li>
+               	</ol>
+            </div>
+			<div class="col-lg-2"></div>
+		</div>
+	</th:block>
+</th:block>
