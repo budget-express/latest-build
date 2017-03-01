@@ -64,11 +64,20 @@ public class ProjectService {
 	}
 	
 	/* Recall Data
-	 * Project getPrjectbyYear per PAGE_SIZE
+	 * Project getPrjectByYear per PAGE_SIZE
 	 */
-	public Page<Project> getProjectbyYear(Integer pageNumber){
+	public Page<Project> getProjectByYear(Integer pageNumber){
 		PageRequest pageable = new PageRequest(pageNumber -1, PAGE_SIZE, Sort.Direction.DESC, "Year");
 		return projectRepository.findAll(pageable);
+	}
+	
+	/* Recall Data
+	 * Project getPrjectByStatus per PAGE_SIZE
+	 */
+	public Page<Project> getProjectByStatus(String status, Integer pageNumber) {
+		logger.info("Begin");
+		PageRequest pageable = new PageRequest(pageNumber -1, PAGE_SIZE, Sort.Direction.DESC, "Year");
+		return projectRepository.findByStatus(pageable,status);
 	}
 	
 	/***************************************************************************************************************************
@@ -183,5 +192,7 @@ public class ProjectService {
 		}
 		
 		return project;
-	}		
+	}
+
+		
 }

@@ -25,13 +25,18 @@
 	<th:block th:fragment="js-inspinia">
 		
 		<!-- jQuery -->
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	    <!-- jQueryUI -->
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
 	    <!-- Bootstrap -->
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	    <!-- MetisMenu -->
 	    <script src="/build/js/plugins/metismenu/jquery.metisMenu.js"></script>
 	    <!-- Slim Scroll -->
 	    <script src="/build/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		<!-- iCheck -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+	
 	
 	    <!-- Custom and plugin javascript -->
 	    <script src="/build/js/inspinia.js"></script>
@@ -45,7 +50,7 @@
 	
 	<th:block th:fragment="footer-jscript">
 		<!-- jQuery -->
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	    <!-- Bootstrap -->
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	    
@@ -76,6 +81,13 @@
 		    	var id = $(this).data("id");
 		        window.location = link+id;
 		    });
+	       $(document).ready(function(){
+	            $('.i-checks').iCheck({
+	                checkboxClass: 'icheckbox_square-green',
+	                radioClass: 'iradio_square-green',
+	            });
+	        });
+
 		</script>
 		<!--  Clickable Rows -->
 

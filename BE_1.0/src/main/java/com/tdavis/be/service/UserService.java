@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ import com.tdavis.be.repository.UserRepository;
 @Transactional
 public class UserService {
 
+	//Log output to console
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -30,22 +35,31 @@ public class UserService {
 		
 	}
 	
+	public User findById(int id) {
+		return userRepository.findById(id);
+	}
+	
 	public User findByName(String name) {
 		return userRepository.findByName(name);
 	}
- 
+	
+	public Iterable<Role> findAllRoles () {
+		return roleRepository.findAll();
+	}
 	
 	public void save(User user) {
-		user.setEnabled(true);
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		user.setPassword(encoder.encode(user.getPassword()));
-
+		
+		if (user.getId() != null) {
+			logger.info("User Password: "+ user.getPassword());
+			user.setPassword(userRepository.findById(user.getId()).getPassword());
+		} else {
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			user.setPassword(encoder.encode(user.getPassword()));
+		}
+		
 		List<Role> roles = new ArrayList<Role>();
 		if (user.isEnabled()) {
 			roles.add(roleRepository.findByName("ROLE_USER"));
-		}
-		if (user.isAdmin()) {
-			roles.add(roleRepository.findByName("ROLE_ADMIN"));
 		}
 		user.setRoles(roles);
 		
@@ -77,5 +91,17 @@ public class UserService {
 	public void delete(Integer id) {
 		User temp = userRepository.findOne(id);
 		userRepository.delete(temp);
+	}
+
+	public void updateRoles(User user, ArrayList<String> userRoles) {
+
+		List<Role> roles = new ArrayList<Role>();
+		for (String temp : userRoles) {
+			roles.add(roleRepository.findByName(temp));
+		}
+		user.setRoles(roles);
+		
+		userRepository.save(user);
+		
 	}
 }

@@ -4,16 +4,16 @@
 		
 		<div class="row wrapper border-bottom white-bg page-heading">
         	<div class="col-lg-10">
-            	<h2 th:text="${navigation.get(2)}"></h2>
+            	<h2 th:text="${current}"></h2>
                	<ol class="breadcrumb">
                    	<li>
-                       	<a th:href="@{/index2}"><span th:text="${navigation.get(0)}"></span></a>
+                       	<a th:href="@{/index2}"><span th:text="${base}"></span></a>
                    	</li>
                    	<li>
-                       	<a><span th:text="${navigation.get(1)}"></span></a>
+                       	<a><span th:text="${previous}"></span></a>
                    	</li>
                    	<li class="active">
-                       	<strong><span th:text="${navigation.get(2)}"></span></strong>
+                       	<strong><span th:text="${current}"></span></strong>
                    	</li>
                	</ol>
             </div>

@@ -54,7 +54,7 @@ public class ProjectController {
 	//1-Project List - Admin
 	@RequestMapping()
 	public String showProjects(Model model) {
-		Page<Project> page = projectService.getProjectbyYear(1);
+		Page<Project> page = projectService.getProjectByYear(1);
 				
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
@@ -85,7 +85,7 @@ public class ProjectController {
 	//2-Project List
 	@RequestMapping("/list") 
 	public String listProjects(Model model) {
-		Page<Project> page = projectService.getProjectbyYear(1);
+		Page<Project> page = projectService.getProjectByYear(1);
 
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
@@ -151,4 +151,18 @@ public class ProjectController {
 		//Redirect to Project
 		return "redirect:/project";
 	}
+	
+	/*************************************************************************************
+	 * 
+	 * New Code
+	 * 
+	 **************************************************************************************/
+
+	
 }
+
+
+
+
+
+

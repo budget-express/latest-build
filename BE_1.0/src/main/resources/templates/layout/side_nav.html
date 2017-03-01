@@ -106,19 +106,18 @@
                   	<li>
                   		<a href="#"><i class="fa fa-folder-o"></i> <span class="nav-label">Projects</span> <span class="fa folder-o"></span></a>
                   		<ul class="nav nav-second-level">
-                          		<li><a href="index.html">All Projects</a></li>
-                          		<li><a href="dashboard_2.html">Active Projects</a></li>
-                          		<li><a href="dashboard_3.html">Planning Projects</a></li>
-                          		<li><a href="dashboard_3.html">Closed Projects</a></li>
+                          		<li><a th:href="@{/settings/projects/active}">Active Projects</a></li>
+                          		<li><a th:href="@{/settings/projects/planning}">Planning Projects</a></li>
+                          		<li><a th:href="@{/settings/projects/closed}">Closed Projects</a></li>
+                          		<li><a th:href="@{/settings/projects/all}">All Projects</a></li>
                       		</ul>
                   	</li>
                   	
                   	<li sec:authorize="hasAuthority('ROLE_ADMIN')">
                   		<a href="#"><i class="fa fa-cogs"></i> <span class="nav-label">Settings</span> <span class="fa folder-o"></span></a>
                   		<ul class="nav nav-second-level">
-                          		<li><a th:href="@{/users}">Users</a></li>
-                          		<li><a href="dashboard_2.html">Roles</a></li>
-                          		<li><a href="dashboard_3.html">Projects</a></li>
+                          		<li><a th:href="@{/settings/users}">Users</a></li>
+                          		<li><a th:href="@{/settings/projects/}">Projects</a></li>
                       		</ul>
                   	</li>
                   	
