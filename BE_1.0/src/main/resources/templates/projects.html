@@ -15,7 +15,7 @@
         	<div class="row border-bottom">
 				
 				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
-				<!-- <th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block> -->
+				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
 				
 				<!-- Page Start -->
 				<div class="row">
@@ -24,9 +24,9 @@
 		
 		                    <div class="ibox">
 		                        <div class="ibox-title">
-		                            <h5>All projects assigned to this account</h5>
+		                            <h5>All projects</h5>
 		                            <div class="ibox-tools">
-		                                <a href="" class="btn btn-primary btn-xs">Create new project</a>
+		                                <a data-toggle="modal" href="#saveModal" class="btn btn-primary btn-xs popProject" data-modal="add">Create new project</a>
 		                            </div>
 		                        </div>
 		                        <div class="ibox-content">
@@ -62,12 +62,25 @@
 		                                                    <div style="width: 48%;" class="progress-bar"></div>
 		                                                </div>
 		                                        </td>
-		                                        <td class="project-description" th:text="${project.description}">
-		                                            
-		                                        </td>
+		                                        <td th:text="${project.description}"></td>
+		                                        <td class="project-type" th:text="${project.type}"></td>
 		                                        <td class="project-actions">
-		                                            <a href="#" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
-		                                            <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+		                                            <a th:href="@{/settings/project/} + ${project.id}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
+		                                            <a data-toggle="modal" href="#saveModal" class="btn btn-white btn-sm popProject" data-modal="edit"
+		                                            	th:attr="data-projectid=${project.id},
+		                                            		data-name=${project.name},
+		                                            		data-description=${project.description},
+		                                            		data-year=${project.year},
+		                                            		data-status=${project.status},
+		                                            		data-type=${project.type}">
+		                                            	<i class="fa fa-pencil"></i> Edit 
+		                                            </a>
+		                                            <button class="btn btn-white btn-sm popProject deletePopup" 
+		                                            	th:attr="data-projectid=${project.id},
+		                                            		data-name=${project.name},
+		                                            		data-year=${project.year}">
+		                                            	<i class="fa fa-trash"></i> Delete 
+		                                            </button>
 		                                        </td>
 		                                    </tr>
 		                                    </tbody>
@@ -79,11 +92,117 @@
 		            </div>
 		        </div>
 				<!-- Page End -->
-				
+				<!-- Project-Modal-Add/Edit Start -->
+				<form class="m-t" role="form" th:action="@{/settings/project/save}" th:object="${project}" method="post">
+					<div class="modal inmodal" id="saveModal" tabindex="-1" role="dialog" aria-hidden="true">
+	                	<div class="modal-dialog">
+	                    	<div class="modal-content animated bounceInRight">
+	                        	<div class="modal-header">
+	                            	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                                <i class="fa fa-laptop modal-icon"></i>
+	                                <h4 class="modal-title"><label class="modalTitle"></label></h4>
+	                                <small class="font-bold modalHeader"></small>
+	                            </div>
+	                            
+	                            <div class="modal-body">
+										<input class="form-control projectID" type="hidden" th:field="*{id}" />
+	                            		
+						            	<div class="form-group">
+						                    <input type="text" class="form-control projectName" placeholder="Project Name" required="" th:field="*{name}"/>
+						                </div>
+						                <div class="form-group">
+						                    <input type="text" class="form-control projectDescription" placeholder="Project Description" required="" th:field="*{description}"/>
+						                </div>
+						                <div class="form-group">
+						                    <input type="text" class="form-control projectYear" placeholder="Project Year" required="" th:field="*{year}"/>
+						                </div>
+						                
+						                <label for="projectStatus">Status:</label>
+						                <select class="form-control m-b projectStatus" id="projectStatus"  th:field="*{status}">
+					                        <option value="Planning">Planning</option>
+					                        <option value="Open">Open</option>
+					                        <option value="Closed">Closed</option>
+                                    	</select>
+						                
+						                <label for="projectType">Type:</label>
+						                <select class="form-control m-b projectType" id="projectType"  th:field="*{type}">
+					                        <option value="Infrastructure">Infrastructure</option>
+					                        <option value="Project">Project</option>
+					                        <option value="Special">Special</option>
+				                        </select>
+	                            </div>
+	                            
+	                            <div class="modal-footer">
+	                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+	                                <button type="submit" class="btn btn-primary">Save</button>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+				</form>			
+				<!-- Project-Modal-Add/Edit End -->
 				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
 				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
 				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+				<script>
+					var id;
+					
+					$(document).on("click", '.popProject',function(e) {
+						id = $(this).data('projectid');
+						var name = $(this).data('name');
+						var description = $(this).data('description');
+						var year = $(this).data('year');
+						var status = $(this).data('status');
+						var type = $(this).data('type');
+						var modal = $(this).data('modal');
+
+						if (modal == 'add') {
+							$(".modalTitle").text("Add Project");
+							$(".modalHeader").text("A a new Project to track budgets.");
+						} else if (modal == 'edit') {
+							$(".modalTitle").text("Edit Project");
+							$(".modalHeader").text("Edit an existing Project.");
+						}						
 				
+						$(".projectID").val(id);
+						$(".projectName").val(name);
+						$(".projectDescription").val(description);
+						$(".projectYear").val(year);
+						$(".projectStatus").val(status);
+						$(".projectType").val(type);
+
+					});
+					
+					$(document).on("click", '.deletePopup',function(e) {
+					
+						swal({
+					        title: "Are you sure?",
+					        text: "You will not be able to recover this Project!",
+					        type: "warning",
+					        showCancelButton: true,
+					        confirmButtonColor: "#DD6B55",
+					        confirmButtonText: "Yes, delete it!",
+			                cancelButtonText: "No, cancel plx!",
+		                    closeOnConfirm: false,
+		                    closeOnCancel: false },
+		                    function (isConfirm) {
+		                   		if (isConfirm) {
+		                   			$.ajax({
+							    	    type: "GET",
+							    	    url: "/settings/project/delete/"+id,
+							    	    data: "{}",
+							    	    async: true,
+							    	    dataType: "text",
+		                   			});
+		                   			
+		                   			setTimeout(function(){window.location.reload(true);},100)
+		                        } else {
+		                            swal("Cancelled", "Your Project is safe :)", "error");
+		                        }
+						});
+		       		});
+
+				</script>
 			</div>
 		</div>
 	</div>

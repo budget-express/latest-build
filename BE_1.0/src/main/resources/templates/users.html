@@ -51,12 +51,12 @@
 		                                                    <td th:text="${user.email}"></td>
 		                                                    <td class="client-status">
 		                                                    	<th:block th:if="${user.enabled}==true">
-			                                                    	<a data-toggle="modal" href="#user-modal-enable" class="btn btn-primary btn-xs popUser" data-from="enabled" th:attr="data-username=${user.name}, data-userid=${user.id}">Enabled</a>
+			                                                    	<a href="#" class="btn btn-primary btn-xs popUser enablePopup" data-from="enabled" th:attr="data-enabled=${user.enabled}, data-userid=${user.id}">Enabled</a>
 			                                                    </th:block>
 		                                                    	<th:block th:if="${user.enabled}==false">
-			                                                    	<a data-toggle="modal" href="#user-modal-enable" class="btn btn-warning btn-xs popUser" data-from="disabled" th:attr="data-username=${user.name}, data-userid=${user.id}">Disabled</a>
+			                                                    	<a href="#" class="btn btn-warning btn-xs popUser enablePopup" data-from="disabled" th:attr="data-enabled=${user.enabled}, data-userid=${user.id}">Disabled</a>
 			                                                    </th:block>
-			                                                    <a data-toggle="modal" href="#user-modal-delete" class="btn btn-danger btn-xs popUser" th:attr="data-userid=${user.id},data-username=${user.name}">Delete</a>
+			                                                    <a href="#" class="btn btn-danger btn-xs popUser deletePopup" th:attr="data-userid=${user.id},data-username=${user.name}">Delete</a>
 		                                                    </td>
 		                                                </tr>
 		                                                </tbody>
@@ -247,8 +247,8 @@
 	                            </div>
 	                        </div>
 	                    </div>
-	                </div>
-	                <!-- Modal user-modal-roles Strat -->
+	                </div>	                
+	                <!-- (Continue Form) - Modal user-modal-roles Strat -->
 	                <div class="modal inmodal" id="user-modal-roles" tabindex="-1" role="dialog" aria-hidden="true">
            				<div class="modal-dialog modal-sm">
                				<div class="modal-content">
@@ -270,59 +270,16 @@
                        		</div>
                			</div>
                		</div>
-               		<!-- Modal user-modal-roles End -->
-	             </form>	
-				<!-- Modal user-modal-delete Start -->
-				<div class="modal inmodal" id="user-modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
-           				<div class="modal-dialog modal-sm">
-               				<div class="modal-content">
-                   				<div class="modal-header">
-                       				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                           			<h2 class="modal-title">Delete User</h2>
-                      			</div>
-                       
-                       			<div class="modal-body">
-                       				<input class="form-control user-id" type="hidden" name="userid"/>
-                       				<input type="text" class="form-control user-username" placeholder="Username" disabled=""/>
-                       			</div>
-                       						
-              					<div class="modal-footer">
-	                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-	                                <button type="button" class="btn btn-warning delete-button" >Delete</button>
-	                            </div>
-                       		</div>
-               			</div>
-               		</div>
-				<!-- Modal user-modal-delete End -->
-				<!-- Modal user-modal-enable Start -->
-				
-					<div class="modal inmodal" id="user-modal-enable" tabindex="-1" role="dialog" aria-hidden="true">
-	         			<div class="modal-dialog modal-sm">
-	               			<div class="modal-content">
-	                  			<div class="modal-header">
-	                      			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	                          		<h2 class="modal-title fromenable"></h2>
-	                     		</div>
-	                       
-	                       		<div class="modal-body">
-	                       			<label class="user-trigger"></label>
-	                       		</div>
-	                       						
-	              				<div class="modal-footer">
-		                        	<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-		                            <button type="button" class="btn btn-warning enable-button" ><span class="enablebutton"></span></button>
-		                        </div>
-	                       	</div>
-	               		</div>
-	               	</div>
-	         
-				<!-- Modal user-modal-enable End -->
+					<!-- Modal user-modal-roles End -->
+				</form>	
+				<!-- Modal user-modal-add/edit Start -->
 				
 				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
 				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
 				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
 				<script>
 					var id;
+					var enabled;
 					$(document).ready(function() {
 					    // Tab initialization
 					    $('#tabs').tabs({
@@ -351,10 +308,8 @@
 						var lname = $(this).data('lname');
 						var email = $(this).data('email');
 						var title = $(this).data('title');
-						var enabled = $(this).data('enabled');
+						enabled = $(this).data('enabled');
 						var from = $(this).data('from');
-						
-						console.log(from);
 						
 						if (from == 'add') {
 							$(".fromtitle").text("Add User");
@@ -370,19 +325,7 @@
 							$(".user-password").removeAttr('required');
 							$(".user-password").val("password");
 							$(".user-password").hide();
-						} else if (from == 'enabled') {
-							$(".fromenable").text("Disable User");
-							$(".user-trigger").text("Disable User: "+ username)
-							$(".enablebutton").text("Disable User");
-						} else if (from == 'disabled') {
-							$(".fromenable").text("Enable User");
-							$(".user-trigger").text("Enable User: "+username)
-							$(".enablebutton").text("Enable User");
 						} 
-						
-						console.log();
-						
-						
 
 						$(".user-id").val(id);
 						$(".user-username").val(username);
@@ -390,19 +333,70 @@
 						$(".user-lname").val(lname);
 						$(".user-email").val(email);
 						$(".user-title").val(title);
-						
-						
-						
-						
+
 					});
 					
-					$(document).on("click", '.delete-button',function(e) {
-			    		location.href = "/settings/user/delete/"+id;
-			    	});
-					
-					$(document).on("click", '.enable-button',function(e) {
-			    		location.href = "/settings/user/enable/"+id;
-			    	});
+					$(document).on("click", '.enablePopup',function(e) {
+						var enable;
+						var msg;
+						var buttonColor;
+						console.log(enabled);
+						if (enabled == true) {enable = "Disable";msg="warning";buttonColor="#DD6B55";}
+						else {enable = "Enable";msg="success";buttonColor="#1ab394";}
+						swal({
+					        title: "Are you sure?",
+					        type: msg,
+					        showCancelButton: true,
+					        confirmButtonColor: buttonColor,
+					        confirmButtonText: "Yes, "+enable+" User!",
+			                cancelButtonText: "No, cancel please!",
+		                    closeOnConfirm: false,
+		                    closeOnCancel: false },
+		                    function (isConfirm) {
+		                   		if (isConfirm) {
+		                   			$.ajax({
+							    	    type: "GET",
+							    	    url: "/settings/user/enable/"+id,
+							    	    data: "{}",
+							    	    async: true,
+							    	    dataType: "text",
+		                   			});
+		                   			
+		                   			setTimeout(function(){window.location.reload(true);},100)
+		                        } else {
+		                            swal("Cancelled", "The User is safe :)", "error");
+		                        }
+						});
+		       		});
+		       		
+					$(document).on("click", '.deletePopup',function(e) {
+						
+						swal({
+					        title: "Are you sure?",
+					        text: "You will not be able to recover this User!",
+					        type: "warning",
+					        showCancelButton: true,
+					        confirmButtonColor: "#DD6B55",
+					        confirmButtonText: "Yes, delete User!",
+			                cancelButtonText: "No, cancel please!",
+		                    closeOnConfirm: false,
+		                    closeOnCancel: false },
+		                    function (isConfirm) {
+		                   		if (isConfirm) {
+		                   			$.ajax({
+							    	    type: "GET",
+							    	    url: "/settings/user/delete/"+id,
+							    	    data: "{}",
+							    	    async: true,
+							    	    dataType: "text",
+		                   			});
+		                   			
+		                   			setTimeout(function(){window.location.reload(true);},100)
+		                        } else {
+		                            swal("Cancelled", "The User is safe :)", "error");
+		                        }
+						});
+		       		});
 				</script>
 	
 			</div>

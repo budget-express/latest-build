@@ -4,17 +4,19 @@
 		
 		<div class="row wrapper border-bottom white-bg page-heading">
         	<div class="col-lg-10">
-            	<h2 th:text="${current}"></h2>
+            	<h2 th:text="${navtitle}"></h2>
                	<ol class="breadcrumb">
-                   	<li>
-                       	<a th:href="@{/index2}"><span th:text="${base}"></span></a>
-                   	</li>
-                   	<li>
-                       	<a><span th:text="${previous}"></span></a>
-                   	</li>
-                   	<li class="active">
-                       	<strong><span th:text="${current}"></span></strong>
-                   	</li>
+               		<th:block  th:each="nav, iterStat : ${navigation}">
+	                   	<li th:if="${iterStat.index == 0}">
+	                       	<a th:href="@{/index2}"><span th:text="${nav}"></span></a>
+	                   	</li>
+	                   	<li th:if="${iterStat.index != 0 and iterStat.index != iterStat.size-1}">
+	                       	<a><span th:text="${nav}"></span></a>
+	                   	</li>
+	                   	<li class="active" th:if="${iterStat.index == iterStat.size-1}">
+	                       	<strong><span th:text="${nav}"></span></strong>
+	                   	</li>
+                   	</th:block>
                	</ol>
             </div>
 			<div class="col-lg-2"></div>
