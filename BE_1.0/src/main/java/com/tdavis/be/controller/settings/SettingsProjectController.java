@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.tdavis.be.entity.Budget;
 import com.tdavis.be.entity.Project;
+import com.tdavis.be.service.BudgetService;
 import com.tdavis.be.service.ProjectService;
 
 
@@ -40,10 +42,16 @@ public class SettingsProjectController {
 	@Autowired
 	private ProjectService projectService;	
 	
-	//Access project on web page
+	//Access project on web page form
 	@ModelAttribute("project")
 	public Project projectConstruct() {
 		return new Project();
+	}
+	
+	//Access budget on web page form
+	@ModelAttribute("budget")
+	public Budget budgetConstruct() {
+		return new Budget();
 	}
 	
 	/********************************************************************************************************
@@ -82,11 +90,41 @@ public class SettingsProjectController {
 		model.addAttribute("title", "Settings>>Projects");
 		
 		//projects.html
-		return "projects";
+		return "list-projects";
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping("/project/{id}")
+	public String viewProject(Model model, @PathVariable int id) {
+		
+		//Find Project
+		Project project = projectService.findById(id);
+		
+		//Set Page Navigation
+		List<String> navigation = new ArrayList<>();
+		
+		navigation.add("Home");
+		navigation.add("Settings");
+		navigation.add("Projects");
+		navigation.add(project.getName());
+		
+		//Find logged in user
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	String name = auth.getName(); //get logged in username
+    	
+    	//Set Model Attributes
+    	model.addAttribute("username", name);
+    	model.addAttribute("project", project);
+    	model.addAttribute("navtitle", project.getName());
+    	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("count", projectService.findNumbers(project.getId()));
+		model.addAttribute("title", project.getName());
+		
+		return "view-project";
 	}
 	
 	/*
-	 * Home >> Settings >> Projects >> All
+	 * Home >> Settings >> Projects >> All/Active/Planning/Closed
 	 * Listing of Projects
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -128,7 +166,7 @@ public class SettingsProjectController {
 		if (bindingResult.hasErrors()) {
 			
 			logger.debug("Error: "+bindingResult);
-			return "redirect:/index2";
+			return "redirect:/error";
 		}
 		
 		//Call Project Service to Save Project

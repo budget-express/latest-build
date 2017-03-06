@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<head>
+	<th:block th:include="/layout/header :: header-inspinia"></th:block>
+</head>
+
+<body>
+    <div id="wrapper">
+		
+		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		
+		<div id="page-wrapper" class="gray-bg">
+        	<div class="row border-bottom">
+				
+				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
+				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
+				
+				<!-- Page Start -->
+				<div class="row">
+		            <div class="col-lg-12">
+		                <div class="wrapper wrapper-content animated fadeInUp">
+							<div class="row m-b-lg m-t-lg">
+               					<div class="col-md-1"></div>
+               						<div class="col-md-4">
+										<div class="profile-image">
+	                        				<i class="fa fa-folder-open-o fa-5x" aria-hidden="true"></i>
+	                    				</div>
+                    					<div class="profile-info">
+                       						<div class="">
+                            					<div>
+					                                <h2 class="no-margins" th:text="${budget.name}">
+					                                	<span th:if="${budget.status} == 'Open'" class="label label-primary">Active</span>
+			                                            <span th:if="${budget.status} == 'Closed'" class="label label-default">Inactive</span>
+			                                            <span th:if="${budget.status} == 'Planning'" class="label label-warning">Planning</span> 
+					                                </h2>
+					                                <h3 th:text="${budget.descriptionShort}"></h3>
+				                                	<small>Created</small><small th:text="${budget.dateCreated}"></small>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </div>
+                					<div class="col-md-3">
+                						<h4><i class="fa fa-info-circle" aria-hidden="true"></i> Details</h4>
+				                    	<table class="table small m-b-xs">
+				                       		<tbody>
+						                        <tr>
+						                            <td><strong ></strong> Budgets</td>
+						                            <td>
+						                            	<i class="fa fa-usd" aria-hidden="true"></i>
+						                                <strong th:text="${#numbers.formatDecimal(budget.budgetRemaining, 0, 'COMMA', 2, 'POINT')}"></strong> Remaining
+						                            </td>
+						                        </tr>
+						                        <tr>
+						                            <td><strong  th:text="${count.get(1)}"></strong> Quotes</td>
+						                            <td>
+						                            	<i class="fa fa-usd" aria-hidden="true"></i>
+						                                <strong th:text="${#numbers.formatDecimal(budget.budgetApproved, 0, 'COMMA', 2, 'POINT')}"></strong> Approved
+						                            </td>
+						                        </tr>
+						                        <tr>
+						                            <td><strong  th:text="${count.get(0)}"></strong> Files</td>
+						                            <td>
+						                            	<i class="fa fa-usd" aria-hidden="true"></i>
+						                                <strong th:text="${#numbers.formatDecimal(budget.budgetRequested, 0, 'COMMA', 2, 'POINT')}"></strong> Requested
+						                            </td>
+						                        </tr>
+					                        </tbody>
+					                    </table>
+               						</div>
+               						<div class="col-md-3">
+               							<!-- History List -->
+               							<h4><i class="fa fa-history" aria-hidden="true"></i> History</h4>
+					                    <table class="table small m-b-xs">
+				                       		<tbody>
+						                        <tr>
+						                            <td>Budget Added By Admin</td>
+						                       	</tr>
+						                       	<tr>
+						                       		<td>Quote Deleted By Admin</td>
+						                       	</tr>
+						                       	<tr>
+						                            <td><span class="pull-right"><a href="#">...</a></span>File Added By Admin</td>
+						                       	</tr>
+						                   	</tbody>
+						            	</table>
+					                </div>
+								</div>
+					
+		                   		<div class="ibox">
+			                        <div class="ibox-title">
+			                            <div class="ibox-tools">
+			                                <a data-toggle="modal" href="#saveModal" class="btn btn-primary btn-xs popQuote" data-modal="add" th:attr="data-budgetname=${budget.name},data-budgetid=${budget.id}">Create new quote</a>
+			                            </div>
+			                        </div>
+		                        	<div class="ibox-content">
+			                            <div class="row m-b-sm m-t-sm">
+			                                <div class="col-md-1">
+			                                    <button type="button" id="loading-example-btn" class="btn btn-white btn-sm" ><i class="fa fa-refresh"></i> Refresh</button>
+			                                </div>
+			                                <div class="col-md-11">
+			                                    <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control" /> <span class="input-group-btn">
+			                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
+			                                </div>
+			                            </div>
+		                            	<div class="budget-list">
+		                                	<table class="table table-hover">
+		                                   		<tbody th:each="quote : ${budget.quotes}">
+		                                    		<tr>
+				                                        <td class="quote-status">
+				                                            <span th:if="${quote.status} == 'Staged'" class="label label-primary">Active</span>
+				                                            <span th:if="${quote.status} == 'Paid'" class="label label-default">Paid</span>
+				                                            <span th:if="${quote.status} == 'Pending'" class="label label-warning">Pending</span>
+				                                        </td>
+				                                        <td class="quote-title">
+				                                            <span th:text="${quote.name}"></span>
+				                                            <br/>
+				                                            <small>Created <span th:text="${quote.dateCreated}"></span></small>
+				                                        </td>
+				                                        <td class="quote-vendor" th:text="${quote.vendor}"></td>
+				                                        <td class="quote-capex" th:text="'$' + ${quote.capex}"></td>
+				                                        <td class="quote-opex" th:text="'$' + ${quote.opex}"></td>
+				                                        <td class="budget-actions">
+				                                            <a th:href="@{/settings/quote/} + ${quote.id}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
+				                                            <a data-toggle="modal" href="#saveModal" class="btn btn-white btn-sm popQuote" data-modal="edit"
+				                                            	th:attr="data-id=${quote.id},
+																   data-budgetid=${budget.id},
+																   data-budgetname=${budget.name},
+																   data-name=${quote.name},
+																   data-justification=${quote.justification},
+																   data-vendor=${quote.vendor},
+																   data-vcontact=${quote.vendorContact},
+																   data-vemail=${quote.vendorEmail},
+																   data-status=${quote.status},
+																   data-capex=${quote.capex},
+																   data-opex=${quote.opex}">
+				                                            	<i class="fa fa-pencil"></i> Edit 
+				                                            </a>
+				                                            <button class="btn btn-white btn-sm popBudget deletePopup" 
+				                                            	th:attr="data-id=${quote.id},
+																data-name=${quote.name}">
+				                                            	<i class="fa fa-trash"></i> Delete 
+				                                            </button>
+				                                        </td>
+		                                    		</tr>
+		                                   		</tbody>
+		                                	</table>
+		                            	</div>
+		                        	</div>
+		                    	</div>
+		                	</div>
+		            	</div>
+		        	</div>
+					<!-- Page End -->
+					
+					<!-- Project-Modal-Add/Edit Start -->
+					<div class="modal inmodal" id="saveModal" tabindex="-1" role="dialog" aria-hidden="true">
+	                	<div class="modal-dialog modal-lg">
+	                    	<div class="modal-content animated bounceInRight">
+	                           
+	                            <div class="modal-body">
+	                            	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                            	<h4 class="modal-title"><label class="modalTitle"></label></h4>
+	                                <small class="font-bold modalHeader"></small>
+	                            	<form class="m-t" role="form" id="form" th:action="@{/settings/quote/save}" th:object="${quote}" method="post">
+										<input class="form-control budgetID" type="hidden" th:field="*{budget.id}" />
+										<input class="form-control quoteID" type="hidden" th:field="*{id}" />
+										
+										<label for="quoteName">Name:</label>
+										<input type="text" th:field="*{name}" class="form-control quoteName" />
+										
+										<label for="quoteJustification">Justification:</label>
+										<textarea style="resize:none" th:field="*{justification}" class="form-control quoteJustification" rows="3"></textarea>
+										
+										<label for="quoteVendor">Vendor:</label>
+										<input type="text" th:field="*{vendor}" class="form-control quoteVendor" />
+										
+										<label for="quoteVendorContact">Vendor Contact:</label>
+										<input type="text" th:field="*{vendorContact}" class="form-control quoteVendorContact" />
+										
+										<label for="quoteVendorEmail">Vendor Email:</label>
+										<input type="text" th:field="*{vendorEmail}" class="form-control quoteVendorEmail" />
+										
+										<label for="quoteStatus">Status:</label>
+										<select th:field="*{status}" class="form-control quoteStatus">
+					                        <option value="Planning">Pending</option>
+					                        <option value="Staged">Staged</option>
+					                        <option value="Paid">Paid</option>
+					                        <option value="Canceled">Canceled</option>
+				                        </select>
+										
+										<label for="quoteCapex">Capex Amount:</label>
+										<input type="text" th:field="*{capex}" class="form-control quoteCapex" />
+										
+										<label for="quoteOpex">Opex Amount:</label>
+										<input type="text" th:field="*{opex}" class="form-control quoteOpex" />		
+	                            		
+		                            </form>
+		                         </div>
+	                        </div>
+	                    </div>
+	                </div>		
+					<!-- Project-Modal-Add/Edit End -->
+					
+				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+				<script>
+			    	var id;
+				    $(document).on("click", '.popQuote',function(e) {
+						id = $(this).data('id');
+						var budgetid = $(this).data('budgetid');
+						var bname = $(this).data('budgetname');
+						var name = $(this).data('name');
+						var justification = $(this).data('justification');
+						var vendor = $(this).data('vendor');
+						var vcontact = $(this).data('vcontact');
+						var vemail = $(this).data('vemail');
+						var status = $(this).data('status');
+						var capex = $(this).data('capex');
+						var opex = $(this).data('opex');
+
+						$(".quoteID").val(id);
+						$(".budgetID").val(bud_id);
+						$(".quoteName").val(name);
+						$(".quoteJustification").val(justification);
+						$(".quoteVendor").val(vendor);
+						$(".quoteVendorContact").val(vcontact);
+						$(".quoteVendorEmail").val(vemail);
+						$(".quoteStatus").val(status);
+						$(".quoteCapex").val(capex);
+						$(".quoteOpex").val(opex);
+					});
+					
+					$(document).on("click", '.deletePopup',function(e) {
+					
+						swal({
+					        title: "Are you sure?",
+					        text: "You will not be able to recover this Quote!",
+					        type: "warning",
+					        showCancelButton: true,
+					        confirmButtonColor: "#DD6B55",
+					        confirmButtonText: "Yes, delete it!",
+			                cancelButtonText: "No, cancel please!",
+		                    closeOnConfirm: false,
+		                    closeOnCancel: false },
+		                    function (isConfirm) {
+		                   		if (isConfirm) {
+		                   			$.ajax({
+							    	    type: "GET",
+							    	    url: "/settings/quote/delete/"+id,
+							    	    data: "{}",
+							    	    async: true,
+							    	    dataType: "text",
+		                   			});
+		                   			
+		                   			setTimeout(function(){window.location.reload(true);},100)
+		                        } else {
+		                            swal("Cancelled", "Your Quote is safe :)", "error");
+		                        }
+						});
+		       		});
+
+				</script>
+				
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

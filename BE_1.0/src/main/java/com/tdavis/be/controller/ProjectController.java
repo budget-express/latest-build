@@ -123,7 +123,7 @@ public class ProjectController {
 		projectService.refresh();
 		
 		//Redirect to Index
-		return "redirect:/index";
+		return "redirect:/";
 	}
 	
 	//Delete Project

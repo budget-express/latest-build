@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.tdavis.be.entity.Budget;
+import com.tdavis.be.entity.FileUpload;
 import com.tdavis.be.entity.Project;
+import com.tdavis.be.entity.Quote;
 import com.tdavis.be.repository.ProjectRepository;
 
 
@@ -75,9 +79,40 @@ public class ProjectService {
 	 * Project getPrjectByStatus per PAGE_SIZE
 	 */
 	public Page<Project> getProjectByStatus(String status, Integer pageNumber) {
-		logger.info("Begin");
 		PageRequest pageable = new PageRequest(pageNumber -1, PAGE_SIZE, Sort.Direction.DESC, "Year");
 		return projectRepository.findByStatus(pageable,status);
+	}
+	
+	/* Recall Data
+	 *  Find Number of quotes/budgets by Project
+	 */
+	public List<Integer> findNumbers(int id) {
+		
+		int files = 0;
+		int quotes = 0;
+		int budgets = 0;
+		Project project = projectRepository.findById(id);
+		List<Integer> values = new ArrayList<>();
+		
+		for (Budget budget : project.getBudgets()) {
+			for (Quote quote : budget.getQuotes()) {
+				if (quote.getId() != null) {
+					for (FileUpload file : quote.getFileUploads()){
+						if (file.getId() != null) {
+							files++;
+						}
+					}
+					quotes++;
+				}
+			}			
+			budgets++;
+		}
+		
+		values.add(files);
+		values.add(quotes);
+		values.add(budgets);
+		
+		return values;
 	}
 	
 	/***************************************************************************************************************************

@@ -24,11 +24,12 @@ public class Quote {
 	private double capex;
 	private double opex;
 	private String justification;
-	private String vendor;
 	private String po;
 	
-	//Planning/Open/Closed
+	//Paid/Pending/Staged
 	private String status;
+	
+	private String vendor;
 	private String vendorContact;
 	private String vendorEmail;
 	
@@ -46,8 +47,6 @@ public class Quote {
 	@OneToMany(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "quote_id")
 	private List<FileUpload> fileUploads;
-	
-	
 
 	public Integer getId() {
 		return id;

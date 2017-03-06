@@ -7,11 +7,11 @@
             	<h2 th:text="${navtitle}"></h2>
                	<ol class="breadcrumb">
                		<th:block  th:each="nav, iterStat : ${navigation}">
-	                   	<li th:if="${iterStat.index == 0}">
+	                   	<li th:if="${iterStat.index == 0} and iterStat.index != iterStat.size-1">
 	                       	<a th:href="@{/index2}"><span th:text="${nav}"></span></a>
 	                   	</li>
 	                   	<li th:if="${iterStat.index != 0 and iterStat.index != iterStat.size-1}">
-	                       	<a><span th:text="${nav}"></span></a>
+	                    	<a href="#"><span th:text="${nav}"></span></a>
 	                   	</li>
 	                   	<li class="active" th:if="${iterStat.index == iterStat.size-1}">
 	                       	<strong><span th:text="${nav}"></span></strong>

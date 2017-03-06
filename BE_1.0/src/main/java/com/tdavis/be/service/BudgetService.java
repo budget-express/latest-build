@@ -2,7 +2,9 @@ package com.tdavis.be.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -14,7 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.tdavis.be.entity.Budget;
-
+import com.tdavis.be.entity.FileUpload;
 import com.tdavis.be.entity.Project;
 import com.tdavis.be.entity.Quote;
 import com.tdavis.be.repository.BudgetRepository;
@@ -61,6 +63,35 @@ public class BudgetService {
 		return budgetRepository.findById(id);
 	}
 	
+	/* Recall Data
+	 *  Find Number of quotes/budgets by Project
+	 */
+	public List<Integer> findNumbers(int id) {
+		
+		int files = 0;
+		int quotes = 0;
+
+		Budget budget = budgetRepository.findById(id);
+		List<Integer> values = new ArrayList<>();
+		
+		for (Quote quote : budget.getQuotes()) {
+			if (quote.getId() != null) {
+				for (FileUpload file : quote.getFileUploads()){
+					if (file.getId() != null) {
+						files++;
+					}
+				}
+				quotes++;
+			}
+		}			
+
+
+		
+		values.add(files);
+		values.add(quotes);
+		
+		return values;
+	}
 	/***************************************************************************************************************************
 	 * 
 	 * Interact with Repository 

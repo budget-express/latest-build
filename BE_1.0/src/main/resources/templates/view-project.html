@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<head>
+	<th:block th:include="/layout/header :: header-inspinia"></th:block>
+</head>
+
+<body>
+    <div id="wrapper">
+		
+		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		
+		<div id="page-wrapper" class="gray-bg">
+        	<div class="row border-bottom">
+				
+				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
+				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
+				
+				<!-- Page Start -->
+				<div class="row">
+		            <div class="col-lg-12">
+		                <div class="wrapper wrapper-content animated fadeInUp">
+							<div class="row m-b-lg m-t-lg">
+               					<div class="col-md-1"></div>
+               						<div class="col-md-4">
+										<div class="profile-image">
+	                        				<i class="fa fa-folder-open-o fa-5x" aria-hidden="true"></i>
+	                    				</div>
+                    					<div class="profile-info">
+                       						<div class="">
+                            					<div>
+					                                <h2 class="no-margins" th:text="${project.name}">
+					                                	<span th:if="${project.status} == 'Open'" class="label label-primary">Active</span>
+			                                            <span th:if="${project.status} == 'Closed'" class="label label-default">Inactive</span>
+			                                            <span th:if="${project.status} == 'Planning'" class="label label-warning">Planning</span> 
+					                                </h2>
+					                                <h3 th:text="${project.description}"></h3>
+				                                	<small>Created</small><small th:text="${project.dateCreated}"></small>
+					                            </div>
+					                        </div>
+					                    </div>
+					                </div>
+                					<div class="col-md-3">
+                						<h4><i class="fa fa-info-circle" aria-hidden="true"></i> Details</h4>
+				                    	<table class="table small m-b-xs">
+				                       		<tbody>
+						                        <tr>
+						                            <td><strong th:text="${count.get(2)}"></strong> Budgets</td>
+						                            <td>
+						                            	<i class="fa fa-usd" aria-hidden="true"></i>
+						                                <strong th:text="${#numbers.formatDecimal(project.budgetSpent, 0, 'COMMA', 2, 'POINT')}"></strong> Spent
+						                            </td>
+						                        </tr>
+						                        <tr>
+						                            <td><strong  th:text="${count.get(1)}"></strong> Quotes</td>
+						                            <td>
+						                            	<i class="fa fa-usd" aria-hidden="true"></i>
+						                                <strong th:text="${#numbers.formatDecimal(project.budgetApproved, 0, 'COMMA', 2, 'POINT')}"></strong> Approved
+						                            </td>
+						                        </tr>
+						                        <tr>
+						                            <td><strong  th:text="${count.get(0)}"></strong> Files</td>
+						                            <td>
+						                            	<i class="fa fa-usd" aria-hidden="true"></i>
+						                                <strong th:text="${#numbers.formatDecimal(project.budgetRequested, 0, 'COMMA', 2, 'POINT')}"></strong> Requested
+						                            </td>
+						                        </tr>
+					                        </tbody>
+					                    </table>
+               						</div>
+               						<div class="col-md-3">
+               							<!-- History List -->
+               							<h4><i class="fa fa-history" aria-hidden="true"></i> History</h4>
+					                    <table class="table small m-b-xs">
+				                       		<tbody>
+						                        <tr>
+						                            <td>Budget Added By Admin</td>
+						                       	</tr>
+						                       	<tr>
+						                       		<td>Quote Deleted By Admin</td>
+						                       	</tr>
+						                       	<tr>
+						                            <td><span class="pull-right"><a href="#">...</a></span>File Added By Admin</td>
+						                       	</tr>
+						                   	</tbody>
+						            	</table>
+					                </div>
+								</div>
+					
+		                   		<div class="ibox">
+			                        <div class="ibox-title">
+			                            <div class="ibox-tools">
+			                                <a data-toggle="modal" href="#saveModal" class="btn btn-primary btn-xs popBudget" data-modal="add" th:attr="data-projectname=${project.name},data-projectid=${project.id}">Create new budget</a>
+			                            </div>
+			                        </div>
+		                        	<div class="ibox-content">
+			                            <div class="row m-b-sm m-t-sm">
+			                                <div class="col-md-1">
+			                                    <button type="button" id="loading-example-btn" class="btn btn-white btn-sm" ><i class="fa fa-refresh"></i> Refresh</button>
+			                                </div>
+			                                <div class="col-md-11">
+			                                    <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control" /> <span class="input-group-btn">
+			                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
+			                                </div>
+			                            </div>
+		                            	<div class="budget-list">
+		                                	<table class="table table-hover">
+		                                   		<tbody th:each="budget : ${project.budgets}">
+		                                    		<tr>
+				                                        <td class="budget-status">
+				                                            <span th:if="${budget.status} == 'Open'" class="label label-primary">Active</span>
+				                                            <span th:if="${budget.status} == 'Closed'" class="label label-default">Inactive</span>
+				                                            <span th:if="${budget.status} == 'Planning'" class="label label-warning">Planning</span>
+				                                        </td>
+				                                        <td class="budget-title">
+				                                            <span th:text="${budget.name}"></span>
+				                                            <br/>
+				                                            <small>Created <span th:text="${budget.dateCreated}"></span></small>
+				                                        </td>
+				                                        <td class="budget-descriptionShort" th:text="${budget.descriptionShort}"></td>
+				                                        <td class="budget-region" th:text="${budget.region}"></td>
+				                                        <td class="budget-actions">
+				                                            <a th:href="@{/settings/budget/} + ${budget.id}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
+				                                            <a data-toggle="modal" href="#saveModal" class="btn btn-white btn-sm popBudget" data-modal="edit"
+				                                            	th:attr="data-id=${budget.id},
+																data-projectid=${project.id},
+																data-projectname=${project.name},
+																data-name=${budget.name},
+																data-sdescription=${budget.descriptionShort},
+																data-ldescription=${budget.descriptionLong},
+																data-year=${budget.year},
+																data-code=${budget.budgetCode},
+																data-status=${budget.status},
+																data-category=${budget.category},
+																data-region=${budget.region},
+																data-criticality=${budget.criticality},
+																data-ranking=${budget.ranking},
+																data-q1=${budget.q1},
+																data-q1e=${budget.enabledQ1},
+																data-q2=${budget.q2},
+																data-q2e=${budget.enabledQ2},
+																data-q3=${budget.q3},
+																data-q3e=${budget.enabledQ3},
+																data-q4=${budget.q4},
+																data-q4e=${budget.enabledQ4}">
+				                                            	<i class="fa fa-pencil"></i> Edit 
+				                                            </a>
+				                                            <button class="btn btn-white btn-sm popBudget deletePopup" 
+				                                            	th:attr="data-id=${budget.id},
+																data-name=${budget.name}">
+				                                            	<i class="fa fa-trash"></i> Delete 
+				                                            </button>
+				                                        </td>
+		                                    		</tr>
+		                                   		</tbody>
+		                                	</table>
+		                            	</div>
+		                        	</div>
+		                    	</div>
+		                	</div>
+		            	</div>
+		        	</div>
+					<!-- Page End -->
+					
+					<!-- Project-Modal-Add/Edit Start -->
+					<div class="modal inmodal" id="saveModal" tabindex="-1" role="dialog" aria-hidden="true">
+	                	<div class="modal-dialog modal-lg">
+	                    	<div class="modal-content animated bounceInRight">
+	                           
+	                            <div class="modal-body">
+	                            	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                            	<h4 class="modal-title"><label class="modalTitle"></label></h4>
+	                                <small class="font-bold modalHeader"></small>
+	                            	<form class="m-t wizard-big" role="form" id="form" th:action="@{/settings/budget/save}" th:object="${budget}" method="post">
+										<input class="form-control projectID" type="hidden" th:field="*{project.id}" />
+										<input class="form-control budgetID" type="hidden" th:field="*{id}" />
+	                            		
+	                            		<h1>Profile</h1>
+		                                <fieldset>
+		                                    <h2>Budget Profile</h2>
+		                                    <div class="row">
+		                                        <div class="col-lg-6">
+		                                            <div class="form-group">
+		                                            	<label for="budgetName">Name:</label>
+					                    				<input type="text" class="form-control required budgetName" placeholder="Name" th:field="*{name}"/>
+					                				</div>
+		                                            <div class="form-group">
+		                                            	<label for="budgetCode">Budget Code:</label>
+					                   					<input type="text" class="form-control required budgetCode" placeholder="Budget Code" th:field="*{budgetCode}"/>
+					                				</div>
+		                                        </div>
+		                                        <div class="col-lg-6">
+		                                            <div class="form-group">
+		                                            	<label for="budgetSDescription">Short Description:</label>
+					                   					<input type="text" class="form-control required budgetSDescription" placeholder="Short Description" th:field="*{descriptionShort}"/>
+					                				</div>
+					                				<div class="form-group">
+					                					<label for="budgetLDescription">Long Description:</label>
+					                   					<textarea style="resize:none" class="form-control budgetLDescription" rows="3" placeholder="Long Description" th:field="*{descriptionLong}"></textarea>
+					                				</div>	                                        
+		                                        </div>
+		                                    </div>
+		                                </fieldset>
+	                            		
+	                            		<h1>Details</h1>
+		                                <fieldset>
+		                                    <h2>Budget Details</h2>
+		                                    <div class="row">
+		                                        <div class="col-lg-6">
+		                                        	
+		                                            <div class="form-group">
+						                    			<label for="budgetStatus">Status:</label>
+														<select class="form-control required budgetStatus" th:field="*{status}">
+									                        <option value="Planning">Planning</option>
+									                        <option value="Open">Open</option>
+									                        <option value="Closed">Closed</option>
+								                        </select>
+					                				</div>
+					                				
+					                				<div class="form-group">
+					                					<label for="budgetCategory" class="control-label">Category:</label>
+								                        <select class="form-control required budgetCategory" th:field="*{category}">
+									                        <option value="Datacenter">Datacenter</option>
+						                           			<option value="License">License</option>
+						                          				<option value="Software">Software</option>
+						                          				<option value="Opex">Opex</option>
+								                        </select>
+								                 	</div>
+								                 	
+								                 	<div class="form-group">
+								                        <label for="budgetRegion" class="control-label">Region:</label>
+								                        <select  class="form-control required budgetRegion" th:field="*{region}">
+									                       	<option value="Global">Global</option>
+								                            <option value="USA">USA</option>
+								                            <option value="EMEA">EMEA</option>
+								                            <option value="APAC">APAC</option>
+								                            <option value="LATAM">LATAM</option>
+								                        </select>
+								                   	</div>
+					                			</div>
+					                			<div class="col-lg-6">
+					                				<div class="form-group">
+								                        <label for="budgetCriticality" class="control-label">Criticality:</label>
+								                        <select class="form-control required budgetCriticality" th:field="*{criticality}">
+									                        <option value="1 - Lights Out">1 - Lights Out</option>
+								                            <option value="2 - Critical">2 - Critical</option>
+								                            <option value="3 - Project">3 - Project</option>
+								                        </select>
+								                   	</div>
+								                        
+								                   	<div class="form-group">
+								                        <label for="budgetRanking" class="control-label">Ranking:</label>
+								                        <select class="form-control required budgetRanking" th:field="*{ranking}">
+									                        <option value="1">1</option>
+								                            <option value="2">2</option>
+								                            <option value="3">3</option>
+								                            <option value="4">4</option>
+								                        </select>
+								                  	</div>
+					                			</div>
+		                                    </div>
+		                                </fieldset>
+		                                
+		                                <h1>Breakout</h1>
+		                                <fieldset>
+		                                    <h2>Quarterly Breakout</h2>
+		                                    <div class="row">
+		                                        <div class="col-lg-12">
+		                                        	<div class="form-group">
+		                                        		<label for="budgetQ1amount">Q1 amount:</label>
+		                                        		<div class="row">
+		                                        			<div class="col-lg-6">
+		                                        				<div class="input-group m-b">
+		                                        					<span class="input-group-addon">
+		                                        						<i class="fa fa-usd" aria-hidden="true"></i>
+		                                        					</span>
+		                                        					<input type="text" class="form-control budgetQ1" th:field="*{q1}" value="0"/>
+		                                        					<span class="input-group-addon"><input type="checkbox" class="budget-q1e" th:field="*{enabledQ1}" /></span>
+		                                        				</div>
+			                                        		</div>
+			                                        	</div>
+			                                        </div>
+													
+													<div class="form-group">
+		                                        		<label for="budgetQ2amount">Q2 amount:</label>
+		                                        		<div class="row">
+		                                        			<div class="col-lg-6">
+		                                        				<div class="input-group m-b">
+		                                        					<span class="input-group-addon">
+		                                        						<i class="fa fa-usd" aria-hidden="true"></i>
+		                                        					</span>
+		                                        					<input type="text" class="form-control budgetQ2" th:field="*{q2}" value="0"/>
+		                                        					<span class="input-group-addon"><input type="checkbox" class="budget-q2e" th:field="*{enabledQ2}" /></span>
+		                                        				</div>
+			                                        		</div>
+			                                        	</div>
+			                                        </div>
+			                                        
+			                                        <div class="form-group">
+		                                        		<label for="budgetQ3amount">Q3 amount:</label>
+		                                        		<div class="row">
+		                                        			<div class="col-lg-6">
+		                                        				<div class="input-group m-b">
+		                                        					<span class="input-group-addon">
+		                                        						<i class="fa fa-usd" aria-hidden="true"></i>
+		                                        					</span>
+		                                        					<input type="text" class="form-control budgetQ3" th:field="*{q3}" value="0"/>
+		                                        					<span class="input-group-addon"><input type="checkbox" class="budget-q3e" th:field="*{enabledQ3}" /></span>
+		                                        				</div>
+			                                        		</div>
+			                                        	</div>
+			                                        </div>
+			                                        
+			                                        <div class="form-group">
+		                                        		<label for="budgetQ4amount">Q4 amount:</label>
+		                                        		<div class="row">
+		                                        			<div class="col-lg-6">
+		                                        				<div class="input-group m-b">
+		                                        					<span class="input-group-addon">
+		                                        						<i class="fa fa-usd" aria-hidden="true"></i>
+		                                        					</span>
+		                                        					<input type="text" class="form-control budgetQ4" th:field="*{q4}" value="0"/>
+		                                        					<span class="input-group-addon"><input type="checkbox" class="budget-q4e" th:field="*{enabledQ4}" /></span>
+		                                        				</div>
+			                                        		</div>
+			                                        	</div>
+			                                        </div>
+		                                        </div>
+		                                  	</div>
+		                              	</fieldset>
+		                            </form>
+		                         </div>
+	                        </div>
+	                    </div>
+	                </div>		
+					<!-- Project-Modal-Add/Edit End -->
+					
+				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+				<script>
+			    	var id;
+				    $(document).on("click", '.popBudget',function(e) {
+						id = $(this).data('id');
+						var projectid = $(this).data('projectid');
+						var pname = $(this).data('projectname');
+						var name = $(this).data('name');
+						var sdescription = $(this).data('sdescription');
+						var ldescription = $(this).data('ldescription');
+						var year = $(this).data('year');
+						var code = $(this).data('code');
+						var status = $(this).data('status');
+						var category = $(this).data('category');
+						var region = $(this).data('region');
+						var criticality = $(this).data('criticality');
+						var ranking = $(this).data('ranking');
+						var q1 = $(this).data('q1');
+						var q1e = $(this).data('q1e');
+						var q2 = $(this).data('q2');
+						var q2e = $(this).data('q2e');
+						var q3 = $(this).data('q3');
+						var q3e = $(this).data('q3e');
+						var q4 = $(this).data('q4');
+						var q4e = $(this).data('q4e');
+						var modal = $(this).data('modal');
+						
+						if (modal == 'add') {
+							$(".modalTitle").text("Add Budget");
+							$(".modalHeader").text("Add a new Budget to Project "+pname+".");
+						} else if (modal == 'edit') {
+							$(".modalTitle").text("Edit Project");
+							$(".modalHeader").text("Edit Budget "+name+" in Project "+pname+".");
+						}							
+						
+						if (q1e == true){
+							$('.budget-q1e').prop('checked', true);
+						}else {$('.budget-q1e').prop('checked', false);}
+						
+						if (q2e == true){
+							$('.budget-q2e').prop('checked', true);
+						}else {$('.budget-q2e').prop('checked', false);}
+						
+						if (q3e == true){
+							$('.budget-q3e').prop('checked', true);
+						}else {$('.budget-q3e').prop('checked', false);}
+						
+						if (q4e == true){
+							$('.budget-q4e').prop('checked', true);
+						}else {$('.budget-q4e').prop('checked', false);}
+						
+						$(".budgetID").val(id);
+						$(".projectID").val(projectid);
+						$(".budgetName").val(name);
+						$(".budgetSDescription").val(sdescription);
+						$(".budgetLDescription").val(ldescription);
+						$(".budgetYear").val(year);
+						$(".budgetCode").val(code);
+						$(".budgetStatus").val(status);
+						$(".budgetCategory").val(category);
+						$(".budgetRegion").val(region);
+						$(".budgetCriticality").val(criticality);
+						$(".budgetRanking").val(ranking);
+						$(".budgetQ1").val(q1);
+						$(".budgetQ2").val(q2);
+						$(".budgetQ3").val(q3);
+						$(".budgetQ4").val(q4);
+
+					});
+					
+					$(document).on("click", '.deletePopup',function(e) {
+					
+						swal({
+					        title: "Are you sure?",
+					        text: "You will not be able to recover this Budget!",
+					        type: "warning",
+					        showCancelButton: true,
+					        confirmButtonColor: "#DD6B55",
+					        confirmButtonText: "Yes, delete it!",
+			                cancelButtonText: "No, cancel please!",
+		                    closeOnConfirm: false,
+		                    closeOnCancel: false },
+		                    function (isConfirm) {
+		                   		if (isConfirm) {
+		                   			$.ajax({
+							    	    type: "GET",
+							    	    url: "/settings/budget/delete/"+id,
+							    	    data: "{}",
+							    	    async: true,
+							    	    dataType: "text",
+		                   			});
+		                   			
+		                   			setTimeout(function(){window.location.reload(true);},100)
+		                        } else {
+		                            swal("Cancelled", "Your Budget is safe :)", "error");
+		                        }
+						});
+		       		});
+
+				</script>
+				<script>
+				/*<![CDATA[*/
+			        $(document).ready(function(){
+			            $("#wizard").steps();
+			            $("#form").steps({
+			                bodyTag: "fieldset",
+			                onStepChanging: function (event, currentIndex, newIndex)
+			                {
+			                    // Always allow going backward even if the current step contains invalid fields!
+			                    if (currentIndex > newIndex)
+			                    {
+			                        return true;
+			                    }
+			
+			                    // Forbid suppressing "Warning" step if the user is to young
+			                    if (newIndex === 3 && Number($("#age").val()) < 18)
+			                    {
+			                        return false;
+			                    }
+			
+			                    var form = $(this);
+			
+			                    // Clean up if user went backward before
+			                    if (currentIndex < newIndex)
+			                    {
+			                        // To remove error styles
+			                        $(".body:eq(" + newIndex + ") label.error", form).remove();
+			                        $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+			                    }
+			
+			                    // Disable validation on fields that are disabled or hidden.
+			                    form.validate().settings.ignore = ":disabled,:hidden";
+			
+			                    // Start validation; Prevent going forward if false
+			                    return form.valid();
+			                },
+			                onStepChanged: function (event, currentIndex, priorIndex)
+			                {
+			                    // Suppress (skip) "Warning" step if the user is old enough.
+			                    if (currentIndex === 2 && Number($("#age").val()) >= 18)
+			                    {
+			                        $(this).steps("next");
+			                    }
+			
+			                    // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
+			                    if (currentIndex === 2 && priorIndex === 3)
+			                    {
+			                        $(this).steps("previous");
+			                    }
+			                },
+			                onFinishing: function (event, currentIndex)
+			                {
+			                    var form = $(this);
+			
+			                    // Disable validation on fields that are disabled.
+			                    // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
+			                    form.validate().settings.ignore = ":disabled";
+			
+			                    // Start validation; Prevent form submission if false
+			                    return form.valid();
+			                },
+			                onFinished: function (event, currentIndex)
+			                {
+			                    var form = $(this);
+			
+			                    // Submit form input
+			                    form.submit();
+			                }
+			            }).validate({
+			                        errorPlacement: function (error, element)
+			                        {
+			                            element.before(error);
+			                        },
+			                        rules: {
+			                            confirm: {
+			                                equalTo: "#password"
+			                            }
+			                        }
+			                    });
+			       });
+			    /*]]>*/
+			    </script>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

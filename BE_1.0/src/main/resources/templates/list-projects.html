@@ -57,9 +57,10 @@
 		                                            <small>Created <span th:text="${project.dateCreated}"></span></small>
 		                                        </td>
 		                                        <td class="project-completion">
-		                                                <small>Spent: 48%</small>
+		                                                <small th:if="${project.budgetApproved} != 0" th:text="${(project.budgetSpent / project.budgetApproved)*100}"></small>
 		                                                <div class="progress progress-mini">
-		                                                    <div style="width: 48%;" class="progress-bar"></div>
+		                                                    <div th:if="${project.budgetApproved} != 0" th:style="'width: ' + ${(project.budgetSpent / project.budgetApproved)*100} + ';'" class="progress-bar"></div>
+		                                                    <div th:if="${project.budgetApproved} == 0" style="width:0;" class="progress-bar"></div>
 		                                                </div>
 		                                        </td>
 		                                        <td th:text="${project.description}"></td>
