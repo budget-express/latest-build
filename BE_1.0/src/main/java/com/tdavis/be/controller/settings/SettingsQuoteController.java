@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,14 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.tdavis.be.entity.Budget;
-import com.tdavis.be.entity.Project;
+import com.tdavis.be.entity.FileUpload;
 import com.tdavis.be.entity.Quote;
-import com.tdavis.be.service.BudgetService;
-import com.tdavis.be.service.ProjectService;
+import com.tdavis.be.entity.User;
 import com.tdavis.be.service.QuoteService;
+import com.tdavis.be.service.UserService;
 
 
 
@@ -39,8 +36,10 @@ public class SettingsQuoteController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	//Constants
-	private String redirectProject = "redirect:/settings/project/";
 	private String redirectBudget = "redirect:/settings/budget/";
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private QuoteService quoteService;
@@ -49,6 +48,12 @@ public class SettingsQuoteController {
 	@ModelAttribute("quote")
 	public Quote quoteConstruct() {
 		return new Quote();
+	}
+	
+	//Access budget on web form
+	@ModelAttribute("file")
+	public FileUpload fileConstruct() {
+		return new FileUpload();
 	}
 	
 	/********************************************************************************************************
@@ -60,6 +65,37 @@ public class SettingsQuoteController {
 	 * Home >> Settings >> Projects >> Budget >> Quote
 	 * Listing of Quote
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping("/quote/{id}")
+	public String listQuotes(Model model, @PathVariable int id) {
+		
+		//Find Quote
+		Quote quote = quoteService.findById(id);
+		
+		//Set Page Navigation
+		List<String> navigation = new ArrayList<>();
+
+		navigation.add("Settings");
+		navigation.add("Projects");
+		navigation.add(quote.getBudget().getProject().getName());
+		navigation.add(quote.getBudget().getName());
+		navigation.add(quote.getName());
+				
+		//Find logged in user
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	User user = userService.findByName(auth.getName());
+    	    	
+    	//Set Model Attributes
+    	model.addAttribute("user", user);
+    	model.addAttribute("quote", quote);
+    	model.addAttribute("navtitle", quote.getName());
+    	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("count" , quoteService.findNumbers(id));
+		model.addAttribute("title", quote.getName());
+		
+		//projects.html
+		return "view-quote";
+	}		
 	
 	/********************************************************************************************************
 	 *  /Settings/Project/Budgets - Save, Delete
@@ -79,12 +115,12 @@ public class SettingsQuoteController {
 			logger.debug("Error: "+bindingResult);
 			return "redirect:/error";
 		}
-	
+
 		//Call Quote Service to Save Quote to Budget
 		quoteService.save(quote);
 		
 		//Redirect to Project Details
-		return redirectProject + quote.getBudget().getId();
+		return redirectBudget + quote.getBudget().getId();
 	}
 	
 	/*

@@ -15,6 +15,7 @@ import com.tdavis.be.entity.Role;
 import com.tdavis.be.entity.User;
 import com.tdavis.be.repository.RoleRepository;
 import com.tdavis.be.repository.UserRepository;
+import com.tdavis.be.service.HistoryService;
 
 
 
@@ -29,6 +30,9 @@ public class InitDbService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	//@Autowired
+	//private HistoryService logger;
+	
 	@PostConstruct
 	public void init() throws IOException {
 		
@@ -36,11 +40,15 @@ public class InitDbService {
 		
 			Role roleUser = new Role();
 			roleUser.setName("ROLE_USER");
+			roleUser.setDisplayName("User Role");
 			roleRepository.save(roleUser);
+			//logger.info("role", 1, "*Init* Added role: " + roleUser.getName());
 			
 			Role roleAdmin = new Role();
 			roleAdmin.setName("ROLE_ADMIN");
+			roleAdmin.setDisplayName("Admin Role");
 			roleRepository.save(roleAdmin);
+			//logger.info("role", 2, "*Init* Added role: " + roleUser.getName());
 			
 			User userAdmin = new User();
 			userAdmin.setEnabled(true);
@@ -55,6 +63,8 @@ public class InitDbService {
 			roles.add(roleUser);
 			userAdmin.setRoles(roles);
 			userRepository.save(userAdmin);
+			//logger.info("user", 2, "*Init* Added user: " + userAdmin.getName());
+			//logger.warning("user", 2, "*Init* Default Admin Account.  Change Password!");
 			
 			User userUser = new User();
 			userUser.setEnabled(true);
@@ -66,6 +76,8 @@ public class InitDbService {
 			uroles.add(roleUser);
 			userUser.setRoles(uroles);
 			userRepository.save(userUser);
+			//logger.info("user", 2, "*Init* Added user: " + userAdmin.getName());
+			//logger.warning("user", 2, "*Init* Default User Account.  Change Password!");
 
 		}
 		

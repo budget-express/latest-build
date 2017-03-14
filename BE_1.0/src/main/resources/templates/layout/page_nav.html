@@ -4,16 +4,21 @@
 		
 		<div class="row wrapper border-bottom white-bg page-heading">
         	<div class="col-lg-10">
-            	<h2 th:text="${navtitle}"></h2>
+            	<h2></h2>
                	<ol class="breadcrumb">
-               		<th:block  th:each="nav, iterStat : ${navigation}">
-	                   	<li th:if="${iterStat.index == 0} and iterStat.index != iterStat.size-1">
-	                       	<a th:href="@{/index2}"><span th:text="${nav}"></span></a>
+					
+					<li>
+                       	<a th:href="@{/index2}"><span>Home</span></a>
+                   	</li>
+                   	
+                   	<th:block  th:each="nav, iterStat : ${navigation}">
+	                   	<li th:if="${iterStat.index == 0}">
+	                    	<a th:href="@{/}+${#strings.toLowerCase(navigation[0])}"><span th:text="${navigation[0]}"></span></a>
 	                   	</li>
-	                   	<li th:if="${iterStat.index != 0 and iterStat.index != iterStat.size-1}">
-	                    	<a href="#"><span th:text="${nav}"></span></a>
+	                   	<li th:if="${iterStat.index &gt; 0 and iterStat.index &lt; iterStat.size-1}">
+	                    	<a th:href="@{/}+${#strings.toLowerCase(navigation[0])}+'/'+${#strings.toLowerCase(nav)}"><span th:text="${nav}"></span></a>
 	                   	</li>
-	                   	<li class="active" th:if="${iterStat.index == iterStat.size-1}">
+	                   	<li class="active" th:if="${iterStat.index != 0 and iterStat.index == iterStat.size-1}">
 	                       	<strong><span th:text="${nav}"></span></strong>
 	                   	</li>
                    	</th:block>

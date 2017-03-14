@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<head>
+	<th:block th:include="/layout/header :: header-inspinia"></th:block>
+</head>
+
+<body>
+    <div id="wrapper">
+		
+		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		
+		<div id="page-wrapper" class="gray-bg">
+        	<div class="row border-bottom">
+				
+				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
+				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
+				
+				<!-- Page Start -->
+				<div class="wrapper wrapper-content  animated fadeInRight">
+            		<div class="row">
+                		<div class="col-lg-12">
+                    		<div class="ibox">
+                        		<div class="ibox-title">
+                            		<h5>Logging</h5>
+                            		
+                        		</div>
+                       
+                        		<div class="ibox-content">
+									<div class="m-b-lg">
+										<div class="input-group">
+		                                    <input type="text" placeholder="Search for issue..." class=" form-control" />
+		                                    <span class="input-group-btn">
+		                                        <button type="button" class="btn btn-white"> Search</button>
+		                                    </span>
+                                		</div>
+                                		
+                                		<div class="m-t-md">
+											<div class="pull-right">
+		                                        <button type="button" class="btn btn-sm btn-success"> <i class="fa fa-user-circle-o"></i> </button>
+		                                        <button type="button" class="btn btn-sm btn-info"> <i class="fa fa-info-circle"></i> </button>
+		                                        <button type="button" class="btn btn-sm btn-warning"> <i class="fa fa-exclamation-circle"></i> </button>
+		                                        <button type="button" class="btn btn-sm btn-danger"> <i class="fa fa-question-circle"></i> </button>
+		                                        <button type="button" class="btn btn-sm btn-default"> <i class="fa fa-check-circle"></i> </button>
+		                                    </div>
+
+                                   			<strong th:each="log, iterStat : ${logs}">
+                                   				<span th:if="${iterStat.index} == ${iterStat.size-1}" th:text="'Found ' + ${iterStat.size} + ' events.'"></span>
+                                   			</strong>
+										</div>
+									</div>
+
+                           			<div class="full-height-scroll">
+               							<div class="table-responsive">
+	                            			<table class="table table-hover issue-tracker">
+				                            	<tbody>
+				                            		<tr th:each="log : ${logs}">
+				                            			<td>
+				                            				<span th:if="${log.type} == 'info'" class="label label-outline label-info">Info</span>
+				                            				<span th:if="${log.type} == 'warning'" class="label label-warning">Warning</span>
+				                            				<span th:if="${log.type} == 'error'" class="label label-danger">Error</span>
+				                            				<span th:if="${log.type} == 'debug'" class="label label-default">Debug</span>
+				                            			</td>
+														<td class="issue-info">
+															<a href="#logPopup" th:text="'Owner: '+${log.object}"></a>
+															
+															<small th:text="${log.message}"></small>
+														</td>
+														<td th:text="${log.user}"></td>
+														<td class="text-right" th:text="${log.date}"></td>
+	
+	                                    			</tr>
+	                                    		</tbody>
+	                                    	</table>
+                                   		</div>
+                                	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Page End -->
+				
+				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

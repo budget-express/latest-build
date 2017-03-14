@@ -6,9 +6,6 @@ import java.util.Date;
 
 import javax.transaction.Transactional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +18,6 @@ import com.tdavis.be.repository.FileUploadRepository;
 @Transactional
 public class FileUploadService {
 	
-	//Log output to console
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
 	//Setup Date Format
 	private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	
@@ -32,6 +26,9 @@ public class FileUploadService {
 	
 	@Autowired
 	private QuoteService quoteService;
+	
+	@Autowired
+	private HistoryService logger;
 	
 	/***************************************************************************************************************************
 	 * 
@@ -69,7 +66,7 @@ public class FileUploadService {
 		
 		//Save File to Repository
 		fileuploadRepository.save(fileUpload);
-		logger.info("*Service* Saved File "+ fileUpload.getName()+" to Quote: "+ fileUpload.getQuote().getName() + " as type: " + fileUpload.getType());
+		logger.info("quote", fileUpload.getQuote().getId(), "Saved File "+ fileUpload.getName()+" to Quote: "+ fileUpload.getQuote().getName() + " as type: " + fileUpload.getType());
 	}
 
 	/*
@@ -81,7 +78,7 @@ public class FileUploadService {
 		
 		//Delete File
 		fileuploadRepository.delete(temp);
-		logger.info("*Service* Deleted File "+ temp.getName()+" from Quote: " + temp.getQuote().getName());
+		logger.warning("quote", temp.getQuote().getId(), "Deleted File "+ temp.getName()+" from Quote: " + temp.getQuote().getName());
 	}
 
 }

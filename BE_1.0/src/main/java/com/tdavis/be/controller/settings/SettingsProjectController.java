@@ -25,8 +25,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.tdavis.be.entity.Budget;
 import com.tdavis.be.entity.Project;
-import com.tdavis.be.service.BudgetService;
+import com.tdavis.be.entity.User;
+import com.tdavis.be.service.HistoryService;
 import com.tdavis.be.service.ProjectService;
+import com.tdavis.be.service.UserService;
 
 
 
@@ -34,13 +36,19 @@ import com.tdavis.be.service.ProjectService;
 @RequestMapping("/settings")
 public class SettingsProjectController {
 	//Log output to console
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger temp = LoggerFactory.getLogger(this.getClass());
 	
 	//Constants
 	private String redirectProjects = "redirect:/settings/projects";
 	
 	@Autowired
 	private ProjectService projectService;	
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private HistoryService logger;
 	
 	//Access project on web page form
 	@ModelAttribute("project")
@@ -70,8 +78,7 @@ public class SettingsProjectController {
 		
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
-		
-		navigation.add("Home");
+
 		navigation.add("Settings");
 		navigation.add("Projects");
 		
@@ -80,10 +87,10 @@ public class SettingsProjectController {
 		
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	
+    	User user = userService.findByName(auth.getName());
+    	    	
     	//Set Model Attributes
-    	model.addAttribute("username", name);
+    	model.addAttribute("user", user);
     	model.addAttribute("projects", page);
     	model.addAttribute("navtitle", "Projects");
     	model.addAttribute("navigation" , navigation);
@@ -103,21 +110,20 @@ public class SettingsProjectController {
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
 		
-		navigation.add("Home");
 		navigation.add("Settings");
 		navigation.add("Projects");
 		navigation.add(project.getName());
 		
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	
+    	User user = userService.findByName(auth.getName());
+    	    	
     	//Set Model Attributes
-    	model.addAttribute("username", name);
+    	model.addAttribute("user", user);
     	model.addAttribute("project", project);
-    	model.addAttribute("navtitle", project.getName());
     	model.addAttribute("navigation" , navigation);
     	model.addAttribute("count", projectService.findNumbers(project.getId()));
+    	model.addAttribute("logs",logger.findAll());
 		model.addAttribute("title", project.getName());
 		
 		return "view-project";
@@ -130,7 +136,7 @@ public class SettingsProjectController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/projects/{sort}")
 	public String listProjectsAll(RedirectAttributes redir, @PathVariable String sort) {
-		logger.info("Sort by: " + sort);
+		temp.info("Sort by: " + sort);
 		switch (sort) {
 			case "all":
 				redir.addAttribute("projects", projectService.getProjectByYear(1));
@@ -144,7 +150,7 @@ public class SettingsProjectController {
 				redir.addFlashAttribute("projects", projectService.findAll());
 				break;
 		}
-		logger.info("Exit");
+		temp.info("Exit");
 		
     	
 		return redirectProjects;
@@ -164,8 +170,8 @@ public class SettingsProjectController {
 	@PostMapping("/project/save")
 	public String saveProject(@ModelAttribute @Valid Project project, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
-			
-			logger.debug("Error: "+bindingResult);
+
+			logger.error("project", project.getId(), "Error saving project: "+project.getName(), bindingResult.toString());
 			return "redirect:/error";
 		}
 		

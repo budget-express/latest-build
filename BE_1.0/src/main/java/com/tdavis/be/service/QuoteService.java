@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tdavis.be.entity.Budget;
+import com.tdavis.be.entity.FileUpload;
 import com.tdavis.be.entity.Quote;
 import com.tdavis.be.repository.QuoteRepository;
 
@@ -20,7 +21,7 @@ import com.tdavis.be.repository.QuoteRepository;
 public class QuoteService {
 	
 	//Log output to console
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger templogger = LoggerFactory.getLogger(this.getClass());
 	
 	//Setup Date Format
 	private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -30,6 +31,9 @@ public class QuoteService {
 		
 		@Autowired
 		private BudgetService budgetService;
+		
+		@Autowired
+		private HistoryService logger;
 		
 		/***************************************************************************************************************************
 		 * 
@@ -50,6 +54,26 @@ public class QuoteService {
 		*/
 		public Quote findById(int id) {
 			return quoteRepository.findById(id);
+		}
+		
+		/* Recall Data - Quote
+		* Quote findById
+		*/
+		public int findNumbers(int id) {
+			
+			int files = 0;
+
+			Quote quote = quoteRepository.findById(id);
+
+				if (quote.getId() != null) {
+					for (FileUpload file : quote.getFileUploads()){
+						if (file.getId() != null) {
+							files++;
+						}
+					}
+				}
+			
+			return files;
 		}
 		
 		/***************************************************************************************************************************
@@ -82,11 +106,11 @@ public class QuoteService {
 				temp.setDateEdited(time);
 				
 				//Set Parent Budget
-				temp.setBudget(budget);
+				//temp.setBudget(budget);
 				
 				//Save Quote to Repository
 				quoteRepository.save(temp);
-				logger.info("*Service* Updated Quote: " + temp.getName());
+				logger.info("budget", temp.getBudget().getId(), "Updated Quote: " + temp.getName());
 				
 				//Update Budget
 				budgetService.save(budget);
@@ -100,7 +124,8 @@ public class QuoteService {
 				
 				//Save Quote to Repository
 				quoteRepository.save(temp);
-				logger.info("*Service* Saved Quote: " + temp.getName()+" to Budget: " + budget.getName());
+				templogger.info("*Service* Saved Quote: " + temp.getName()+" to Budget: " + budget.getName());
+				logger.info("budget", temp.getBudget().getId(), "Saved Quote: " + temp.getName()+" to Budget: " + budget.getName());
 				
 				//Update Budget
 				budgetService.save(budget);
@@ -117,7 +142,7 @@ public class QuoteService {
 			
 			//Delete Quote from Repository
 			quoteRepository.delete(temp);
-			logger.info("*Service* Deleted Quote "+ temp.getName()+" from Budget: " + temp.getBudget().getName());
+			logger.warning("budget", temp.getBudget().getId(), "Deleted Quote "+ temp.getName()+" from Budget: " + temp.getBudget().getName());
 			
 			//Update Budget
 			budgetService.save(temp.getBudget());
@@ -130,6 +155,9 @@ public class QuoteService {
 			for (Quote quote : findAll()) {
 				save(quote);
 			}
-			logger.info("*Service* Refreshing Quotes!");
+			templogger.info("*Service* Refreshing Quotes!");
+			logger.system("Refreshing Quotes!");
 		}
+
+
 }

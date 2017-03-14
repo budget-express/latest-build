@@ -1,5 +1,6 @@
 package com.tdavis.be.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -26,7 +27,7 @@ public class Budget {
     private String budgetCode;
     
     //Details
-    private String status;
+    private String status; //Planning-Open-Closed
     private String category;
     private String region;
     private String criticality;
@@ -42,7 +43,7 @@ public class Budget {
     private double q4;
     private boolean enabledQ4;
     
-    //Variables
+    //Variables - Capex
     private double quoteSpent;
     private double quotePending;
     private double quoteStaged;
@@ -50,15 +51,30 @@ public class Budget {
     private double budgetRequested;
     private double budgetApproved;
     
+    //Variables - Opex
+    private double quoteSpentOpex;
+    private double quotePendingOpex;
+    private double quoteStagedOpex;
+    
+    //Logging
+    private String editedBy;
+    private String createdBy;
+    private String enabledBy;
+    private String disabledBy;
+    
     //Timestamp
-    private String dateCreated;
-    private String dateEdited;
-    private String dateEnabled; 
-    private String dateDisabled;
-    private String dateQ1Enabled;
-    private String dateQ2Enabled;
-    private String dateQ3Enabled;
-    private String dateQ4Enabled;
+    private Date dateCreated;
+    private Date dateEdited;
+    private Date dateEnabled; 
+    private Date dateDisabled;
+    private Date dateQ1Enabled;
+    private Date dateQ1Disabled;
+    private Date dateQ2Enabled;
+    private Date dateQ2Disabled;
+    private Date dateQ3Enabled;
+    private Date dateQ3Disabled;
+    private Date dateQ4Enabled;
+    private Date dateQ4Disabled;
     
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
@@ -67,6 +83,7 @@ public class Budget {
 	@OneToMany(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="budget_id")
 	private List<Quote> quotes;
+
 
 	public Integer getId() {
 		return id;
@@ -268,68 +285,156 @@ public class Budget {
 		this.budgetApproved = budgetApproved;
 	}
 
-	public String getDateCreated() {
+	public double getQuoteSpentOpex() {
+		return quoteSpentOpex;
+	}
+
+	public void setQuoteSpentOpex(double quoteSpentOpex) {
+		this.quoteSpentOpex = quoteSpentOpex;
+	}
+
+	public double getQuotePendingOpex() {
+		return quotePendingOpex;
+	}
+
+	public void setQuotePendingOpex(double quotePendingOpex) {
+		this.quotePendingOpex = quotePendingOpex;
+	}
+
+	public double getQuoteStagedOpex() {
+		return quoteStagedOpex;
+	}
+
+	public void setQuoteStagedOpex(double quoteStagedOpex) {
+		this.quoteStagedOpex = quoteStagedOpex;
+	}
+
+	public String getEditedBy() {
+		return editedBy;
+	}
+
+	public void setEditedBy(String editedBy) {
+		this.editedBy = editedBy;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getEnabledBy() {
+		return enabledBy;
+	}
+
+	public void setEnabledBy(String enabledBy) {
+		this.enabledBy = enabledBy;
+	}
+
+	public String getDisabledBy() {
+		return disabledBy;
+	}
+
+	public void setDisabledBy(String disabledBy) {
+		this.disabledBy = disabledBy;
+	}
+
+	public Date getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(String dateCreated) {
+	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
-	public String getDateEdited() {
+	public Date getDateEdited() {
 		return dateEdited;
 	}
 
-	public void setDateEdited(String dateEdited) {
+	public void setDateEdited(Date dateEdited) {
 		this.dateEdited = dateEdited;
 	}
 
-	public String getDateEnabled() {
+	public Date getDateEnabled() {
 		return dateEnabled;
 	}
 
-	public void setDateEnabled(String dateEnabled) {
+	public void setDateEnabled(Date dateEnabled) {
 		this.dateEnabled = dateEnabled;
 	}
 
-	public String getDateDisabled() {
+	public Date getDateDisabled() {
 		return dateDisabled;
 	}
 
-	public void setDateDisabled(String dateDisabled) {
+	public void setDateDisabled(Date dateDisabled) {
 		this.dateDisabled = dateDisabled;
 	}
 
-	public String getDateQ1Enabled() {
+	public Date getDateQ1Enabled() {
 		return dateQ1Enabled;
 	}
 
-	public void setDateQ1Enabled(String dateQ1Enabled) {
+	public void setDateQ1Enabled(Date dateQ1Enabled) {
 		this.dateQ1Enabled = dateQ1Enabled;
 	}
 
-	public String getDateQ2Enabled() {
+	public Date getDateQ1Disabled() {
+		return dateQ1Disabled;
+	}
+
+	public void setDateQ1Disabled(Date dateQ1Disabled) {
+		this.dateQ1Disabled = dateQ1Disabled;
+	}
+
+	public Date getDateQ2Enabled() {
 		return dateQ2Enabled;
 	}
 
-	public void setDateQ2Enabled(String dateQ2Enabled) {
+	public void setDateQ2Enabled(Date dateQ2Enabled) {
 		this.dateQ2Enabled = dateQ2Enabled;
 	}
 
-	public String getDateQ3Enabled() {
+	public Date getDateQ2Disabled() {
+		return dateQ2Disabled;
+	}
+
+	public void setDateQ2Disabled(Date dateQ2Disabled) {
+		this.dateQ2Disabled = dateQ2Disabled;
+	}
+
+	public Date getDateQ3Enabled() {
 		return dateQ3Enabled;
 	}
 
-	public void setDateQ3Enabled(String dateQ3Enabled) {
+	public void setDateQ3Enabled(Date dateQ3Enabled) {
 		this.dateQ3Enabled = dateQ3Enabled;
 	}
 
-	public String getDateQ4Enabled() {
+	public Date getDateQ3Disabled() {
+		return dateQ3Disabled;
+	}
+
+	public void setDateQ3Disabled(Date dateQ3Disabled) {
+		this.dateQ3Disabled = dateQ3Disabled;
+	}
+
+	public Date getDateQ4Enabled() {
 		return dateQ4Enabled;
 	}
 
-	public void setDateQ4Enabled(String dateQ4Enabled) {
+	public void setDateQ4Enabled(Date dateQ4Enabled) {
 		this.dateQ4Enabled = dateQ4Enabled;
+	}
+
+	public Date getDateQ4Disabled() {
+		return dateQ4Disabled;
+	}
+
+	public void setDateQ4Disabled(Date dateQ4Disabled) {
+		this.dateQ4Disabled = dateQ4Disabled;
 	}
 
 	public Project getProject() {

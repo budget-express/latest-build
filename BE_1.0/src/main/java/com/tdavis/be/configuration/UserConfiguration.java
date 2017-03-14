@@ -55,7 +55,7 @@ public class UserConfiguration extends WebSecurityConfigurerAdapter {
 				.usernameParameter("j_username")
 				.passwordParameter("j_password")
 				.loginProcessingUrl("/j_spring_security_check")
-				.defaultSuccessUrl("/")
+				.defaultSuccessUrl("/index")
 				.permitAll()
 				.and()
 			.logout()

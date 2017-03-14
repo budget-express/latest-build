@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tdavis.be.entity.User;
+import com.tdavis.be.service.HistoryService;
 import com.tdavis.be.service.UserService;
 
 
@@ -38,6 +39,9 @@ public class SettingsUserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private HistoryService historyService;
 	
 	//Access user on web page
 	@ModelAttribute("user")
@@ -67,19 +71,20 @@ public class SettingsUserController {
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
 		
-		navigation.add("Home");
 		navigation.add("Settings");
 		navigation.add("Users");
 				
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	   	String name = auth.getName(); //get logged in username
-	   	model.addAttribute("username", name);
-	   	model.addAttribute("fname", userService.findByName(name).getFname());
-	   	model.addAttribute("lname", userService.findByName(name).getLname());
+		//Find logged in user
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	User user = userService.findByName(auth.getName());
+    	    	
+    	//Set Model Attributes
+    	model.addAttribute("user", user);
 	   	model.addAttribute("navigation",navigation);
 	   	model.addAttribute("navtitle", "Users");
 	   	model.addAttribute("users", userService.findAll());
 	   	model.addAttribute("roles", userService.findAllRoles());
+	   	model.addAttribute("logs", historyService.getHistoryByDate(1));
 		model.addAttribute("title", "Settings>>Users");
 		
 		return "users";

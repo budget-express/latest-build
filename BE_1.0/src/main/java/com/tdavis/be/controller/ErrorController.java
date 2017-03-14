@@ -11,6 +11,7 @@ public class ErrorController {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	@RequestMapping("/")
 	public String error() {
 		return "error";
 	}

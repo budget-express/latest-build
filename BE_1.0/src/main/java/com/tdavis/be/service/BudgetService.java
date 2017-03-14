@@ -1,15 +1,11 @@
 package com.tdavis.be.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -21,17 +17,9 @@ import com.tdavis.be.entity.Project;
 import com.tdavis.be.entity.Quote;
 import com.tdavis.be.repository.BudgetRepository;
 
-
-
 @Service
 @Transactional
 public class BudgetService {
-	
-	//Log output to console
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	//Setup Date Format
-	private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	
 	@Autowired
 	private BudgetRepository budgetRepository;
@@ -41,6 +29,9 @@ public class BudgetService {
 	
 	@Autowired
 	private QuoteService quoteService;
+	
+	@Autowired
+	private HistoryService logger;
 	
 	/***************************************************************************************************************************
 	 * 
@@ -85,8 +76,6 @@ public class BudgetService {
 			}
 		}			
 
-
-		
 		values.add(files);
 		values.add(quotes);
 		
@@ -106,47 +95,47 @@ public class BudgetService {
 		//Find Project
 		Project project = projectService.findById(budget.getProject().getId());
 		
-		//Temp Budget
-		Budget temp = update(budget);
-		
-		//Set Current Time for Timestamp
-		String time = sdf.format(new Date());
-		
+		//Logging Message
+		String message;
+
 		//If...Existing Budget...Update Budget in Repository
-		if (temp.getId() != null){
+		if (budget.getId() != null){
 			
-			//!!!!!!Not sure why I have to do this????
-			temp.setDateCreated(findById(budget.getId()).getDateCreated());
+			//Preserve Created Date and Created By
+			budget.setDateCreated(budgetRepository.getOne(budget.getId()).getDateCreated());
+			budget.setCreatedBy(budgetRepository.getOne(budget.getId()).getCreatedBy());
+
+				
+			//Set Edited Date and Edited By
+			budget.setDateEdited(new Date());
+			budget.setEditedBy(logger.getLoggedon());
 			
-			//Set Edited Timestamp
-			temp.setDateEdited(time);
-			
-			//Set Parent Project
-			temp.setProject(project);
-			
-			//Save Budget
-			budgetRepository.save(temp);
-			logger.info("*Service* Updated Budget: " + temp.getName());
-			
-			//Update Project
-			projectService.save(project);
+			message = "Updated Budget: " + budget.getName();
 		} else {
 						
-			//Set Created Timestamp
-			temp.setDateCreated(time);
-			
-			//Set Parent Project
-			temp.setProject(project);
-			
-			//Save Budget to Repository
-			budgetRepository.save(temp);
-			logger.info("*Service* Saved Budget: " + temp.getName()+" to Project: " + project.getName());
-			
-			//Update Project
-			projectService.save(project);
+			//Set Created Date and Created By and Year
+			budget.setDateCreated(new Date());
+			budget.setCreatedBy(logger.getLoggedon());
+
+			message = "Saved Budget: " + budget.getName()+" to Project: " + project.getName();
 		}
+		
+		//Set Project and Year
+		budget.setYear(project.getYear());
+		budget.setProject(project);
+
+		//Budget Calculations and Active
+		Budget temp = update(budget);
+		
+		//Save Budget
+		budgetRepository.save(temp);
+		logger.info("project", project.getId(), message);
+		
+		//Update Project
+		projectService.save(project);
+		
 	}
-	
+
 	/*
 	 * Refresh Budget
 	 */
@@ -158,7 +147,7 @@ public class BudgetService {
 		for (Budget budget : findAll()) {
 			save(budget);
 		}
-		logger.info("*Service* Refreshing Budgets!");
+		logger.info("system", 0, "Refreshing Budgets!");
 	}
 	
 	/*
@@ -172,8 +161,11 @@ public class BudgetService {
 		//Calculations for Quote
 		temp = quoteCal(temp);
 	
-		//Calculations for Budget
-		temp = budgetCal(temp);
+		//Calculations for Budget + Check Quarters
+		temp = updateQuarters(temp);
+		
+		//Set Active Status
+		temp = active(temp);
 				
 		return temp;
 	}
@@ -189,7 +181,7 @@ public class BudgetService {
 		
 		//Delete Budget
 		budgetRepository.delete(temp);
-		logger.info("*Service* Deleted Budget "+ temp.getName()+" from Project: " + temp.getProject().getName());
+		logger.info("project", temp.getProject().getId(), "Deleted Budget "+ temp.getName()+" from Project: " + temp.getProject().getName());
 		
 		//Update Project
 		projectService.save(temp.getProject());
@@ -208,63 +200,107 @@ public class BudgetService {
 	public Budget quoteCal(Budget budget) {
 		
 		//Quote Calculation Variables
-		double quoteSpent=0;
-		double quotePending=0;
-		double quoteStaged=0;
-		
+		double quoteSpentCapex=0;
+		double quotePendingCapex=0;
+		double quoteStagedCapex=0;
+		double quoteSpentOpex=0;
+		double quotePendingOpex=0;
+		double quoteStagedOpex=0;
+				
 		//Calculate Quote Amounts
 		if (budget.getQuotes() != null) {
 			for (Quote quote : budget.getQuotes()){
 				switch(quote.getStatus().toLowerCase()) {
 					case "paid" :
-						quoteSpent += quote.getCapex();
+						quoteSpentCapex += quote.getCapex();
+						quoteSpentOpex += quote.getOpex();
 						break;
 					case "pending" :
-						quotePending += quote.getCapex();
+						quotePendingCapex += quote.getCapex();
+						quotePendingOpex += quote.getOpex();
 						break;
 					case "staged" :
-						quoteStaged += quote.getCapex();
+						quoteStagedCapex += quote.getCapex();
+						quoteStagedOpex =+ quote.getOpex();
 						break;
+					case "canceled" :
 					default :
 						break;
 				}
 			}
 			
 		}
-		
+
 		//Save Calculations to Budget
-		budget.setQuoteSpent(quoteSpent);
-		budget.setQuotePending(quotePending);
-		budget.setQuoteStaged(quoteStaged);
+		budget.setQuoteSpent(quoteSpentCapex);
+		budget.setQuotePending(quotePendingCapex);
+		budget.setQuoteStaged(quoteStagedCapex);
+		budget.setQuoteSpentOpex(quoteSpentOpex);
+		budget.setQuotePendingOpex(quotePendingOpex);
+		budget.setQuoteStagedOpex(quoteStagedOpex);
 		
 		return budget;
 	}
 	
 	/*
-	 * Calculate Budget amounts for Quarters
+	 * Calculate Budget amounts for Quarters and set timestamps
 	 */
-	public Budget budgetCal(Budget budget) {
+	private Budget updateQuarters(Budget budget) {
 		
 		//Budget Calculation Variables
 		double budgetRemaining;
-		double budgetRequested;
-		double budgetApproved = 0;
+		double budgetRequested = 0;;
+		double budgetApproved = 0;		
 		
-		//Calculate Requested Amount
-		if (budget.isEnabledQ1()) {
-			budgetApproved += budget.getQ1();
-		}
-		if (budget.isEnabledQ2()) {
-			budgetApproved += budget.getQ2();
-		}
-		if (budget.isEnabledQ3()) {
-			budgetApproved += budget.getQ3();
-		}
-		if (budget.isEnabledQ4()) {
-			budgetApproved += budget.getQ4();
+		switch (budget.getStatus().toLowerCase()) {
+			
+			case ("open") :
+			case ("closed") :
+				//Set Quarters enabled/Disabled + Calculate Budget Amounts
+				if (budget.isEnabledQ1()) {
+					if (budget.getDateQ1Enabled() == null) {
+						budget.setDateQ1Enabled(new Date());
+					}
+					budgetApproved += budget.getQ1();
+				} else {
+					budget.setDateQ1Enabled(budget.getDateQ1Enabled());
+					budget.setDateQ1Disabled(new Date());
+				}
+				
+				if (budget.isEnabledQ2()) {
+					if (budget.getDateQ2Enabled() == null) {
+						budget.setDateQ2Enabled(new Date());
+					}
+					budgetApproved += budget.getQ2();
+				} else {
+					budget.setDateQ2Enabled(budget.getDateQ2Enabled());
+					budget.setDateQ2Disabled(new Date());
+				}
+				if (budget.isEnabledQ3()) {
+					if (budget.getDateQ3Enabled() == null) {
+						budget.setDateQ3Enabled(new Date());
+					}
+					budgetApproved += budget.getQ3();
+				} else {
+					budget.setDateQ3Enabled(budget.getDateQ3Enabled());
+					budget.setDateQ3Disabled(new Date());
+				}
+				if (budget.isEnabledQ4()) {
+					if (budget.getDateQ4Enabled() == null) {
+						budget.setDateQ4Enabled(new Date());
+					}
+					budgetApproved += budget.getQ4();
+				} else {
+					budget.setDateQ4Enabled(budget.getDateQ4Enabled());
+					budget.setDateQ4Disabled(new Date());
+				}
+				budgetRequested = budget.getQ1() + budget.getQ2() + budget.getQ3() + budget.getQ4();
+				break;
+			case ("planning") :
+			default :
+				break;
 		}
 		
-		budgetRequested = budget.getQ1()+budget.getQ2() + budget.getQ3() + budget.getQ4();
 		budgetRemaining = budgetApproved - budget.getQuoteSpent();
 		
 		//Save Calculation to Budget
@@ -275,6 +311,25 @@ public class BudgetService {
 		return budget;
 	}
 	
-	
-	
+	public Budget active(Budget budget) {
+		
+		switch(budget.getStatus().toLowerCase()) {
+		case "open" :
+			budget.setDateEnabled(new Date());
+			budget.setEnabledBy(logger.getLoggedon());
+			break;
+		case "closed" :
+			budget.setDateEnabled(budgetRepository.getOne(budget.getId()).getDateEnabled());
+			budget.setEnabledBy(budgetRepository.getOne(budget.getId()).getEnabledBy());
+			budget.setDateDisabled(new Date());
+			budget.setDisabledBy(logger.getLoggedon());
+			break;
+		case "planning" :
+		default :
+			break;
+		}
+		
+		return budget;
+	}
+		
 }

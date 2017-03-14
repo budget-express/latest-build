@@ -70,12 +70,12 @@
                     	<div class="dropdown profile-element"> 
               
                     		<span>
-                        		<img alt="image" class="img-circle" src="/images/profile_small.jpg" />
+                    			<img class="profile img-circle" th:attr="data-name=${user.fname} + ' ' + ${user.lname}"/>
                            	</span>
                           	
                           	<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                          		<span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"  th:text="'Welcome, ' + ${username}"></strong></span> 
-                           		<span class="text-muted text-xs block" ><b class="caret"><th:block th:if="${usertitle != null}" th:text="${usertitle}" /></b></span> </span> 
+                          		<span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"  th:text="'Welcome, ' + ${user.name}"></strong></span> 
+                           		<span class="text-muted text-xs block" ><b class="caret"><th:block th:if="${user.title != null}" th:text="${user.title}" /></b></span> </span> 
                            	</a>
                           	
                           	<ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -118,6 +118,7 @@
                   		<ul class="nav nav-second-level">
                           		<li><a th:href="@{/settings/users}">Users</a></li>
                           		<li><a th:href="@{/settings/projects/}">Projects</a></li>
+                          		<li><a th:href="@{/settings/log/}">Log</a></li>
                       		</ul>
                   	</li>
                   	

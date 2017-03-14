@@ -25,18 +25,19 @@
                					<div class="col-md-1"></div>
                						<div class="col-md-4">
 										<div class="profile-image">
-	                        				<i class="fa fa-newspaper-o fa-5x" aria-hidden="true"></i>
+	                        				<i class="fa fa-folder-open-o fa-5x" aria-hidden="true"></i>
 	                    				</div>
                     					<div class="profile-info">
                        						<div class="">
                             					<div>
-					                                <h2 class="no-margins" th:text="${budget.name}">
-					                                	<span th:if="${budget.status} == 'Open'" class="label label-primary">Active</span>
-			                                            <span th:if="${budget.status} == 'Closed'" class="label label-default">Inactive</span>
-			                                            <span th:if="${budget.status} == 'Planning'" class="label label-warning">Planning</span> 
+					                                <h2 class="no-margins" th:text="${quote.name}">
+					                                	<span th:if="${quote.status} == 'Staged'" class="label label-success">Staged</span>
+			                                            <span th:if="${quote.status} == 'Paid'" class="label label-primary">Paid</span>
+			                                            <span th:if="${quote.status} == 'Pending'" class="label label-warning">Pending</span> 
+			                                            <span th:if="${quote.status} == 'Canceled'" class="label label-default">Canceled</span> 
 					                                </h2>
-					                                <h3 th:text="${budget.descriptionShort}"></h3>
-				                                	<small>Created</small><small th:text="${budget.dateCreated}"></small>
+					                                <h3 th:text="${quote.vendor} +' | '+ ${quote.vendorContact}"></h3>
+				                                	<small>Created</small><small th:text="${quote.dateCreated}"></small>
 					                            </div>
 					                        </div>
 					                    </div>
@@ -49,21 +50,21 @@
 						                            <td><strong ></strong> Budgets</td>
 						                            <td>
 						                            	<i class="fa fa-usd" aria-hidden="true"></i>
-						                                <strong th:text="${#numbers.formatDecimal(budget.budgetRemaining, 0, 'COMMA', 2, 'POINT')}"></strong> Remaining
+						                                <strong th:text="${#numbers.formatDecimal(quote.capex, 0, 'COMMA', 2, 'POINT')}"></strong> Capex
 						                            </td>
 						                        </tr>
 						                        <tr>
-						                            <td><strong  th:text="${count.get(1)}"></strong> Quotes</td>
+						                            <td><strong></strong> Quotes</td>
 						                            <td>
 						                            	<i class="fa fa-usd" aria-hidden="true"></i>
-						                                <strong th:text="${#numbers.formatDecimal(budget.budgetApproved, 0, 'COMMA', 2, 'POINT')}"></strong> Approved
+						                                <strong th:text="${#numbers.formatDecimal(quote.opex, 0, 'COMMA', 2, 'POINT')}"></strong> Opex
 						                            </td>
 						                        </tr>
 						                        <tr>
-						                            <td><strong  th:text="${count.get(0)}"></strong> Files</td>
+						                            <td><strong  th:text="${count}"></strong> Files</td>
 						                            <td>
 						                            	<i class="fa fa-usd" aria-hidden="true"></i>
-						                                <strong th:text="${#numbers.formatDecimal(budget.budgetRequested, 0, 'COMMA', 2, 'POINT')}"></strong> Requested
+						                                <strong ></strong> Requested
 						                            </td>
 						                        </tr>
 					                        </tbody>
@@ -91,7 +92,7 @@
 		                   		<div class="ibox">
 			                        <div class="ibox-title">
 			                            <div class="ibox-tools">
-			                                <a data-toggle="modal" href="#saveModal" class="btn btn-primary btn-xs popQuote" data-modal="add" th:attr="data-budgetname=${budget.name},data-budgetid=${budget.id}">Create new quote</a>
+			                                <a data-toggle="modal" href="#saveModal" class="btn btn-primary btn-xs popFile" th:attr="data-quotename=${quote.name},data-quoteid=${quote.id}">Upload File</a>
 			                            </div>
 			                        </div>
 		                        	<div class="ibox-content">
@@ -104,43 +105,23 @@
 			                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
 			                                </div>
 			                            </div>
-		                            	<div class="budget-list">
+		                            	<div class="file-list">
 		                                	<table class="table table-hover">
-		                                   		<tbody th:each="quote : ${budget.quotes}">
+		                                   		<tbody th:each="file : ${quote.fileUploads}">
 		                                    		<tr>
-				                                        <td class="quote-status">
-				                                            <span th:if="${quote.status} == 'Staged'" class="label label-success">Staged</span>
-				                                            <span th:if="${quote.status} == 'Paid'" class="label label-primary">Paid</span>
-				                                            <span th:if="${quote.status} == 'Pending'" class="label label-warning">Pending</span> 
-				                                            <span th:if="${quote.status} == 'Canceled'" class="label label-default">Canceled</span>
-				                                        </td>
-				                                        <td class="quote-title">
-				                                            <span th:text="${quote.name}"></span>
+				                                        <td class="file-name">
+				                                            <span th:text="${file.name}"></span>
 				                                            <br/>
-				                                            <small>Created <span th:text="${quote.dateCreated}"></span></small>
+				                                            <small>Created <span th:text="${file.dateCreated}"></span></small>
 				                                        </td>
-				                                        <td class="quote-vendor" th:text="${quote.vendor}"></td>
-				                                        <td class="quote-capex" th:text="'$' + ${quote.capex}"></td>
-				                                        <td class="quote-opex" th:text="'$' + ${quote.opex}"></td>
-				                                        <td class="budget-actions">
-				                                            <a th:href="@{/settings/quote/} + ${quote.id}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
-				                                            <a data-toggle="modal" href="#saveModal" class="btn btn-white btn-sm popQuote" data-modal="edit"
-				                                            	th:attr="data-id=${quote.id},
-																   data-budgetid=${budget.id},
-																   data-budgetname=${budget.name},
-																   data-name=${quote.name},
-																   data-justification=${quote.justification},
-																   data-vendor=${quote.vendor},
-																   data-vcontact=${quote.vendorContact},
-																   data-vemail=${quote.vendorEmail},
-																   data-status=${quote.status},
-																   data-capex=${quote.capex},
-																   data-opex=${quote.opex}">
-				                                            	<i class="fa fa-pencil"></i> Edit 
+				                                        <td class="file-type" th:text="${file.type}"></td>
+				                                        <td class="file-actions">
+				                                            <a th:href="@{/file/download/}+${file.id}" class="btn btn-white btn-sm" th:attr="data-fileid=${file.id}">
+				                                            	<i class="fa fa-folder"></i> 
+				                                            	Download 
 				                                            </a>
-				                                            <button class="btn btn-white btn-sm popQuote deletePopup" 
-				                                            	th:attr="data-id=${quote.id},
-																data-name=${quote.name}">
+				                                            <button class="btn btn-white btn-sm popFile deletePopup" 
+				                                            	th:attr="data-id=${file.id}">
 				                                            	<i class="fa fa-trash"></i> Delete 
 				                                            </button>
 				                                        </td>
@@ -156,7 +137,7 @@
 					<!-- Page End -->
 					
 					<!-- Project-Modal-Add/Edit Start -->
-					<form class="m-t" role="form" id="form" th:action="@{/settings/quote/save}" th:object="${quote}" method="post">
+					<form class="m-t" role="form" id="form" th:action="@{/settings/file/save}" method="post" enctype="multipart/form-data">
 						<div class="modal inmodal" id="saveModal" tabindex="-1" role="dialog" aria-hidden="true">
 		                	<div class="modal-dialog">
 		                    	<div class="modal-content animated bounceInRight">
@@ -169,44 +150,23 @@
 	                            
 	                            	<div class="modal-body">
 
-										<input class="form-control budgetID" type="hidden" th:field="*{budget.id}" />
-										<input class="form-control quoteID" type="hidden" th:field="*{id}" />
-										
-										<label for="quoteName">Name:</label>
-										<input type="text" th:field="*{name}" class="form-control quoteName" />
-										
-										<label for="quoteJustification">Justification:</label>
-										<textarea style="resize:none" th:field="*{justification}" class="form-control quoteJustification" rows="3"></textarea>
-										
-										<label for="quoteVendor">Vendor:</label>
-										<input type="text" th:field="*{vendor}" class="form-control quoteVendor" />
-										
-										<label for="quoteVendorContact">Vendor Contact:</label>
-										<input type="text" th:field="*{vendorContact}" class="form-control quoteVendorContact" />
-										
-										<label for="quoteVendorEmail">Vendor Email:</label>
-										<input type="text" th:field="*{vendorEmail}" class="form-control quoteVendorEmail" />
-										
-										<label for="quoteStatus">Status:</label>
-										<select th:field="*{status}" class="form-control quoteStatus">
-					                        <option value="Pending">Pending</option>
-					                        <option value="Staged">Staged</option>
-					                        <option value="Paid">Paid</option>
-					                        <option value="Canceled">Canceled</option>
-				                        </select>
-										
-										<label for="quoteCapex">Capex Amount:</label>
-										<input type="text" th:field="*{capex}" class="form-control quoteCapex" />
-										
-										<label for="quoteOpex">Opex Amount:</label>
-										<input type="text" th:field="*{opex}" class="form-control quoteOpex" />		
-	                            		
+										<input class="form-control quoteID" type="hidden" th:field="*{quote.id}" />
+
+										<label for="fileName">File:</label>
+										<input type="file" id="fileName" class="form-control" name="myFile"/>
+																											
+										<label for="fileType">Type:</label>
+										<select id="fileType" class="form-control" name="fileType">
+					                        <option value="">Choose..</option>
+					                        <option value="Quote">Quote</option>
+					                        <option value="PO">PO</option>
+				                        </select>									
 		                            
 			                         </div>
 			                         
 			                         <div class="modal-footer">
 		                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-		                                <button type="submit" class="btn btn-primary">Save</button>
+		                                <button type="submit" class="btn btn-primary">Upload</button>
 		                            </div>
 		                        </div>
 		                    </div>
@@ -219,38 +179,16 @@
 				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
 				<script>
 			    	var id;
-				    $(document).on("click", '.popQuote',function(e) {
+				    $(document).on("click", '.popFile',function(e) {
 						id = $(this).data('id');
-						var budgetid = $(this).data('budgetid');
-						var bname = $(this).data('budgetname');
-						var name = $(this).data('name');
-						var justification = $(this).data('justification');
-						var vendor = $(this).data('vendor');
-						var vcontact = $(this).data('vcontact');
-						var vemail = $(this).data('vemail');
-						var status = $(this).data('status');
-						var capex = $(this).data('capex');
-						var opex = $(this).data('opex');
-						var modal = $(this).data('modal');
-						
-						if (modal == 'add') {
-							$(".modalTitle").text("Add Quote");
-							$(".modalHeader").text("Add a new Quote to Budget "+bname+".");
-						} else if (modal == 'edit') {
-							$(".modalTitle").text("Edit Project");
-							$(".modalHeader").text("Edit Quote "+name+" in Budget "+bname+".");
-						}
-						
-						$(".quoteID").val(id);
-						$(".budgetID").val(budgetid);
+						var quotetid = $(this).data('quoteid');
+						var qname = $(this).data('quotename');
+					
+						$(".modalTitle").text("Upload File");
+						$(".modalHeader").text("Upload a new File to Quote "+qname+".");
+
+						$(".quoteID").val(quoteid);
 						$(".quoteName").val(name);
-						$(".quoteJustification").val(justification);
-						$(".quoteVendor").val(vendor);
-						$(".quoteVendorContact").val(vcontact);
-						$(".quoteVendorEmail").val(vemail);
-						$(".quoteStatus").val(status);
-						$(".quoteCapex").val(capex);
-						$(".quoteOpex").val(opex);
 					});
 					
 					$(document).on("click", '.deletePopup',function(e) {
@@ -269,7 +207,7 @@
 		                   		if (isConfirm) {
 		                   			$.ajax({
 							    	    type: "GET",
-							    	    url: "/settings/quote/delete/"+id,
+							    	    url: "/settings/file/delete/"+id,
 							    	    data: "{}",
 							    	    async: true,
 							    	    dataType: "text",

@@ -55,9 +55,7 @@ public class User {
 	@ManyToMany
 	@JoinTable(name="app_user_role")
 	private List<Role> roles;
-	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-	private List<History> historys;
+
 	
 	
 	
@@ -69,13 +67,6 @@ public class User {
 		this.name = name;
 	}
 
-	public List<History> getHistorys() {
-		return historys;
-	}
-
-	public void setHistorys(List<History> historys) {
-		this.historys = historys;
-	}
 
 	public String getFname() {
 		return fname;

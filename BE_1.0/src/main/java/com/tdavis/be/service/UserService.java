@@ -8,6 +8,9 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +24,19 @@ import com.tdavis.be.repository.UserRepository;
 public class UserService {
 
 	//Log output to console
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	//private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private HistoryService logger;
 	
 	public Iterable<User> findAll () {
 		
@@ -48,26 +57,38 @@ public class UserService {
 	}
 	
 	public void save(User user) {
+
+
+		
+    	String message;
 		
 		if (user.getId() != null) {
-			logger.info("User Password: "+ user.getPassword());
+			//Preserve Password
 			user.setPassword(userRepository.findById(user.getId()).getPassword());
+			
+			//Set Roles
+			user.setRoles(roleService.setRoles(user));
+			
+			message = "Updated User " + user.getName();
+
 		} else {
+			//Encrypt Password
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			user.setPassword(encoder.encode(user.getPassword()));
+
+			//Set Roles
+			user.setRoles(roleService.setRoles(user));
+			
+			message = "Created User " + user.getName();
 		}
-		
-		List<Role> roles = new ArrayList<Role>();
-		if (user.isEnabled()) {
-			roles.add(roleRepository.findByName("ROLE_USER"));
-		}
-		user.setRoles(roles);
-		
+
 		userRepository.save(user);
+		logger.info("system", 0 , message);
 
 	}
 	
 	public void edit(User user) {
+	
 		User temp = userRepository.findOne(user.getId());
 		temp.setId(user.getId());
 		temp.setName(user.getName());
@@ -91,6 +112,7 @@ public class UserService {
 	public void delete(Integer id) {
 		User temp = userRepository.findOne(id);
 		userRepository.delete(temp);
+		logger.info("system", 0 , "Deleted User " + temp.getName());
 	}
 
 	public void updateRoles(User user, ArrayList<String> userRoles) {
@@ -104,4 +126,15 @@ public class UserService {
 		userRepository.save(user);
 		
 	}
+	
+	public Integer getCount() {
+		int size = 0;
+		for(User user : userRepository.findAll()) {
+		   size++;
+		}
+		
+		return size;
+	}
+	
+
 }

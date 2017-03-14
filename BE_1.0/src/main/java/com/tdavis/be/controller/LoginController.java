@@ -11,6 +11,6 @@ public class LoginController {
 	@RequestMapping(value="/login")
 	public String printUser(Model model) {
 		model.addAttribute("title", "Budget Express - Login");
-		return "login";
+		return "login2";
 	}
 }

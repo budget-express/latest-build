@@ -18,6 +18,7 @@
 				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
 				
 				<!-- Page Start -->
+				<script>var i;</script>
 				<div class="row">
 		            <div class="col-lg-12">
 		                <div class="wrapper wrapper-content animated fadeInUp">
@@ -71,20 +72,27 @@
                						</div>
                						<div class="col-md-3">
                							<!-- History List -->
+               							<script>i=0;</script>
                							<h4><i class="fa fa-history" aria-hidden="true"></i> History</h4>
-					                    <table class="table small m-b-xs">
-				                       		<tbody>
-						                        <tr>
-						                            <td>Budget Added By Admin</td>
-						                       	</tr>
-						                       	<tr>
-						                       		<td>Quote Deleted By Admin</td>
-						                       	</tr>
-						                       	<tr>
-						                            <td><span class="pull-right"><a href="#">...</a></span>File Added By Admin</td>
-						                       	</tr>
-						                   	</tbody>
-						            	</table>
+               							<div class="full-height-scroll">
+               								<div class="table-responsive">
+							                    <table class="table small m-b-xs">
+						                       		<tbody th:each="log, iterStat : ${logs}">
+														<th:block th:if="${log.object} == 'project' and ${log.objectId} == ${project.id}">
+															
+															<!--<tr>
+																<td th:text="${log.message}"><script>console.log(i);i++;</script></td>
+															</tr>
+															
+															 <tr th:if="${i} == 2">
+																<td th:text="${log.message}"><span class="pull-right"><a href="#">...</a></span></td>
+															</tr> -->
+														</th:block>
+								                       	
+								                   	</tbody>
+								            	</table>
+								            </div>
+								    	</div>
 					                </div>
 								</div>
 					
@@ -276,7 +284,7 @@
 		                                        						<i class="fa fa-usd" aria-hidden="true"></i>
 		                                        					</span>
 		                                        					<input type="text" class="form-control budgetQ1" th:field="*{q1}" value="0"/>
-		                                        					<span class="input-group-addon"><input type="checkbox" class="budget-q1e" th:field="*{enabledQ1}" /></span>
+		                                        					<span class="input-group-addon"><input type="checkbox" class="budget-q1e" th:field="*{enabledQ1}"/></span>
 		                                        				</div>
 			                                        		</div>
 			                                        	</div>
@@ -363,7 +371,7 @@
 						var q3e = $(this).data('q3e');
 						var q4 = $(this).data('q4');
 						var q4e = $(this).data('q4e');
-						var modal = $(this).data('modal');
+						var modal = $(this).data('modal');						
 						
 						if (modal == 'add') {
 							$(".modalTitle").text("Add Budget");
@@ -371,41 +379,41 @@
 						} else if (modal == 'edit') {
 							$(".modalTitle").text("Edit Project");
 							$(".modalHeader").text("Edit Budget "+name+" in Project "+pname+".");
-						}							
-						
-						if (q1e == true){
-							$('.budget-q1e').prop('checked', true);
-						}else {$('.budget-q1e').prop('checked', false);}
-						
-						if (q2e == true){
-							$('.budget-q2e').prop('checked', true);
-						}else {$('.budget-q2e').prop('checked', false);}
-						
-						if (q3e == true){
-							$('.budget-q3e').prop('checked', true);
-						}else {$('.budget-q3e').prop('checked', false);}
-						
-						if (q4e == true){
-							$('.budget-q4e').prop('checked', true);
-						}else {$('.budget-q4e').prop('checked', false);}
+							
+							if (q1e == true){
+								$('.budget-q1e').prop('checked', true);
+							}else {$('.budget-q1e').prop('checked', false);}
+							
+							if (q2e == true){
+								$('.budget-q2e').prop('checked', true);
+							}else {$('.budget-q2e').prop('checked', false);}
+							
+							if (q3e == true){
+								$('.budget-q3e').prop('checked', true);
+							}else {$('.budget-q3e').prop('checked', false);}
+							
+							if (q4e == true){
+								$('.budget-q4e').prop('checked', true);
+							}else {$('.budget-q4e').prop('checked', false);}	
+							
+							$(".budgetName").val(name);
+							$(".budgetSDescription").val(sdescription);
+							$(".budgetLDescription").val(ldescription);
+							$(".budgetYear").val(year);
+							$(".budgetCode").val(code);
+							$(".budgetStatus").val(status);
+							$(".budgetCategory").val(category);
+							$(".budgetRegion").val(region);
+							$(".budgetCriticality").val(criticality);
+							$(".budgetRanking").val(ranking);
+							$(".budgetQ1").val(q1);
+							$(".budgetQ2").val(q2);
+							$(".budgetQ3").val(q3);
+							$(".budgetQ4").val(q4);
+						}	
 						
 						$(".budgetID").val(id);
 						$(".projectID").val(projectid);
-						$(".budgetName").val(name);
-						$(".budgetSDescription").val(sdescription);
-						$(".budgetLDescription").val(ldescription);
-						$(".budgetYear").val(year);
-						$(".budgetCode").val(code);
-						$(".budgetStatus").val(status);
-						$(".budgetCategory").val(category);
-						$(".budgetRegion").val(region);
-						$(".budgetCriticality").val(criticality);
-						$(".budgetRanking").val(ranking);
-						$(".budgetQ1").val(q1);
-						$(".budgetQ2").val(q2);
-						$(".budgetQ3").val(q3);
-						$(".budgetQ4").val(q4);
-
 					});
 					
 					$(document).on("click", '.deletePopup',function(e) {

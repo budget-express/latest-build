@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,13 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.tdavis.be.entity.Budget;
-import com.tdavis.be.entity.Project;
 import com.tdavis.be.entity.Quote;
+import com.tdavis.be.entity.User;
 import com.tdavis.be.service.BudgetService;
-import com.tdavis.be.service.ProjectService;
+import com.tdavis.be.service.UserService;
 
 
 
@@ -44,6 +42,9 @@ public class SettingsBudgetController {
 	
 	@Autowired
 	private BudgetService budgetService;
+	
+	@Autowired
+	private UserService userService;
 	
 	//Access quote on web form
 	@ModelAttribute("quote")
@@ -76,7 +77,6 @@ public class SettingsBudgetController {
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
 		
-		navigation.add("Home");
 		navigation.add("Settings");
 		navigation.add("Projects");
 		navigation.add(budget.getProject().getName());
@@ -84,10 +84,10 @@ public class SettingsBudgetController {
 				
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	String name = auth.getName(); //get logged in username
-    	
+    	User user = userService.findByName(auth.getName());
+    	    	
     	//Set Model Attributes
-    	model.addAttribute("username", name);
+    	model.addAttribute("user", user);
     	model.addAttribute("budget", budget);
     	model.addAttribute("navtitle", budget.getName());
     	model.addAttribute("navigation" , navigation);

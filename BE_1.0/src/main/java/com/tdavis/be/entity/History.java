@@ -1,11 +1,10 @@
 package com.tdavis.be.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class History {
@@ -14,21 +13,52 @@ public class History {
 	@GeneratedValue
 	private Integer id;
 
-	private String name;
-	
+	//info-error-warning-debug
 	private String type;
 	
-	private String date;
+	//project-budget-quote-file
+	private String object;
 	
-	private String log;
+	private Integer objectId;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+	private String user;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="project_id")
-	private Project project;
+	private Integer userId;
+
+	private String message;
+	
+	private String payload;
+	
+	private Date date;
+	
+	public History() {
+		this.date = new Date();
+	}
+	
+	public History(String type, String object, Integer objectId, String user, Integer userId,
+			String message, String payload) {
+		super();
+		this.type = type;
+		this.object = object;
+		this.objectId = objectId;
+		this.user = user;
+		this.userId = userId;
+		this.message = message;
+		this.payload = payload;
+		this.date = new Date();
+	}
+	
+	public History(String type, String object, Integer objectId, String user, Integer userId,
+			String message) {
+		super();
+		this.type = type;
+		this.object = object;
+		this.objectId = objectId;
+		this.user = user;
+		this.userId = userId;
+		this.message = message;
+		this.date = new Date();
+	}
 
 	public Integer getId() {
 		return id;
@@ -36,14 +66,6 @@ public class History {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getType() {
@@ -54,38 +76,56 @@ public class History {
 		this.type = type;
 	}
 
-	public String getDate() {
-		return date;
+	public String getObject() {
+		return object;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setObject(String object) {
+		this.object = object;
 	}
 
-	public String getLog() {
-		return log;
+	public Integer getObjectId() {
+		return objectId;
 	}
 
-	public void setLog(String log) {
-		this.log = log;
+	public void setObjectId(Integer objectId) {
+		this.objectId = objectId;
 	}
 
-	public User getUser() {
+	public String getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(String user) {
 		this.user = user;
 	}
 
-	public Project getProject() {
-		return project;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setProject(Project project) {
-		this.project = project;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
-	
-	
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getPayload() {
+		return payload;
+	}
+
+	public void setPayload(String payload) {
+		this.payload = payload;
+	}
+
+	public Date getDate() {
+		return date;
+	}
 	
 }

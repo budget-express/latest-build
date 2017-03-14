@@ -1,5 +1,6 @@
 package com.tdavis.be.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -29,13 +30,19 @@ public class Project {
 	private double budgetPending;	
 	private double budgetStaged;
 	
-	//Date Variables
-	private String dateCreated;
-	private String dateEdited;
-	private String dateEnabled;
-	private String dateDisabled;
+    //Logging
+    private String editedBy;
+    private String createdBy;
+    private String enabledBy;
+    private String disabledBy;
 	
-	//Project/Infrastructure
+	//Timestamp
+	private Date dateCreated;
+	private Date dateEdited;
+	private Date dateEnabled;
+	private Date dateDisabled;
+
+	//Project/Infrastructure/Special
 	private String type;
 	
 	//Planning/Open/Closed
@@ -44,9 +51,6 @@ public class Project {
 	@OneToMany(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="project_id")
 	private List<Budget> budgets;
-	
-	@OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
-	private List<History> historys;
 
 	public Integer getId() {
 		return id;
@@ -114,43 +118,35 @@ public class Project {
 		this.type = type;
 	}
 
-	public List<History> getHistorys() {
-		return historys;
-	}
-
-	public void setHistorys(List<History> historys) {
-		this.historys = historys;
-	}
-
-	public String getDateCreated() {
+	public Date getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(String dateCreated) {
+	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
-	public String getDateEdited() {
+	public Date getDateEdited() {
 		return dateEdited;
 	}
 
-	public void setDateEdited(String dateEdited) {
+	public void setDateEdited(Date dateEdited) {
 		this.dateEdited = dateEdited;
 	}
 
-	public String getDateEnabled() {
+	public Date getDateEnabled() {
 		return dateEnabled;
 	}
 
-	public void setDateEnabled(String dateEnabled) {
+	public void setDateEnabled(Date dateEnabled) {
 		this.dateEnabled = dateEnabled;
 	}
 
-	public String getDateDisabled() {
+	public Date getDateDisabled() {
 		return dateDisabled;
 	}
 
-	public void setDateDisabled(String dateDisabled) {
+	public void setDateDisabled(Date dateDisabled) {
 		this.dateDisabled = dateDisabled;
 	}
 
@@ -193,7 +189,38 @@ public class Project {
 	public void setBudgetStaged(double budgetStaged) {
 		this.budgetStaged = budgetStaged;
 	}
-	
-	
+
+	public String getEditedBy() {
+		return editedBy;
+	}
+
+	public void setEditedBy(String editedBy) {
+		this.editedBy = editedBy;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getEnabledBy() {
+		return enabledBy;
+	}
+
+	public void setEnabledBy(String enabledBy) {
+		this.enabledBy = enabledBy;
+	}
+
+	public String getDisabledBy() {
+		return disabledBy;
+	}
+
+	public void setDisabledBy(String disabledBy) {
+		this.disabledBy = disabledBy;
+	}
+
 	
 }

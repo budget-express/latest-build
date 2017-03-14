@@ -26,7 +26,7 @@
 		                            <!-- <span class="text-muted small pull-right">Last modification: <i class="fa fa-clock-o"></i> 2:10 pm - 12.06.2014</span> -->
 		                            <h2>User Adminitration</h2>
 		                            <div class="input-group">
-		                                <input type="text" placeholder="Search client " class="input form-control" />
+		                                <input type="text" placeholder="Search users " class="input form-control" />
 		                                <span class="input-group-btn">
 		                                        <button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search</button>
 		                                </span>
@@ -44,7 +44,7 @@
 		                                            <table class="table table-striped table-hover">
 		                                                <tbody th:each="user : ${users}">
 		                                                <tr>
-		                                                    <td class="client-avatar"><img alt="image" src="/images/profile_small.jpg" /> </td>
+		                                                    <td class="client-avatar"><img class="profile img-circle" th:attr="data-name=${user.fname} + ' ' + ${user.lname}"/> </td>
 		                                                    <td><a data-toggle="tab" th:href="'#'+${user.name}" class="client-link" th:text="${user.fname + ' ' + user.lname}"></a></td>
 		                                                    <td th:text="${user.title}"></td>
 		                                                    <td class="contact-type"><i class="fa fa-envelope"> </i></td>
@@ -95,7 +95,7 @@
 		                                           	<h2 th:text="${usertab.fname} + ' ' + ${usertab.lname}"></h2>
 		
 		                                           	<div class="m-b-sm">
-		                                               	<img alt="image" class="img-circle" src="/images/profile_small.jpg" style="width: 62px" />
+		                                               	<img class="profile img-circle" th:attr="data-name=${usertab.fname} + ' ' + ${usertab.lname}"/>
 		                                           	</div>
 		                                       	</div>
 		                                       	<div class="col-lg-8">
@@ -113,7 +113,8 @@
 																 data-lname=${usertab.lname},
 																 data-email=${usertab.email},
 																 data-title=${usertab.title},
-																 data-enabled=${usertab.enabled}">
+																 data-enabled=${usertab.enabled},
+																 data-admin=${usertab.admin}">
 													<i class="fa fa-user-circle"></i> Edit
 		                                            </a>                                          
 		                                            <a  th:href="'mailto:'+ ${usertab.email}" class="btn btn-primary btn-sm btn-block"><i
@@ -139,26 +140,12 @@
 											
 													<!-- Add user History -->
 			                                        <ul class="list-group clear-list">
-			                                            <li class="list-group-item fist-item">
-			                                                <span class="pull-right"> 09:00 pm </span>
-			                                                Added Budget XXX
-			                                            </li>
-			                                            <li class="list-group-item">
-			                                                <span class="pull-right"> 10:16 am </span>
-			                                                Enabled Budget XXX Q1
-			                                            </li>
-			                                            <li class="list-group-item">
-			                                                <span class="pull-right"> 08:22 pm </span>
-			                                                Added Quote YYY
-			                                            </li>
-			                                            <li class="list-group-item">
-			                                                <span class="pull-right"> 11:06 pm </span>
-			                                                Deleted user Frank
-			                                            </li>
-			                                            <li class="list-group-item">
-			                                                <span class="pull-right"> 12:00 am </span>
-			                                                Enabled user Angus
-			                                            </li>
+			                                        	<th:block th:each="log, iterStat : ${logs}" >
+				                                            <li th:if="${log.user} == ${usertab.name} and ${iterStat.index} &lt; 5" class="list-group-item fist-item" >
+				                                                <span class="pull-right" th:text="${log.date}"></span>
+				                                                <span th:text="${log.message}"></span>
+				                                            </li>
+				                                    	</th:block>
 			                                        </ul>
 			                                        <span class="pull-right"><a href="#" >...more history</a></span>
 		                                   		</div>
@@ -236,6 +223,10 @@
 					                        <div class="checkbox i-checks"><label> <input type="checkbox" class="user-enabled" th:field="*{enabled}" /><i></i> Enable User </label></div>
 					                	</div>
 					                	
+					                	<div class="form-group">
+					                        <div class="checkbox i-checks"><label> <input type="checkbox" class="user-admin" th:field="*{admin}" /><i></i> Enable Admin </label></div>
+					                	</div>
+					                	
 					                	<div>
 					                		<span class="pull-right"><a data-toggle="modal" href="#user-modal-roles" class="btn btn-info btn-xs" >Roles</a></span>
 					                	</div>
@@ -310,6 +301,7 @@
 						var title = $(this).data('title');
 						enabled = $(this).data('enabled');
 						var from = $(this).data('from');
+						var isAdmin = $(this).data('admin');
 						
 						if (from == 'add') {
 							$(".fromtitle").text("Add User");
@@ -318,9 +310,15 @@
 						} else if (from == 'edit') {
 							$(".fromtitle").text("Edit User");
 							$(".frombody").text("Edit users on the site.");
+							
 							if (enabled == true){
 								$('.user-enabled').prop('checked', true);
 							}else {$('.user-enabled').prop('checked', false);}
+							
+							if (isAdmin == true) {
+								$('.user-admin').prop('checked', true);
+							} else {$('.user-admin').prop('checked',false);}
+							
 							$(".user-enabled").val(enabled);
 							$(".user-password").removeAttr('required');
 							$(".user-password").val("password");

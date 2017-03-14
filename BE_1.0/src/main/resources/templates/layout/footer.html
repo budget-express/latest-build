@@ -14,7 +14,7 @@
 		<div class="footer">
         	<div class="pull-right">
             	
-            	<span th:text="'Logged in as ' + ${username}"></span>
+            	<span th:text="'Logged in as ' + ${user.name}"></span>
         	</div>
         	<div>
             	<strong>Budget Tracker</strong> by Tim Davis
@@ -47,11 +47,18 @@
 	    <!-- Custom and plugin javascript -->
 	    <script src="/build/js/inspinia.js"></script>
 	    <script src="/build/js/plugins/pace/pace.min.js"></script>
+	    <script src="/build/js/plugins/initial/initial.min.js"></script>
 	    
 	</th:block>
 	
 	<th:block th:fragment="customjs-inspinia">
-	
+		<!-- Initialize Initials Start -->
+		<script>
+			$(document).ready(function() {
+				$(".profile").initials();
+			});
+		</script>
+		<!-- Initialize Initials End -->
 	</th:block>
 	
 	<th:block th:fragment="footer-jscript">
@@ -75,7 +82,7 @@
 		
 	    <!-- Custom Theme Scripts -->
 	    <script src="/build/js/custom.min.js"></script>
-
+	
 	    
 
 	    

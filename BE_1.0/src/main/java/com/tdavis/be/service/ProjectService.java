@@ -4,14 +4,9 @@ package com.tdavis.be.service;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,12 +25,6 @@ import com.tdavis.be.repository.ProjectRepository;
 @Service
 @Transactional
 public class ProjectService {
-		
-	//Log output to console
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	//Setup Date Format
-	private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	
 	//STATIC Page Size
 	private static final int PAGE_SIZE = 20;
@@ -45,6 +34,9 @@ public class ProjectService {
 	
 	@Autowired
 	private BudgetService budgetService;
+	
+	@Autowired
+	private HistoryService logger;
 
 	/***************************************************************************************************************************
 	 * 
@@ -79,7 +71,7 @@ public class ProjectService {
 	 * Project getPrjectByStatus per PAGE_SIZE
 	 */
 	public Page<Project> getProjectByStatus(String status, Integer pageNumber) {
-		PageRequest pageable = new PageRequest(pageNumber -1, PAGE_SIZE, Sort.Direction.DESC, "Year");
+		PageRequest pageable = new PageRequest(pageNumber -1, PAGE_SIZE, Sort.Direction.DESC, "Status");
 		return projectRepository.findByStatus(pageable,status);
 	}
 	
@@ -115,6 +107,18 @@ public class ProjectService {
 		return values;
 	}
 	
+	/* Recall Data
+	 *  Find Number of Projects
+	 */
+	public Integer getCount() {
+		int size = 0;
+		for(@SuppressWarnings("unused") Project i: projectRepository.findAll()) {
+		   size++;
+		}
+		
+		return size;
+	}
+	
 	/***************************************************************************************************************************
 	 * 
 	 * Interacting With Repository 
@@ -127,34 +131,38 @@ public class ProjectService {
 	public void save(Project project) {
 			
 		//Set Current Time for Timestamp
-    	String time = sdf.format(new Date());
+    	Date time = new Date();
     	
     	//If...Existing Project...Update Project in Repository
 		if (project.getId() != null){
 			
-			//Not sure why I have to do this????
-			project.setDateCreated(findById(project.getId()).getDateCreated());
+			//Preserve Date Created and Created By and Budget Reference
+			project.setDateCreated(projectRepository.getOne(project.getId()).getDateCreated());
+			project.setCreatedBy(projectRepository.getOne(project.getId()).getCreatedBy());
+			project.setBudgets(findById(project.getId()).getBudgets());
 			
-			//Temp Project
-			Project temp;
-			temp = budgetCal(project);
-
-			//Set Edited timestamp
-			temp.setDateEdited(time);
+			//Project Calculations
+			project = budgetCal(project);
+			project = active(project);
+			
+			//Set Edited Date and Edited By
+			project.setDateEdited(time);
+			project.setEditedBy(logger.getLoggedon());
 			
 			//Update Project in Repository
-			projectRepository.save(temp);
-			logger.info("*Service* Updated Project: " + temp.getName());
+			projectRepository.save(project);
+			logger.info("project", project.getId(), "Updated Project: " + project.getName());
 
 		//Else...New Record...Save to Repository
 		} else {
 
-			//Set Created Timestamp
+			//Set Created Date and Created By
 			project.setDateCreated(time);
+			project.setCreatedBy(logger.getLoggedon());
 			
 			//Save Project to Repository
 			projectRepository.save(project);
-			logger.info("*Service* Saved Project "+ project.getName());
+			logger.system("Saved Project: "+project.getName());
 		}
 	}
 	
@@ -169,7 +177,7 @@ public class ProjectService {
 		for (Project project : findAll()) {
 			save(project);
 		}
-		logger.info("*Service* Refreshing Projects!");
+		logger.system("Refreshing Projects!");
 	}
 	
 	/*
@@ -179,7 +187,7 @@ public class ProjectService {
 	public void delete(int id) {
 		Project temp = projectRepository.findById(id);
 		projectRepository.delete(temp);
-		logger.info("*Service* Deleted Project "+ temp.getName());
+		logger.warning("project", temp.getId(), "Deleted Project "+ temp.getName());
 			
 	}
 	
@@ -223,6 +231,28 @@ public class ProjectService {
 			case "Open" : project.setEnabled(true);
 			break;
 			default:
+			break;
+		}
+		
+		logger.system("Calculations on Project: " + project.getName());
+		return project;
+	}
+	
+	public Project active(Project project) {
+		
+		switch(project.getStatus().toLowerCase()) {
+		case "open" :
+			project.setDateEnabled(new Date());
+			project.setEnabledBy(logger.getLoggedon());
+			break;
+		case "closed" :
+			project.setDateEnabled(projectRepository.getOne(project.getId()).getDateEnabled());
+			project.setEnabledBy(projectRepository.getOne(project.getId()).getEnabledBy());
+			project.setDateDisabled(new Date());
+			project.setDisabledBy(logger.getLoggedon());
+			break;
+		case "planning" :
+		default :
 			break;
 		}
 		
