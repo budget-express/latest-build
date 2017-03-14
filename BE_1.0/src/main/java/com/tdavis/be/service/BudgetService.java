@@ -249,13 +249,13 @@ public class BudgetService {
 		
 		//Budget Calculation Variables
 		double budgetRemaining;
-		double budgetRequested = 0;;
+		double budgetRequested = 0;
 		double budgetApproved = 0;		
 		
 		switch (budget.getStatus().toLowerCase()) {
 			
-			case ("open") :
-			case ("closed") :
+			case "open" :
+			case "closed" :
 				//Set Quarters enabled/Disabled + Calculate Budget Amounts
 				if (budget.isEnabledQ1()) {
 					if (budget.getDateQ1Enabled() == null) {
@@ -296,7 +296,7 @@ public class BudgetService {
 				}
 				budgetRequested = budget.getQ1() + budget.getQ2() + budget.getQ3() + budget.getQ4();
 				break;
-			case ("planning") :
+			case "planning" :
 			default :
 				break;
 		}

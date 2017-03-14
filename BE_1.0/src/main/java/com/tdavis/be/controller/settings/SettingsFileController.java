@@ -26,9 +26,9 @@ import com.tdavis.be.service.QuoteService;
 @RequestMapping("/settings")
 public class SettingsFileController {
 
-	//Log output to console
+		// Define the logger object for this class
 		private final Logger logger = LoggerFactory.getLogger(this.getClass());
-		
+	
 		//Constants
 		private String redirectQuote = "redirect:/settings/quote/";
 		
@@ -58,15 +58,19 @@ public class SettingsFileController {
 		 */
 		@PreAuthorize("hasRole('ROLE_ADMIN')")
 		@PostMapping("/file/save")
-		public String saveFile(@RequestParam("myFile") MultipartFile myFile,@RequestParam("fileType") String type, int id, Model model) throws IOException {
+		public String saveFile(@RequestParam("myFile") MultipartFile myFile,@RequestParam("fileType") String type, String id, Model model) throws IOException {
 			FileUpload fileUpload = new FileUpload();
-			Quote quote = quoteService.findById(id);
 			
+			int quoteid = Integer.parseInt(id);
+			logger.info(quoteid + "");
+			Quote quote = quoteService.findById(quoteid);
+			
+		
 			fileUpload.setName(myFile.getOriginalFilename());
 			fileUpload.setType(type);
 			fileUpload.setFiledata(myFile.getBytes());
 			fileUpload.setQuote(quote);
-					
+			logger.info("Do I get here?");		
 			fileUploadService.save(fileUpload);
 			
 			return redirectQuote + quote.getId();

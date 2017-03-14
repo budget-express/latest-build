@@ -109,13 +109,13 @@
 
 							<tbody>
 								<th:block th:each="quote, rowStat : ${budget.quotes}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
-									<tr class="toprow pointer" th:attr="data-href=@{/quote/}, data-id=${quote.id}">
+									<tr class="toprow pointer" th:attr="data-href=@{/old/quote/}, data-id=${quote.id}">
 										<td th:text="${quote.name}"></td>
 										<td th:text="${quote.vendor}"></td>				
 										<td>$ <span th:text="${#numbers.formatDecimal(quote.capex, 0, 'COMMA', 2, 'POINT')}"></span></td>
 										<td>$ <span th:text="${#numbers.formatDecimal(quote.opex, 0, 'COMMA', 2, 'POINT')}"></span></td>
 										<td class=" last">
-											<a th:href="@{/quote/}+${quote.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+											<a th:href="@{/old/quote/}+${quote.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
 											<a  data-toggle="modal" href="#quote-modal-edit" class="btn btn-info btn-xs popQuote" sec:authorize="hasAuthority('ROLE_ADMIN')" 
 												th:attr="data-id=${quote.id},
 													   data-budgetid=${budget.id},
@@ -147,7 +147,7 @@
           </div>
 					
 					<!-- Quote-Modal-Add/Edit Start -->
-					<form action="#" th:action="@{/quote}" th:object="${quote}" method="post">
+					<form action="#" th:action="@{/old/quote}" th:object="${quote}" method="post">
 						<div class="modal fade" id="quote-modal-add" tabindex="-1" role="dialog" aria-labellefby="addQuote">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
@@ -157,7 +157,7 @@
 									</div>
 									
 									<div class="modal-body">
-										<input class="form-control budget-id" type="hidden" th:field="*{budget.id}" name="id" readonly="readonly" />
+										<input class="form-control budget-id" type="hidden" th:field="*{budget.id}" name="budget-id" readonly="readonly" />
 										
 										<label for="quoteName">Name:</label>
 										<input type="text" th:field="*{name}" id="quoteName" class="form-control quote-name" />
@@ -201,7 +201,7 @@
 					</form>
 					<!-- Quote-Modal-Add/Edit End -->
 					<!-- Quote-Modal-Add/Edit Start -->
-					<form action="#" th:action="@{/quote}" th:object="${quote}" method="post">
+					<form action="#" th:action="@{/old/quote}" th:object="${quote}" method="post">
 						<div class="modal fade" id="quote-modal-edit" tabindex="-1" role="dialog" aria-labellefby="editQuote">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
@@ -328,7 +328,7 @@
 	    <!-- Delete Quote Start  -->
 	    <script>
 	    	$(document).on("click", '.delete-button',function(e) {
-	    		location.href = "/quote/delete/"+id;
+	    		location.href = "/old/quote/delete/"+id;
 	    	});
 	    </script>
 	    <!-- Delete Quote End -->

@@ -114,7 +114,7 @@
 						                            </div>
 												</td>
 												<td class=" last">
-													<a th:href="@{/budget/}+${budget.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+													<a th:href="@{/old/budget/}+${budget.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
 													<a  data-toggle="modal" href="#budget-modal-add" class="btn btn-info btn-xs popBudget edit_budget" sec:authorize="hasAuthority('ROLE_ADMIN')" 
 														th:attr="data-id=${budget.id},
 														data-projectid=${project.id},
@@ -161,7 +161,7 @@
 	</div>
 	
 	<!-- budget-Modal-Add Start -->
-	<form action="#" th:action="@{/budget}" th:object="${budget}" method="post">
+	<form action="#" th:action="@{/old/budget}" th:object="${budget}" method="post">
 		<div class="modal fade clearfix" id="budget-modal-add" tabindex="-1" role="dialog" aria-labellefby="addBudget">
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">
@@ -407,7 +407,7 @@
     <!-- Delete Budget Start  -->
     <script>
     	$(document).on("click", '.delete-button',function(e) {
-    		location.href = "/budget/delete/"+id;
+    		location.href = "/old/budget/delete/"+id;
     	});
     </script>
     <!-- Delete Budget End -->

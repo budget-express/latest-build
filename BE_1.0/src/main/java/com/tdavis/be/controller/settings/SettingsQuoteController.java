@@ -94,7 +94,7 @@ public class SettingsQuoteController {
 		model.addAttribute("title", quote.getName());
 		
 		//projects.html
-		return "view-quote";
+		return "/settings/view-quote";
 	}		
 	
 	/********************************************************************************************************

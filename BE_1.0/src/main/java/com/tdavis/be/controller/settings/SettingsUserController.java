@@ -87,7 +87,7 @@ public class SettingsUserController {
 	   	model.addAttribute("logs", historyService.getHistoryByDate(1));
 		model.addAttribute("title", "Settings>>Users");
 		
-		return "users";
+		return "/settings/users";
 	}
 	
 	/********************************************************************************************************
@@ -109,8 +109,6 @@ public class SettingsUserController {
 		
 		//Call User Services to Save User
 		userService.save(user);
-		
-		//userService.updateRoles(user,userRoles);
 
 		//Set Success for Deletion
 		model.addAttribute("success", true);

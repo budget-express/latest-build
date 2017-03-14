@@ -38,7 +38,6 @@ public class SettingsBudgetController {
 	
 	//Constants
 	private String redirectProject = "redirect:/settings/project/";
-	private String redirectBudget = "redirect:/settings/budget/";
 	
 	@Autowired
 	private BudgetService budgetService;
@@ -95,7 +94,7 @@ public class SettingsBudgetController {
 		model.addAttribute("title", budget.getName());
 		
 		//projects.html
-		return "view-budget";
+		return "/settings/view-budget";
 	}	
 	
 	/********************************************************************************************************

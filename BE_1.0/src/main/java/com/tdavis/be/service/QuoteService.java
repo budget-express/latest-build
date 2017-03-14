@@ -1,12 +1,8 @@
 package com.tdavis.be.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +15,6 @@ import com.tdavis.be.repository.QuoteRepository;
 @Service
 @Transactional
 public class QuoteService {
-	
-	//Log output to console
-	private final Logger templogger = LoggerFactory.getLogger(this.getClass());
-	
-	//Setup Date Format
-	private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		
 		@Autowired
 		private QuoteRepository quoteRepository; 
@@ -53,7 +43,7 @@ public class QuoteService {
 		* Quote findById
 		*/
 		public Quote findById(int id) {
-			return quoteRepository.findById(id);
+			return quoteRepository.getOne(id);
 		}
 		
 		/* Recall Data - Quote
@@ -90,46 +80,43 @@ public class QuoteService {
 			//Find Budget
 			Budget budget = budgetService.findById(quote.getBudget().getId());
 			
-			//Temp Quote
-			Quote temp = quote;
+			//Temp Quote, Message
+			Quote temp = active(quote);
 			
-			//Set Current Time for Timestamp
-			String time = sdf.format(new Date());
+			String message;
 			
 			//If...Existing Quote...Update Quote in Repository
 			if (temp.getId() != null){
 				
-				//!!!!!!Not sure why I have to do this????
+				//Preserve
 				temp.setDateCreated(findById(quote.getId()).getDateCreated());
+				temp.setCreatedBy(quoteRepository.getOne(quote.getId()).getCreatedBy());
+				temp.setBudget(quoteRepository.getOne(quote.getId()).getBudget());
 				
 				//Set Edited Timestamp
-				temp.setDateEdited(time);
-				
-				//Set Parent Budget
-				//temp.setBudget(budget);
-				
-				//Save Quote to Repository
-				quoteRepository.save(temp);
-				logger.info("budget", temp.getBudget().getId(), "Updated Quote: " + temp.getName());
+				temp.setDateEdited(new Date());
+				temp.setEditedBy(logger.getLoggedon());
+
+				message = "Updated Quote: " + temp.getName();
 				
 				//Update Budget
 				budgetService.save(budget);
 				
 			} else {
-				//Set Created Timestamp
-				temp.setDateCreated(time);
-				
-				//Set Parent Budget
+				//Set Date Created and Created By and Budget
+				temp.setDateCreated(new Date());
+				temp.setCreatedBy(logger.getLoggedon());
 				temp.setBudget(budget);
 				
-				//Save Quote to Repository
-				quoteRepository.save(temp);
-				templogger.info("*Service* Saved Quote: " + temp.getName()+" to Budget: " + budget.getName());
-				logger.info("budget", temp.getBudget().getId(), "Saved Quote: " + temp.getName()+" to Budget: " + budget.getName());
-				
-				//Update Budget
-				budgetService.save(budget);
+				message = "Saved Quote: " + temp.getName()+" to Budget: " + budget.getName();
 			}
+			
+			//Save Quote to Repository
+			quoteRepository.save(temp);
+			logger.info("budget", temp.getBudget().getId(), message);
+			
+			//Update Budget
+			budgetService.save(budget);
 		}
 			
 		/*
@@ -155,9 +142,29 @@ public class QuoteService {
 			for (Quote quote : findAll()) {
 				save(quote);
 			}
-			templogger.info("*Service* Refreshing Quotes!");
 			logger.system("Refreshing Quotes!");
 		}
 
-
+		/*
+		 * Active Quotes?
+		 */
+		private Quote active(Quote quote) {
+			switch(quote.getStatus().toLowerCase()) {
+			case "paid" :
+			case "pending" :
+				quote.setDateEnabled(new Date());
+				quote.setEnabledBy(logger.getLoggedon());
+				break;
+			case "canceled" :
+				quote.setDateEnabled(quoteRepository.getOne(quote.getId()).getDateEnabled());
+				quote.setEnabledBy(quoteRepository.getOne(quote.getId()).getEnabledBy());
+				quote.setDateDisabled(new Date());
+				quote.setDisabledBy(logger.getLoggedon());
+				break;
+			case "staged" :
+			default :
+				break;
+			}
+			return quote;
+		}
 }

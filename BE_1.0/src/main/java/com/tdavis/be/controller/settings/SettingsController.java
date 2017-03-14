@@ -68,6 +68,6 @@ public class SettingsController {
 	   	model.addAttribute("numlogs", numLogs);
 		model.addAttribute("title", "Settings");
 		
-		return "menu-settings";
+		return "/settings/menu-settings";
 	}
 }

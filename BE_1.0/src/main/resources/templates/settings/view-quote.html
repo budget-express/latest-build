@@ -115,12 +115,12 @@
 				                                            <small>Created <span th:text="${file.dateCreated}"></span></small>
 				                                        </td>
 				                                        <td class="file-type" th:text="${file.type}"></td>
-				                                        <td class="file-actions">
-				                                            <a th:href="@{/file/download/}+${file.id}" class="btn btn-white btn-sm" th:attr="data-fileid=${file.id}">
+				                                        <td class="file-actions ">
+				                                            <a th:href="@{/file/download/}+${file.id}" class="btn btn-success btn-sm" th:attr="data-fileid=${file.id}">
 				                                            	<i class="fa fa-folder"></i> 
 				                                            	Download 
 				                                            </a>
-				                                            <button class="btn btn-white btn-sm popFile deletePopup" 
+				                                            <button class="btn btn-danger btn-sm popFile deletePopup" 
 				                                            	th:attr="data-id=${file.id}">
 				                                            	<i class="fa fa-trash"></i> Delete 
 				                                            </button>
@@ -150,7 +150,7 @@
 	                            
 	                            	<div class="modal-body">
 
-										<input class="form-control quoteID" type="hidden" th:field="*{quote.id}" />
+										<input class="form-control" th:value="${quote.id}" type="hidden" name="id" />
 
 										<label for="fileName">File:</label>
 										<input type="file" id="fileName" class="form-control" name="myFile"/>

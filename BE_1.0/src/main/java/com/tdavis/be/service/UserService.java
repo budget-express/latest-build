@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +16,6 @@ import com.tdavis.be.repository.UserRepository;
 @Service
 @Transactional
 public class UserService {
-
-	//Log output to console
-	//private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -127,6 +118,7 @@ public class UserService {
 		
 	}
 	
+	@SuppressWarnings("unused")
 	public Integer getCount() {
 		int size = 0;
 		for(User user : userRepository.findAll()) {

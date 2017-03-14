@@ -141,7 +141,7 @@ public class ProjectService {
 			project.setCreatedBy(projectRepository.getOne(project.getId()).getCreatedBy());
 			project.setBudgets(findById(project.getId()).getBudgets());
 			
-			//Project Calculations
+			//Project Calculations and Active
 			project = budgetCal(project);
 			project = active(project);
 			
@@ -159,6 +159,9 @@ public class ProjectService {
 			//Set Created Date and Created By
 			project.setDateCreated(time);
 			project.setCreatedBy(logger.getLoggedon());
+			
+			//Project Active
+			project = active(project);
 			
 			//Save Project to Repository
 			projectRepository.save(project);

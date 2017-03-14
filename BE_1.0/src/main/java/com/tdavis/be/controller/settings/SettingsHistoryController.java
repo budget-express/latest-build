@@ -53,7 +53,7 @@ public class SettingsHistoryController {
 	   	model.addAttribute("logs", historyService.getHistoryByDate(1));
 		model.addAttribute("title", "Settings>>Logs");
 		
-		return "log";
+		return "/settings/log";
 	}
 	
 	

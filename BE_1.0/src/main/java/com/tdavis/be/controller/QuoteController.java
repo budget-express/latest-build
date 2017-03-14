@@ -19,7 +19,7 @@ import com.tdavis.be.entity.Quote;
 import com.tdavis.be.service.QuoteService;
 
 @Controller
-@RequestMapping("/quote")
+@RequestMapping("/old/quote")
 public class QuoteController {
 	
 	//private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -40,7 +40,7 @@ public class QuoteController {
     	model.addAttribute("username", name);
     	model.addAttribute("quote", quoteService.findById(id));
 		model.addAttribute("title", "Quote");
-		return "quote-details";
+		return "/old/quote-details";
 	}
 	
 	@RequestMapping("/delete/{id}")
@@ -62,14 +62,11 @@ public class QuoteController {
 			
 			return "project";
 		}
-		
-		//Find Budget ID
-		int budgetId = quote.getBudget().getId();
-		
+				
 		//Call Quote Service to Save Quote to Budget
 		quoteService.save(quote);
 		
 		//Redirect to Budget Details
-		return "redirect:/budget/" + budgetId;
+		return "redirect:/budget/" + quote.getBudget().getId();
 	}
 }

@@ -1,7 +1,5 @@
 package com.tdavis.be.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.transaction.Transactional;
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tdavis.be.entity.FileUpload;
-import com.tdavis.be.entity.Quote;
 
 import com.tdavis.be.repository.FileUploadRepository;
 
@@ -18,14 +15,9 @@ import com.tdavis.be.repository.FileUploadRepository;
 @Transactional
 public class FileUploadService {
 	
-	//Setup Date Format
-	private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-	
 	@Autowired
 	private FileUploadRepository fileuploadRepository;
-	
-	@Autowired
-	private QuoteService quoteService;
+
 	
 	@Autowired
 	private HistoryService logger;
@@ -54,15 +46,9 @@ public class FileUploadService {
 	 */
 	public void save(FileUpload fileUpload) {
 		
-		//Find Quote
-		Quote quote = quoteService.findById(fileUpload.getQuote().getId());
-		
-		//Set Created Timestamp
-		String created = sdf.format(new Date());
-		fileUpload.setDateCreated(created);
-		
-		//Set Parent Quote
-		fileUpload.setQuote(quote);
+		//Set Date Created and Created By and Set Quote
+		fileUpload.setDateCreated(new Date());
+		fileUpload.setCreatedBy(logger.getLoggedon());
 		
 		//Save File to Repository
 		fileuploadRepository.save(fileUpload);

@@ -65,7 +65,7 @@
 
                         			<tbody>
 										<th:block th:each="project, rowStat : ${projects}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
-											<tr class="toprow pointer" th:attr="data-href=@{/project/}, data-id=${project.id}"> <!-- Change This Odd/Even -->
+											<tr class="toprow pointer" th:attr="data-href=@{/old/project/}, data-id=${project.id}"> <!-- Change This Odd/Even -->
 												<td th:text="${project.name}"></td>
 												<td th:text="${project.description}"></td>
 												<td th:text="${project.budgetApproved-project.budgetSpent}"></td>
@@ -78,7 +78,7 @@
 						                            </div>
 												</td>
 												<td class=" last">
-													<a th:href="@{/project/}+${project.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+													<a th:href="@{/old/project/}+${project.id}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
 													<a  data-toggle="modal" href="#project-modal-edit" class="btn btn-info btn-xs popProject" sec:authorize="hasAuthority('ROLE_ADMIN')" 
 														th:attr="data-id=${project.id},
 														data-name=${project.name},
@@ -111,7 +111,7 @@
 	</div>
 	
 	<!-- Project-Modal-Add Start -->
-		<form action="#" th:action="@{/project/save}" th:object="${project}" method="post">
+		<form action="#" th:action="@{/old/project/save}" th:object="${project}" method="post">
 			<div class="modal fade" id="project-modal-add" tabindex="-1" role="dialog" aria-labellefby="addProject">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -159,7 +159,7 @@
 		</form>
 	<!-- Project-Modal-Add End -->
 	<!-- Project-Modal-Edit Start -->
-		<form action="#" th:action="@{/project/save}" th:object="${project}" method="post">
+		<form action="#" th:action="@{/old/project/save}" th:object="${project}" method="post">
 			<div class="modal fade" id="project-modal-edit" tabindex="-1" role="dialog" aria-labellefby="editProject">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -291,7 +291,7 @@
 	    <!-- Delete Project Start  -->
 	    <script>
 	    	$(document).on("click", '.delete-button',function(e) {
-	    		location.href = "/project/delete/"+id;
+	    		location.href = "/old/project/delete/"+id;
 	    	});
 	    </script>
 	    <!-- Delete Project End -->

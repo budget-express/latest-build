@@ -23,10 +23,10 @@ public class IndexController {
     	
     	model.addAttribute("title", "Budget Tracker");
     	model.addAttribute("user", user);
-        return "index2";
+        return "index";
     }
     
-    @RequestMapping("/index2")
+    @RequestMapping("/old/index")
     String index2(Model model){
     	
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -39,6 +39,6 @@ public class IndexController {
     	//model.addAttribute("name", user.getFname() + " " + user.getLname());
     	//model.addAttribute("usertitle", userService.findByName(name).getTitle());
 
-    	return "index2";
+    	return "old/index";
     }
 }

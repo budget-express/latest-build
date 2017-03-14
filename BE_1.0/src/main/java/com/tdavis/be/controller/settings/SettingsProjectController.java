@@ -97,7 +97,7 @@ public class SettingsProjectController {
 		model.addAttribute("title", "Settings>>Projects");
 		
 		//projects.html
-		return "list-projects";
+		return "/settings/list-projects";
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -126,7 +126,7 @@ public class SettingsProjectController {
     	model.addAttribute("logs",logger.findAll());
 		model.addAttribute("title", project.getName());
 		
-		return "view-project";
+		return "/settings/view-project";
 	}
 	
 	/*

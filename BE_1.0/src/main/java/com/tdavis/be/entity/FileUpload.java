@@ -1,5 +1,7 @@
 package com.tdavis.be.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,8 +21,11 @@ public class FileUpload {
 	@Lob
 	private byte[] filedata;
 	
+    //Logging
+    private String createdBy;
+	
 	//Timestamps
-	private String dateCreated;
+	private Date dateCreated;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "quote_id")
@@ -58,11 +63,17 @@ public class FileUpload {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public String getDateCreated() {
+	public Date getDateCreated() {
 		return dateCreated;
 	}
-	public void setDateCreated(String dateCreated) {
+	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
+	}
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	

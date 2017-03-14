@@ -4,7 +4,7 @@
 		<div class="col-md-3 left_col">
 			<div class="left_col scroll-view">
 				<div class="navbar nav_title" style="border: 0;">
-					<a th:href="@{/index2}" class="site_title"><i class="fa fa-money"></i>
+					<a th:href="@{/index}" class="site_title"><i class="fa fa-money"></i>
 						<span>vBudget</span></a>
 				</div>
 
@@ -40,17 +40,18 @@
 							<li>
 								<a><i class="fa fa-table"></i> Project <span class="fa fa-chevron-down"></span></a>
 								<ul class="nav child_menu">
-									<li><a th:href="@{/project/list}">Projects</a></li>
-									<li><a th:href="@{/project/details}">Temp - Details</a></li>
+									<li><a th:href="@{project/list}">Projects</a></li>
+									<li><a th:href="@{project/details}">Temp - Details</a></li>
 								</ul>
 							</li>
 							</th:block>
 							<li sec:authorize="hasAuthority('ROLE_ADMIN')">
 								<a><i class="fa fa-cogs"></i> Admin <span	class="fa fa-chevron-down"></span></a>
 								<ul class="nav child_menu">
-									<li><a th:href="@{/project}">Projects</a></li>
-									<li><a th:href="@{/project/refresh}">Refresh</a></li>
+									<li><a th:href="@{project}">Projects</a></li>
+									<li><a th:href="@{project/refresh}">Refresh</a></li>
 									<li><a th:href="@{admin}">Users</a></li>
+									
 								</ul>
 							</li>
 						</ul>
@@ -91,7 +92,7 @@
                   	</li>
                   	
                   	<li>
-                    	<a th:href="@{/index2}"><i class="fa fa-home"></i> <span class="nav-label">Home</span> <span class="fa home"></span></a>	
+                    	<a th:href="@{/}"><i class="fa fa-home"></i> <span class="nav-label">Home</span> <span class="fa home"></span></a>	
                   	</li>
                   		
                   	<li>
@@ -119,6 +120,7 @@
                           		<li><a th:href="@{/settings/users}">Users</a></li>
                           		<li><a th:href="@{/settings/projects/}">Projects</a></li>
                           		<li><a th:href="@{/settings/log/}">Log</a></li>
+                          		<li><a th:href="@{/old/index}">Old Site</a></li>
                       		</ul>
                   	</li>
                   	

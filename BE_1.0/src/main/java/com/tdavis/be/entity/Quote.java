@@ -1,6 +1,7 @@
 package com.tdavis.be.entity;
 
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -33,11 +34,17 @@ public class Quote {
 	private String vendorContact;
 	private String vendorEmail;
 	
+    //Logging
+    private String editedBy;
+    private String createdBy;
+    private String enabledBy;
+    private String disabledBy;
+	
 	//Timestamps
-	private String dateCreated;
-	private String dateEdited;
-	private String dateEnabled; 
-    private String dateDisabled;
+	private Date dateCreated;
+	private Date dateEdited;
+	private Date dateEnabled; 
+    private Date dateDisabled;
     
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -120,22 +127,6 @@ public class Quote {
 		this.status = status;
 	}
 
-	public String getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(String dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
-	public String getDateEdited() {
-		return dateEdited;
-	}
-
-	public void setDateEdited(String dateEdited) {
-		this.dateEdited = dateEdited;
-	}
-
 	public List<FileUpload> getFileUploads() {
 		return fileUploads;
 	}
@@ -160,19 +151,67 @@ public class Quote {
 		this.vendorEmail = vendorEmail;
 	}
 
-	public String getDateEnabled() {
+	public String getEditedBy() {
+		return editedBy;
+	}
+
+	public void setEditedBy(String editedBy) {
+		this.editedBy = editedBy;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getEnabledBy() {
+		return enabledBy;
+	}
+
+	public void setEnabledBy(String enabledBy) {
+		this.enabledBy = enabledBy;
+	}
+
+	public String getDisabledBy() {
+		return disabledBy;
+	}
+
+	public void setDisabledBy(String disabledBy) {
+		this.disabledBy = disabledBy;
+	}
+
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public Date getDateEdited() {
+		return dateEdited;
+	}
+
+	public void setDateEdited(Date dateEdited) {
+		this.dateEdited = dateEdited;
+	}
+
+	public Date getDateEnabled() {
 		return dateEnabled;
 	}
 
-	public void setDateEnabled(String dateEnabled) {
+	public void setDateEnabled(Date dateEnabled) {
 		this.dateEnabled = dateEnabled;
 	}
 
-	public String getDateDisabled() {
+	public Date getDateDisabled() {
 		return dateDisabled;
 	}
 
-	public void setDateDisabled(String dateDisabled) {
+	public void setDateDisabled(Date dateDisabled) {
 		this.dateDisabled = dateDisabled;
 	}
 	

@@ -3,39 +3,48 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
 	lang="en">
 <head>
-	<th:block th:include="/layout/header :: header-meta"></th:block>
+	<th:block th:include="/layout/header :: header-inspinia"></th:block>
 </head>
 
-<body class="nav-md">
-	<div class="container body">
-		<div class="main_container">
-			<th:block th:include="/layout/side_nav :: side_nav"></th:block>
-			<th:block th:include="/layout/top_nav :: top_nav"></th:block>
-			<!-- Page Start -->
-			<div class="right_col" role="main">
-          		<div class="row">
-          		<div class="page-title">
-				<div class="jumbotron">
-				  <h1>Budget Express Application</h1>
-				  <p>Using 100% open source</p>
-				  <ul>
-				  	<li>Java</li>
-				  	<li>Spring Boot</li>
-				  	<li>STS</li>
-				  	<li>Maven</li>
-				  	<li>Hypersonic SQL</li>
-				  	<li>mySQL</li>
-				  	
-				  </ul>
-				</div>
-				</div>
-				</div>
-				</div>
-			<!-- Page End -->
-			<th:block th:include="/layout/footer :: footer"></th:block>
+<body>
+    <div id="wrapper">
+		
+		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		
+		<div id="page-wrapper" class="gray-bg">
+        	<div class="row border-bottom">
+				
+				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
+				
+				<!-- Page Start -->
+				<div class="wrapper wrapper-content animated fadeInRight">
+           			<div class="row">
+           				<div class="col-lg-12">
+               				<div class="ibox float-e-margins">
+                   				<div class="ibox-title">
+                       				<h5>Budget Tracker</h5>
+                       				<div class="ibox-tools">
+                           				<a class="collapse-link">
+                               				<i class="fa fa-chevron-up"></i>
+                           				</a>
+                       				</div>
+                   				</div>
+			                    <div class="ibox-content">
+			                        <p>Welocome to Budget Tracker.  Recent posts will go here.</p>
+			                    </div>
+               				</div>
+           				</div>
+          			</div>
+           		</div>
+				<!-- Page End -->
+				
+				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+				
+			</div>
 		</div>
 	</div>
-	<th:block th:include="/layout/footer :: footer-jscript"></th:block>
 </body>
-</html>
 
+</html>

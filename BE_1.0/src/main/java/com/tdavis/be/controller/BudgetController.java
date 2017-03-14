@@ -23,13 +23,12 @@ import com.tdavis.be.entity.Quote;
 import com.tdavis.be.service.BudgetService;
 
 @Controller
-@RequestMapping("/budget")
+@RequestMapping("/old/budget")
 public class BudgetController {
 	
-	//private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private String modelBudgetTitle = "Budget";
 	private String modelUsername = "username";
-	private String modelBudget = "budget";
+	private String modelBudget = "/old/budget";
 	private String modelTitle = "title";
 	
 	@Autowired
@@ -77,7 +76,7 @@ public class BudgetController {
 		budgetService.delete(id);
 
 		//Redirect to Project Details
-		return "redirect:/project/" + projectId;
+		return "redirect:/old/project/" + projectId;
 	}
 	
 	/*
@@ -94,6 +93,6 @@ public class BudgetController {
 		budgetService.save(budget);
 		
 		//Redirect to Project Details
-		return "redirect:/project/" + budget.getProject().getId();
+		return "redirect:/old/project/" + budget.getProject().getId();
 	}
 }

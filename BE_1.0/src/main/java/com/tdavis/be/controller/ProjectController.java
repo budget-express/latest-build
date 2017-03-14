@@ -24,9 +24,8 @@ import com.tdavis.be.service.ProjectService;
 
 
 @Controller
-@RequestMapping("/project")
+@RequestMapping("/old/project")
 public class ProjectController {
-	//private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	//Model Configuration
 	private String modelProjectTitle = "Projects";
@@ -36,7 +35,7 @@ public class ProjectController {
 	private String modelTitle = "title";
 	
 	//HTML output file
-	private String sourceProject = "project";
+	private String sourceProject = "/old/project";
 	
 	@Autowired
 	private ProjectService projectService;
@@ -79,7 +78,7 @@ public class ProjectController {
     	model.addAttribute(modelTitle, "Project Details -" + project.getName());
     	
     	//Return project-details.html
-		return "project-details";
+		return "/old/project-details";
 	}
 	
 	//2-Project List
@@ -92,7 +91,7 @@ public class ProjectController {
     	model.addAttribute(modelUsername, name);
     	model.addAttribute(modelProjects, page);
 		model.addAttribute(modelTitle, modelProjectTitle);
-		return "project-list";
+		return "/old/project-list";
 	}
 	
 	//2-Project List - View Details
@@ -111,7 +110,7 @@ public class ProjectController {
     	model.addAttribute(modelProject, projectService.findById(Integer.parseInt(id)));
     	model.addAttribute("spent",balance);
 		model.addAttribute(modelTitle, "Project Details -" + projectService.findById(Integer.parseInt(id)).getName());
-		return "project_details";
+		return "/old/project_details";
 	}
 	
 	
@@ -134,7 +133,7 @@ public class ProjectController {
 		projectService.delete(id);
 
 		//Redirect to Project
-		return "redirect:/project";
+		return "redirect:/old/project";
 	}
 	
 	//Add Project
@@ -149,7 +148,7 @@ public class ProjectController {
 		projectService.save(project);
 		
 		//Redirect to Project
-		return "redirect:/project";
+		return "redirect:/old/project";
 	}
 	
 	/*************************************************************************************

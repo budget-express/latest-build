@@ -52,12 +52,12 @@ public class HistoryService {
 		/* Recall Data
 		 *  Find Number of Logs
 		 */
+		@SuppressWarnings("unused")
 		public Integer getCount() {
 			int size = 0;
 			for(History log : historyRepository.findAll()) {
 			   size++;
-			}
-			
+			}	
 			return size;
 		}		
 		

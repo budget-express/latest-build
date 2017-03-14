@@ -101,12 +101,12 @@
 
 									<tbody>
 										<th:block th:each="file, rowStat : ${quote.fileUploads}"  th:class="${rowStat.odd}? 'odd' : 'even'" class="odd">
-											<tr class="toprow pointer" th:attr="data-href=@{/quote/}, data-id=${quote.id}">
+											<tr class="toprow pointer" th:attr="data-href=@{/old/quote//}, data-id=${quote.id}">
 												<td th:text="${file.name}" class="glyphicon glyphicon-paperclip"></td>
 												<td th:text="${file.type}"></td>				
 												<td th:text="${file.dateCreated}"></td>
 												<td class=" last">
-													<a th:href="@{/file/download/}+${file.id}" class="btn btn-info btn-xs" sec:authorize="hasAuthority('ROLE_USER')"
+													<a th:href="@{/old/file/download/}+${file.id}" class="btn btn-info btn-xs" sec:authorize="hasAuthority('ROLE_USER')"
 													   th:attr="data-fileid=${file.id}"
 													   >
 													  <i class="fa fa-trash-o"></i> Download </a>
@@ -126,7 +126,7 @@
             </div>
           </div>
 				<!-- File-Modal-Add Start -->
-				<form action="#" th:action="@{/file}" method="post" enctype="multipart/form-data">
+				<form action="#" th:action="@{/old/file}" method="post" enctype="multipart/form-data">
 					<div class="modal fade" id="file-modal-add" tabindex="-1" role="dialog" aria-labellefby="addFile">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -210,7 +210,7 @@
 			});
 		    
 		    $(document).on("click", '.delete-button',function(e) {
-	    		location.href = "/file/delete/"+id;
+	    		location.href = "/old/file/delete/"+id;
 	    	});
 	</script>
 </body>

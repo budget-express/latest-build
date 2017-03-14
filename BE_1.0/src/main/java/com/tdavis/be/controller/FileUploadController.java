@@ -26,7 +26,7 @@ import com.tdavis.be.service.FileUploadService;
 import com.tdavis.be.service.QuoteService;
 
 @Controller
-@RequestMapping("/file")
+@RequestMapping("/old/file")
 public class FileUploadController {
 	
 	//private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -53,7 +53,7 @@ public class FileUploadController {
 		fileUploadService.delete(id);
 		
 		//Redirect to Quote Details
-		return "redirect:/quote/" + quote.getId();
+		return "redirect:/old/quote/" + quote.getId();
 	}
 	
 	@PostMapping()
@@ -68,6 +68,6 @@ public class FileUploadController {
 				
 		fileUploadService.save(fileUpload);
 		
-		return "redirect:/quote/" + quote.getId();
+		return "redirect:/old/quote/" + quote.getId();
 	}
 }
