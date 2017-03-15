@@ -261,6 +261,32 @@ public class ProjectService {
 		
 		return project;
 	}
+	
+	public double getPercentSpent(Project project) {
+		
+		double spent;
+		
+		if (project.getBudgetApproved() != 0) {
+			spent = (project.getBudgetSpent()/project.getBudgetApproved())*100;
+		} else {
+			spent = 0;
+		}
+		
+		return spent;
+	}
+	
+	public double getPercentPending(Project project) {
+		
+		double pending;
+		
+		if (project.getBudgetApproved() != 0) {
+			pending = (project.getBudgetPending()/project.getBudgetApproved())*100;
+		} else {
+			pending = 0;
+		}
+		
+		return pending;
+	}
 
 		
 }

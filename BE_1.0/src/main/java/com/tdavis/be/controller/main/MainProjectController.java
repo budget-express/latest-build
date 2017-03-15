@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -88,19 +87,21 @@ public class MainProjectController {
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
 		
-		navigation.add("Settings");
+		navigation.add("Main");
 		navigation.add("Projects");
 		navigation.add(project.getName());
 		
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	User user = userService.findByName(auth.getName());
-    	    	
+    	User user = userService.findByName(auth.getName());   	
+    	
     	//Set Model Attributes
     	model.addAttribute("user", user);
     	model.addAttribute("project", project);
     	model.addAttribute("navigation" , navigation);
     	model.addAttribute("count", projectService.findNumbers(project.getId()));
+    	model.addAttribute("percentspent", projectService.getPercentSpent(project));
+    	model.addAttribute("percentpending", projectService.getPercentPending(project));
     	model.addAttribute("logs",logger.findAll());
 		model.addAttribute("title", project.getName());
 		
