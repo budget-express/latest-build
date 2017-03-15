@@ -8,5 +8,6 @@
 		<class>com.tdavis.be.entity.Role</class>
 		<class>com.tdavis.be.entity.User</class>
 		<class>com.tdavis.be.entity.FileUpload</class>
+		<class>com.tdavis.be.entity.Blog</class>
 	</persistence-unit>
 </persistence>

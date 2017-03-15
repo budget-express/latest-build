@@ -18,11 +18,11 @@
 				
 				<!-- Page Start -->
 				<div class="wrapper wrapper-content animated fadeInRight">
-           			<div class="row">
-           				<div class="col-lg-12">
+           			<div class="row" th:each="blog : ${blogs}">
+           				<div th:if="${blog.enabled}" class="col-lg-12">
                				<div class="ibox float-e-margins">
                    				<div class="ibox-title">
-                       				<h5>Budget Tracker</h5>
+                       				<h5 th:text="${blog.name}"></h5>
                        				<div class="ibox-tools">
                            				<a class="collapse-link">
                                				<i class="fa fa-chevron-up"></i>
@@ -30,7 +30,12 @@
                        				</div>
                    				</div>
 			                    <div class="ibox-content">
-			                        <p>Welocome to Budget Tracker.  Recent posts will go here.</p>
+			                        <p><span th:text="${blog.message}"></span></p>
+			                    </div>
+			                    
+			                    <div class="ibox-footer">
+			                    	Created by <span th:text="${blog.createdBy}"></span>
+			                    	<span class="pull-right" th:text="${blog.dateCreated}"></span>
 			                    </div>
                				</div>
            				</div>

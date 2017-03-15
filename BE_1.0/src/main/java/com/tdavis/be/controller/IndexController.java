@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tdavis.be.entity.User;
+import com.tdavis.be.service.BlogService;
 import com.tdavis.be.service.UserService;
 
 @Controller
@@ -16,6 +17,9 @@ public class IndexController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private BlogService blogService;
+	
     @RequestMapping("/")
     String index(Model model){
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -23,6 +27,7 @@ public class IndexController {
     	
     	model.addAttribute("title", "Budget Tracker");
     	model.addAttribute("user", user);
+    	model.addAttribute("blogs", blogService.getBlogByDateCreated(1));
         return "index";
     }
     

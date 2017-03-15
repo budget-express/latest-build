@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<head>
+	<th:block th:include="/layout/header :: header-inspinia"></th:block>
+</head>
+
+<body>
+    <div id="wrapper">
+		
+		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		
+		<div id="page-wrapper" class="gray-bg">
+        	<div class="row border-bottom">
+				
+				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
+				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
+				
+				<!-- Page Start -->
+				<div class="row">
+		            <div class="col-lg-12">
+		                <div class="wrapper wrapper-content animated fadeInUp">
+		
+		                    <div class="ibox">
+		                        <div class="ibox-title">
+		                            <h5>All projects</h5>
+		                            <div class="ibox-tools">
+		                                <a data-toggle="modal" href="#saveModal" class="btn btn-primary btn-xs popProject" data-modal="add">Create new blog</a>
+		                            </div>
+		                        </div>
+		                        <div class="ibox-content">
+		                            <div class="row m-b-sm m-t-sm">
+		                                <div class="col-md-1">
+		                                    <button type="button" id="loading-example-btn" class="btn btn-white btn-sm" ><i class="fa fa-refresh"></i> Refresh</button>
+		                                </div>
+		                                <div class="col-md-11">
+		                                    <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control" /> <span class="input-group-btn">
+		                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
+		                                </div>
+		                            </div>
+		
+		                            <div class="project-list">
+		
+		                                <table class="table table-hover">
+		                                    <tbody th:each="blog : ${blogs}">
+		                                    <tr>
+		                                        <td class="blog-status">
+		                                            <span th:if="${blog.enabled}" class="label label-primary">Active</span>
+		                                            <span th:unless="${blog.enabled}" class="label label-default">Inactive</span>
+		                                        </td>
+		                                        <td class="project-title">
+		                                            <span th:text="${blog.name}"></span>
+		                                            <br/>
+		                                            <small>Created <span th:text="${blog.dateCreated}"></span></small>
+		                                        </td>
+		                                        <td class="project-actions">
+		                                            <a data-toggle="modal" href="#saveModal" class="btn btn-white btn-sm popBlog" data-modal="edit"
+		                                            	th:attr="data-blogid=${blog.id},
+		                                            		data-name=${blog.name},
+		                                            		data-message=${blog.message},
+		                                            		data-enabled=${blog.enabled}">
+		                                            	<i class="fa fa-pencil"></i> Edit 
+		                                            </a>
+		                                            <button class="btn btn-white btn-sm popProject deletePopup" 
+		                                            	th:attr="data-blogid=${blog.id},
+		                                            		data-name=${blog.name}">
+		                                            	<i class="fa fa-trash"></i> Delete 
+		                                            </button>
+		                                        </td>
+		                                    </tr>
+		                                    </tbody>
+		                                </table>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+				<!-- Page End -->
+				<!-- Project-Modal-Add/Edit Start -->
+				<form class="m-t" role="form" th:action="@{/settings/blog/save}" th:object="${blog}" method="post">
+					<div class="modal inmodal" id="saveModal" tabindex="-1" role="dialog" aria-hidden="true">
+	                	<div class="modal-dialog">
+	                    	<div class="modal-content animated bounceInRight">
+	                        	<div class="modal-header">
+	                            	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                                <i class="fa fa-laptop modal-icon"></i>
+	                                <h4 class="modal-title"><label class="modalTitle"></label></h4>
+	                                <small class="font-bold modalHeader"></small>
+	                            </div>
+	                            
+	                            <div class="modal-body">
+										<input class="form-control blogID" type="hidden" th:field="*{id}" />
+	                            		
+						            	<div class="form-group">
+						                    <input type="text" class="form-control blogName" placeholder="Blog Name" required="required" th:field="*{name}"/>
+						                </div>
+	                					<div class="form-group">
+											<label for="blogMessage">Message:</label>
+											<textarea style="resize:none" class="form-control blogMessagen" rows="3" placeholder="Message... " th:field="*{message}"></textarea>
+										</div>
+						                <div class="form-group">
+					                        <div class="checkbox i-checks"><label> <input type="checkbox" class="blogEnabled" th:field="*{enabled}" /><i></i> Enable</label></div>
+						                </div>
+						                
+	                            </div>
+	                            
+	                            <div class="modal-footer">
+	                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+	                                <button type="submit" class="btn btn-primary">Save</button>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+				</form>			
+				<!-- Project-Modal-Add/Edit End -->
+				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+				<script>
+					var id;
+					
+					$(document).on("click", '.popBlog',function(e) {
+						id = $(this).data('blogid');
+						var name = $(this).data('name');
+						var message = $(this).data('message');
+						var enabled = $(this).data('enabled');
+						var modal = $(this).data('modal');
+
+						if (modal == 'add') {
+							$(".modalTitle").text("Add Blog");
+							$(".modalHeader").text("A a new Blog.");
+						} else if (modal == 'edit') {
+							$(".modalTitle").text("Edit Blog");
+							$(".modalHeader").text("Edit an existing Blog.");
+							if (enabled == true){
+								$('.blogEnabled').prop('checked', true);
+							}else {$('.blogEnabled').prop('checked', false);}
+						}						
+						
+						$(".blogID").val(id);
+						$(".blogName").val(name);
+						$(".blogMessage").val(message);
+					});
+					
+					$(document).on("click", '.deletePopup',function(e) {
+					
+						swal({
+					        title: "Are you sure?",
+					        text: "You will not be able to recover this Blog!",
+					        type: "warning",
+					        showCancelButton: true,
+					        confirmButtonColor: "#DD6B55",
+					        confirmButtonText: "Yes, delete it!",
+			                cancelButtonText: "No, cancel plx!",
+		                    closeOnConfirm: false,
+		                    closeOnCancel: false },
+		                    function (isConfirm) {
+		                   		if (isConfirm) {
+		                   			$.ajax({
+							    	    type: "GET",
+							    	    url: "/settings/blog/delete/"+id,
+							    	    data: "{}",
+							    	    async: true,
+							    	    dataType: "text",
+		                   			});
+		                   			
+		                   			setTimeout(function(){window.location.reload(true);},100)
+		                        } else {
+		                            swal("Cancelled", "Your Blog is safe :)", "error");
+		                        }
+						});
+		       		});
+
+				</script>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
