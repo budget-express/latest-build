@@ -1,10 +1,461 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<th:block th:include="/layout/header :: header-inspinia"></th:block>
 </head>
-<body>
 
+<body>
+    <div id="wrapper">
+		
+		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		
+		<div id="page-wrapper" class="gray-bg">
+        	<div class="row border-bottom">
+				
+				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
+				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
+				
+				<!-- Page Start -->
+				<div class="row">
+            		<div class="col-lg-9">
+                		<div class="wrapper wrapper-content animated fadeInUp">
+                    		<div class="ibox collapsed">
+                    			<div class="ibox-title">
+                       				<h5 th:text="${project.name}"></h5>
+                       				<div class="ibox-tools">
+                           				<a class="collapse-link">
+                               				<i class="fa fa-chevron-up"></i>
+                           				</a>
+                       				</div>
+                   				</div>
+                    		
+                        		<div class="ibox-content">
+                            		
+                            		<div class="row">
+                                		<div class="col-lg-12">
+                                    		<dl class="dl-horizontal">
+                                        		<dt>Status:</dt> 
+                                        		<dd>
+                                        			<span th:if="${project.status} == 'Open'" class="label label-primary">Active</span>
+		                                            <span th:if="${project.status} == 'Closed'" class="label label-default">Inactive</span>
+		                                            <span th:if="${project.status} == 'Planning'" class="label label-warning">Planning</span>
+                                        		</dd>
+                                    		</dl>
+                                		</div>
+                            		</div>
+                            		
+                            		<div class="row">
+                                		<div class="col-lg-4">
+                                    		<dl class="dl-horizontal">
+                                    			<dt>Year:</dt> <dd th:text="${project.year}"></dd>
+		                                        <dt>Type:</dt> <dd th:text="${project.type}"></dd>
+		                                        
+                                    		</dl>
+                                		</div>
+                                		<div class="col-lg-4" id="cluster_info">
+                                    		<dl class="dl-horizontal" >
+		                                        <dt>Budget Request:</dt> <dd th:text="'$'+${project.budgetRequested}"></dd>
+		                                        <dt>Budget Approved:</dt> <dd th:text="'$'+${project.budgetApproved}"></dd>
+		                                        <dt>Budget Spent:</dt> <dd th:text="'$'+${project.budgetSpent}"></dd>
+		                                        <dt>Budget Staged:</dt> <dd th:text="'$'+${project.budgetStaged}"></dd>		                                        
+		                                    </dl>
+		                                </div>
+		                                <div class="col-lg-4" id="cluster_info">
+                                    		<dl class="dl-horizontal" >
+		                                        <dt>Last Updated:</dt> <dd th:text="${project.dateEdited}"></dd>
+		                                        <dt>Edited By:</dt> <dd th:text="${project.editedBy}"></dd>
+		                                        <dt>Created Date:</dt> <dd th:text="${project.dateCreated}"></dd>
+		                                        <dt>Created By:</dt> <dd th:text="${project.createdBy}"></dd>
+		                                    </dl>
+		                                </div>
+		                            </div>
+	                           		
+	                           		<div class="row">
+	                               		<div class="col-lg-12">
+	                                    	<dl class="dl-horizontal">
+		                                        <dt>Completed:</dt>
+		                                        <dd>
+		                                        	<div class="progress progress-striped active">
+						                                <div th:style="'width: ' + ${percentspent} + '%;'" class="progress-bar progress-bar-success">
+						                                    <span class="sr-only"></span>
+						                                </div>
+						                                <div th:style="'width: ' + ${percentpending} + '%;'" class="progress-bar progress-bar-warning">
+						                                    <span class="sr-only"></span>
+						                                </div>
+						                            </div>
+		                                            <small><strong th:text="${percentspent} + '%'"> </strong> Approved budget spent. <strong th:text="${percentpending} + '%'"> </strong> Pending budget allocated.</small>
+		                                        </dd>
+	                                    	</dl>
+	                                	</div>
+	                           		</div>
+	                           	</div>
+	                      	</div>
+
+                    		<div class="ibox collapsed">
+                    			<div class="ibox-title">
+                       				<h5 th:text="${budget.name}"></h5>
+                       				<div class="ibox-tools">
+                           				<a class="collapse-link">
+                               				<i class="fa fa-chevron-up"></i>
+                           				</a>
+                       				</div>
+                   				</div>
+                    		
+                        		<div class="ibox-content">
+                            		
+                            		<div class="row">
+                                		<div class="col-lg-12">
+                                    		<dl class="dl-horizontal">
+                                        		<dt>Status:</dt> 
+                                        		<dd>
+                                        			<span th:if="${budget.status} == 'Open'" class="label label-primary">Active</span>
+		                                            <span th:if="${budget.status} == 'Closed'" class="label label-default">Inactive</span>
+		                                            <span th:if="${budget.status} == 'Planning'" class="label label-warning">Planning</span>
+                                        		</dd>
+                                    		</dl>
+                                		</div>
+                            		</div>
+                            		
+                            		<div class="row">
+                                		<div class="col-lg-4">
+                                    		<dl class="dl-horizontal">
+                                    			<dt>Year:</dt> <dd th:text="${project.year}"></dd>
+		                                        <dt>Budget Code:</dt> <dd th:text="${budget.budgetCode}"></dd>
+		                                        
+                                    		</dl>
+                                		</div>
+                                		<div class="col-lg-4" id="cluster_info">
+                                    		<dl class="dl-horizontal" >
+		                                        <dt>Budget Request:</dt> <dd th:text="'$'+${budget.budgetRequested}"></dd>
+		                                        <dt>Budget Approved:</dt> <dd th:text="'$'+${budget.budgetApproved}"></dd>
+		                                        <dt>Budget Spent:</dt> <dd th:text="'$'+${budget.budgetApproved - budget.budgetRemaining}"></dd>
+		                                        <dt>Budget Staged:</dt> <dd th:text="'$'+${project.budgetStaged}"></dd>		                                        
+		                                    </dl>
+		                                </div>
+		                                <div class="col-lg-4" id="cluster_info">
+                                    		<dl class="dl-horizontal" >
+		                                        <dt>Last Updated:</dt> <dd th:text="${budget.dateEdited}"></dd>
+		                                        <dt>Edited By:</dt> <dd th:text="${budget.editedBy}"></dd>
+		                                        <dt>Created Date:</dt> <dd th:text="${budget.dateCreated}"></dd>
+		                                        <dt>Created By:</dt> <dd th:text="${budget.createdBy}"></dd>
+		                                    </dl>
+		                                </div>
+		                            </div>
+	                           		
+	                           		<div class="row">
+	                               		<div class="col-lg-12">
+	                                    	<dl class="dl-horizontal">
+		                                        <dt>Completed:</dt>
+		                                        <dd>
+		                                        	<div class="progress progress-striped active">
+						                                <div th:style="'width: ' + ${percentspent} + '%;'" class="progress-bar progress-bar-success">
+						                                    <span class="sr-only"></span>
+						                                </div>
+						                                <div th:style="'width: ' + ${percentpending} + '%;'" class="progress-bar progress-bar-warning">
+						                                    <span class="sr-only"></span>
+						                                </div>
+						                            </div>
+		                                            <small><strong th:text="${percentspent} + '%'"> </strong> Approved budget spent. <strong th:text="${percentpending} + '%'"> </strong> Pending budget allocated.</small>
+		                                        </dd>
+	                                    	</dl>
+	                                	</div>
+	                           		</div>
+	                           	</div>
+	                      	</div>							
+
+							<div class="ibox">
+                    			<div class="ibox-title">
+                       				<h5 th:text="${quote.name}"></h5>
+                       				<div class="ibox-tools">
+                           				<a class="collapse-link">
+                               				<i class="fa fa-chevron-up"></i>
+                           				</a>
+                       				</div>
+                   				</div>
+                    		
+                        		<div class="ibox-content">
+                            		
+                            		<div class="row">
+                                		<div class="col-lg-12">
+                                    		<dl class="dl-horizontal">
+                                        		<dt>Status:</dt> 
+                                        		<dd>
+                                        			<span th:if="${quote.status} == 'Staged'" class="label label-success">Active</span>
+		                                            <span th:if="${quote.status} == 'Pending'" class="label label-warning">Inactive</span>
+		                                            <span th:if="${quote.status} == 'Paid'" class="label label-info">Planning</span>
+		                                            <span th:if="${quote.status} == 'Cancelled'" class="label label-default">Cancelled</span>
+                                        		</dd>
+                                    		</dl>
+                                		</div>
+                            		</div>
+                            		
+                            		<div class="row">
+                                		<div class="col-lg-4">
+                                    		<dl class="dl-horizontal">
+                                    			<dt>Year:</dt> <dd th:text="${project.year}"></dd>
+		                                        <dt>PO:</dt> <dd th:text="${quote.po}"></dd>
+		                                        
+                                    		</dl>
+                                		</div>
+                                		<div class="col-lg-4" id="cluster_info">
+                                    		<dl class="dl-horizontal" >
+		                                        <dt>Vendor:</dt> <dd th:text="${quote.vendor}"></dd>
+		                                        <dt>Vendor Contact:</dt> <dd th:text="${quote.vendorContact}"></dd>
+		                                        <dt>Vendor Email:</dt> <dd th:text="${quote.vendorEmail}"></dd>	                                        
+		                                    </dl>
+		                                </div>
+		                                <div class="col-lg-4" id="cluster_info">
+                                    		<dl class="dl-horizontal" >
+		                                        <dt>Last Updated:</dt> <dd th:text="${quote.dateEdited}"></dd>
+		                                        <dt>Edited By:</dt> <dd th:text="${quote.editedBy}"></dd>
+		                                        <dt>Created Date:</dt> <dd th:text="${quote.dateCreated}"></dd>
+		                                        <dt>Created By:</dt> <dd th:text="${quote.createdBy}"></dd>
+		                                    </dl>
+		                                </div>
+		                            </div>
+	                           	</div>
+	                      	</div>
+
+                    		<div class="ibox">
+                    			<div class="ibox-title">
+                       				<div class="ibox-tools">
+                           				<a class="collapse-link">
+                               				<i class="fa fa-chevron-up"></i>
+                           				</a>
+                       				</div>
+                   				</div>
+                    		
+                        		<div class="ibox-content">
+		                            <div class="row m-t-sm">
+		                                <div class="col-lg-12">
+			                                <div class="panel blank-panel">
+				                                <div class="panel-heading">
+				                                    <div class="panel-options">
+				                                        <ul class="nav nav-tabs">
+				                                            <li class="active"><a href="#files" data-toggle="tab">Files</a></li>
+				                                            <li class=""><a href="#activity" data-toggle="tab">Last activity</a></li>
+				                                        </ul>
+				                                    </div>
+				                                </div>
+		
+				                                <div class="panel-body">
+					                                <div class="tab-content">
+						                                <div class="tab-pane active" id="files">
+						                                    <div class="feed-activity-list">
+						                                        <div class="feed-element">
+						                                            <table class="table table-hover">
+								                                   		<tbody th:each="file : ${quote.fileUploads}">
+								                                    		<tr>
+										                                        <td class="file-name">
+										                                            <span th:text="${file.name}"></span>
+										                                            <br/>
+										                                            <small>Created <span th:text="${file.dateCreated}"></span></small>
+										                                        </td>
+										                                        <td class="file-type" th:text="${file.type}"></td>
+										                                        <td class="file-actions ">
+										                                            <a th:href="@{/file/download/}+${file.id}" class="btn btn-success btn-sm" th:attr="data-fileid=${file.id}">
+										                                            	<i class="fa fa-folder"></i> 
+										                                            	Download 
+										                                            </a>
+										                                            <button class="btn btn-danger btn-sm popFile deletePopup" 
+										                                            	th:attr="data-id=${file.id}">
+										                                            	<i class="fa fa-trash"></i> Delete 
+										                                            </button>
+										                                        </td>
+								                                    		</tr>
+								                                   		</tbody>
+								                                	</table>
+						                                        </div>
+				                                        	</div>
+				                                		</div>
+                                		
+				                                		<div class="tab-pane" id="activity">
+													    	<div class="full-height-scroll">
+						               							<div class="table-responsive">
+							                            			<table class="table table-hover issue-tracker">
+										                            	<tbody th:each="log : ${logs}">
+										                            		<tr th:if="${log.object} == 'quote' and ${log.objectId} == ${quote.id}">
+										                            			<td>
+										                            				<span th:if="${log.type} == 'info'" class="label label-outline label-info">Info</span>
+										                            				<span th:if="${log.type} == 'warning'" class="label label-warning">Warning</span>
+										                            				<span th:if="${log.type} == 'error'" class="label label-danger">Error</span>
+										                            				<span th:if="${log.type} == 'debug'" class="label label-default">Debug</span>
+										                            			</td>
+																				<td class="issue-info">
+																					<a href="#logPopup" th:text="'Owner: '+${log.object}"></a>
+																					
+																					<small th:text="${log.message}"></small>
+																				</td>
+																				<td th:text="${log.user}"></td>
+																				<td class="text-right" th:text="${log.date}"></td>
+							
+							                                    			</tr>
+							                                    		</tbody>
+							                                    	</table>
+						                                   		</div>
+						                                   	</div>
+														</div>
+					                            	</div>
+												</div>
+											</div>
+					               		</div>
+									</div>
+                     			</div>
+                    		</div>
+                		</div>
+            		</div>
+            
+		            <div class="col-lg-3">
+		            	<div class="wrapper wrapper-content project-manager">
+		                	<h4>Project description</h4>
+		                	<img src="img/zender_logo.png" class="img-responsive" />
+		                    <p class="small">
+		                        There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look
+		                        even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing
+		                    </p>
+		                    <p class="small font-bold">
+		                        <span><i class="fa fa-circle text-warning"></i> High priority</span>
+		                    </p>
+		                    <h5>Project tag</h5>
+		                    <ul class="tag-list" style="padding: 0">
+		                        <li><a href=""><i class="fa fa-tag"></i> Zender</a></li>
+		                        <li><a href=""><i class="fa fa-tag"></i> Lorem ipsum</a></li>
+		                        <li><a href=""><i class="fa fa-tag"></i> Passages</a></li>
+		                        <li><a href=""><i class="fa fa-tag"></i> Variations</a></li>
+		                    </ul>
+		                    <h5>Project files</h5>
+		                    <ul class="list-unstyled project-files">
+		                        <li><a href=""><i class="fa fa-file"></i> Project_document.docx</a></li>
+		                        <li><a href=""><i class="fa fa-file-picture-o"></i> Logo_zender_company.jpg</a></li>
+		                        <li><a href=""><i class="fa fa-stack-exchange"></i> Email_from_Alex.mln</a></li>
+		                        <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
+		                    </ul>
+		                    <div class="text-center m-t-md">
+		                        <a href="#" class="btn btn-xs btn-primary">Add files</a>
+		                        <a href="#" class="btn btn-xs btn-primary">Report contact</a>
+		
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+				
+				<!-- Page End -->
+				<!-- Project-Modal-Add/Edit Start -->
+				<form class="m-t" role="form" th:action="@{/main/project/save}" th:object="${project}" method="post">
+					<div class="modal inmodal" id="saveModal" tabindex="-1" role="dialog" aria-hidden="true">
+	                	<div class="modal-dialog">
+	                    	<div class="modal-content animated bounceInRight">
+	                        	<div class="modal-header">
+	                            	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                                <i class="fa fa-laptop modal-icon"></i>
+	                                <h4 class="modal-title"><label class="modalTitle"></label></h4>
+	                                <small class="font-bold modalHeader"></small>
+	                            </div>
+	                            
+	                            <div class="modal-body">
+										<input class="form-control projectID" type="hidden" th:field="*{id}" />
+	                            		
+						            	<div class="form-group">
+						                    <input type="text" class="form-control projectName" placeholder="Project Name" required="required" th:field="*{name}"/>
+						                </div>
+						                <div class="form-group">
+						                    <input type="text" class="form-control projectDescription" placeholder="Project Description" required="required" th:field="*{description}"/>
+						                </div>
+						                <div class="form-group">
+						                    <input type="text" class="form-control projectYear" placeholder="Project Year" required="required" th:field="*{year}"/>
+						                </div>
+						                
+						                <label for="projectStatus">Status:</label>
+						                <select class="form-control m-b projectStatus" id="projectStatus"  th:field="*{status}">
+					                        <option value="Planning">Planning</option>
+					                        <option value="Open">Open</option>
+					                        <option value="Closed">Closed</option>
+                                    	</select>
+						                
+						                <label for="projectType">Type:</label>
+						                <select class="form-control m-b projectType" id="projectType"  th:field="*{type}">
+					                        <option value="Infrastructure">Infrastructure</option>
+					                        <option value="Project">Project</option>
+					                        <option value="Special">Special</option>
+				                        </select>
+	                            </div>
+	                            
+	                            <div class="modal-footer">
+	                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+	                                <button type="submit" class="btn btn-primary">Save</button>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+				</form>			
+				<!-- Project-Modal-Add/Edit End -->
+				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+				<script>
+					var id;
+					
+					$(document).on("click", '.popProject',function(e) {
+						id = $(this).data('projectid');
+						var name = $(this).data('name');
+						var description = $(this).data('description');
+						var year = $(this).data('year');
+						var status = $(this).data('status');
+						var type = $(this).data('type');
+						var modal = $(this).data('modal');
+
+						if (modal == 'add') {
+							$(".modalTitle").text("Add Project");
+							$(".modalHeader").text("A a new Project to track budgets.");
+						} else if (modal == 'edit') {
+							$(".modalTitle").text("Edit Project");
+							$(".modalHeader").text("Edit an existing Project.");
+						}						
+				
+						$(".projectID").val(id);
+						$(".projectName").val(name);
+						$(".projectDescription").val(description);
+						$(".projectYear").val(year);
+						$(".projectStatus").val(status);
+						$(".projectType").val(type);
+
+					});
+					
+					$(document).on("click", '.deletePopup',function(e) {
+					
+						swal({
+					        title: "Are you sure?",
+					        text: "You will not be able to recover this Project!",
+					        type: "warning",
+					        showCancelButton: true,
+					        confirmButtonColor: "#DD6B55",
+					        confirmButtonText: "Yes, delete it!",
+			                cancelButtonText: "No, cancel plx!",
+		                    closeOnConfirm: false,
+		                    closeOnCancel: false },
+		                    function (isConfirm) {
+		                   		if (isConfirm) {
+		                   			$.ajax({
+							    	    type: "GET",
+							    	    url: "/main/project/delete/"+id,
+							    	    data: "{}",
+							    	    async: true,
+							    	    dataType: "text",
+		                   			});
+		                   			
+		                   			setTimeout(function(){window.location.reload(true);},100)
+		                        } else {
+		                            swal("Cancelled", "Your Project is safe :)", "error");
+		                        }
+						});
+		       		});
+
+				</script>
+			</div>
+		</div>
+	</div>
 </body>
+
 </html>

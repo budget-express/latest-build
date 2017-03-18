@@ -34,9 +34,6 @@ import com.tdavis.be.service.UserService;
 @Controller
 @RequestMapping("/main")
 public class MainProjectController {
-
-	//Log output to console
-	private final Logger temp = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private ProjectService projectService;	
@@ -69,7 +66,7 @@ public class MainProjectController {
 	 * Home >> Settings >> Projects >> All
 	 * Listing of Projects
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping("/projects")
 	public String listProjects(Model model) {
 
@@ -77,7 +74,7 @@ public class MainProjectController {
 		return "redirect:/main/projects/all";
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping("/project/{id}")
 	public String viewProject(Model model, @PathVariable int id) {
 		
@@ -112,7 +109,7 @@ public class MainProjectController {
 	 * Home >> Settings >> Projects >> All/Active/Planning/Closed
 	 * Listing of Projects
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping("/projects/{sort}")
 	public String listProjectsAll(Model model, @PathVariable String sort) {
 
@@ -159,7 +156,7 @@ public class MainProjectController {
 	 * Home >> Settings >> Projects >> Save
 	 * Save Project
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/project/save")
 	public String saveProject(@ModelAttribute @Valid Project project, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
@@ -178,7 +175,7 @@ public class MainProjectController {
 	 * Home >> Settings >> Projects >> Delete
 	 * Delete Project
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping("/project/delete/{id}")
 	@ResponseBody
 	public String projectDelete(Model model, @PathVariable int id){

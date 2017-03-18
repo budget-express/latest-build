@@ -17,6 +17,9 @@ public class FileUploadService {
 	
 	@Autowired
 	private FileUploadRepository fileuploadRepository;
+	
+	@Autowired
+	private QuoteService quoteService;
 
 	
 	@Autowired
@@ -49,6 +52,7 @@ public class FileUploadService {
 		//Set Date Created and Created By and Set Quote
 		fileUpload.setDateCreated(new Date());
 		fileUpload.setCreatedBy(logger.getLoggedon());
+		fileUpload.setQuote(quoteService.findById(fileUpload.getQuote().getId()));
 		
 		//Save File to Repository
 		fileuploadRepository.save(fileUpload);

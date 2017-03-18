@@ -91,16 +91,13 @@ public class QuoteService {
 				//Preserve
 				temp.setDateCreated(findById(quote.getId()).getDateCreated());
 				temp.setCreatedBy(quoteRepository.getOne(quote.getId()).getCreatedBy());
-				temp.setBudget(quoteRepository.getOne(quote.getId()).getBudget());
+				temp.setBudget(budget);
 				
 				//Set Edited Timestamp
 				temp.setDateEdited(new Date());
 				temp.setEditedBy(logger.getLoggedon());
 
 				message = "Updated Quote: " + temp.getName();
-				
-				//Update Budget
-				budgetService.save(budget);
 				
 			} else {
 				//Set Date Created and Created By and Budget

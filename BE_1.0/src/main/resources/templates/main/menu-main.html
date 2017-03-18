@@ -1,10 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<th:block th:include="/layout/header :: header-inspinia"></th:block>
 </head>
-<body>
 
+<body>
+    <div id="wrapper">
+		
+		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		
+		<div id="page-wrapper" class="gray-bg">
+        	<div class="row border-bottom">
+				
+				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
+				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
+				
+				<!-- Page Start -->
+				<div class="wrapper wrapper-content animated fadeInRight">
+			    	<div class="row">
+			    	
+			        	<div class="col-lg-2">
+			        		<a th:href="@{/settings/users}">
+	                			<div class="widget style1 lazur-bg">
+	                   				<div class="row">
+	                        			<div class="col-xs-4">
+	                            			<i class="fa fa-user-o fa-5x"></i>
+	                        			</div>
+	                        			<div class="col-xs-8 text-right">
+	                            			<span> All Projects </span>
+	                            			<h2 class="font-bold" th:text="${numusers}"></h2>
+	                        			</div>
+	                    			</div>
+	                			</div>
+	                		</a>
+            			</div>
+            			
+            			<div class="col-lg-2">
+            				<a th:href="@{/settings/projects}">
+	                			<div class="widget style1 navy-bg">
+	                   				<div class="row">
+	                        			<div class="col-xs-4">
+	                            			<i class="fa fa-folder-o fa-5x"></i>
+	                        			</div>
+	                        			<div class="col-xs-8 text-right">
+	                            			<span> Active Projects </span>
+	                            			<h2 class="font-bold" th:text="${numprojects}"></h2>
+	                        			</div>
+	                    			</div>
+	                			</div>
+	                		</a>
+            			</div>
+            			
+            			<div class="col-lg-2">
+            				<a th:href="@{/settings/log}">
+	                			<div class="widget style1 yellow-bg">
+	                   				<div class="row">
+	                        			<div class="col-xs-4">
+	                            			<i class="fa fa-file-text-o fa-5x"></i>
+	                        			</div>
+	                        			<div class="col-xs-8 text-right">
+	                            			<span> Pending Projects </span>
+	                            			<h2 class="font-bold" th:text="${numlogs}"></h2>
+	                        			</div>
+	                    			</div>
+	                			</div>
+	                		</a>
+            			</div>
+                	</div>
+                	<div class="row">
+                		<div class="col-lg-2">
+                			<a th:href="@{/settings/configuration}">
+	                			<div class="widget style1 red-bg">
+	                   				<div class="row">
+	                        			<div class="col-xs-4">
+	                            			<i class="fa fa-cogs fa-5x"></i>
+	                        			</div>
+	                        			<div class="col-xs-8 text-right">
+	                            			<span> Closed Projects </span>
+	                            			
+	                        			</div>
+	                    			</div>
+	                			</div>
+	                		</a>
+            			</div>
+            			
+            			<div class="col-lg-2">
+                			<a th:href="@{/settings/blogs}">
+	                			<div class="widget style1 white-bg">
+	                   				<div class="row">
+	                        			<div class="col-xs-4">
+	                            			<i class="fa fa-th fa-5x"></i>
+	                        			</div>
+	                        			<div class="col-xs-8 text-right">
+	                            			<span> Dashboards </span>
+	                            			
+	                        			</div>
+	                    			</div>
+	                			</div>
+	                		</a>
+            			</div>
+                	</div>
+				</div>
+				<!-- Page End -->
+				
+				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+			</div>
+		</div>
+	</div>
 </body>
+
 </html>

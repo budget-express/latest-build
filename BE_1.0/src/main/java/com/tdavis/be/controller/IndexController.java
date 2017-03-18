@@ -28,6 +28,7 @@ public class IndexController {
     	model.addAttribute("title", "Budget Tracker");
     	model.addAttribute("user", user);
     	model.addAttribute("blogs", blogService.getBlogByDateCreated(1));
+    	
         return "index";
     }
     
@@ -40,10 +41,6 @@ public class IndexController {
     	model.addAttribute("title", "Budget Tracker");
     	model.addAttribute("user", user);
     	
-    	//model.addAttribute("username", user.getName());
-    	//model.addAttribute("name", user.getFname() + " " + user.getLname());
-    	//model.addAttribute("usertitle", userService.findByName(name).getTitle());
-
     	return "old/index";
     }
 }
