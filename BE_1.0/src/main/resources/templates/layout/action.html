@@ -1,0 +1,29 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	<th:block fragment="action-budgetEdit">
+		<a data-toggle="modal" href="#budgetSave" class="btn btn-white btn-sm popBudget" data-modal="edit"
+		    th:attr="data-id=${budget.id},
+			data-projectid=${project.id},
+			data-projectname=${project.name},
+			data-name=${budget.name},
+			data-sdescription=${budget.descriptionShort},
+			data-ldescription=${budget.descriptionLong},
+			data-year=${budget.year},
+			data-code=${budget.budgetCode},
+			data-status=${budget.status},
+			data-category=${budget.category},
+			data-region=${budget.region},
+			data-criticality=${budget.criticality},
+			data-ranking=${budget.ranking},
+			data-q1=${budget.q1},
+			data-q1e=${budget.enabledQ1},
+			data-q2=${budget.q2},
+			data-q2e=${budget.enabledQ2},
+			data-q3=${budget.q3},
+			data-q3e=${budget.enabledQ3},
+			data-q4=${budget.q4},
+			data-q4e=${budget.enabledQ4}">
+			<i class="fa fa-pencil"></i> Edit 
+		</a>
+	</th:block>
+</th:block>

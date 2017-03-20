@@ -91,26 +91,28 @@
                       	</div>
                   	</li>
                   	
-                  	<li>
+                  	<li class="linkHome">
                     	<a th:href="@{/}"><i class="fa fa-home"></i> <span class="nav-label">Home</span> <span class="fa home"></span></a>	
                   	</li>
                   		
-                  	<li>
+                  	<li class="linkDashboard">
                   		<a href="#"><i class="fa fa-tachometer"></i> <span class="nav-label">Dashboards</span> <span class="fa home"></span></a>
                   		<ul class="nav nav-second-level">
+                  				<li><a href="#">*Coming Soon*</a></li>
+                          		<!-- 
                           		<li><a href="index.html">Dashboards</a></li>
                           		<li><a href="dashboard_2.html">Project</a></li>
-                          		<li><a href="dashboard_3.html">Budget</a></li>
+                          		<li><a href="dashboard_3.html">Budget</a></li> -->
                       		</ul>
                   	</li>
                   	
-                  	<li>
+                  	<li class="linkProjects">
                   		<a href="#"><i class="fa fa-folder-o"></i> <span class="nav-label">Projects</span> <span class="fa folder-o"></span></a>
                   		<ul class="nav nav-second-level">
-                          		<li><a th:href="@{/main/projects/open}">Active Projects</a></li>
-                          		<li><a th:href="@{/main/projects/planning}">Planning Projects</a></li>
-                          		<li><a th:href="@{/main/projects/closed}">Closed Projects</a></li>
-                          		<li><a th:href="@{/main/projects/all}">All Projects</a></li>
+                          		<li class="activeProjects"><a th:href="@{/main/projects/open}">Active Projects</a></li>
+                          		<li class="planningProjects"><a th:href="@{/main/projects/planning}">Planning Projects</a></li>
+                          		<li class="closedProjects"><a th:href="@{/main/projects/closed}">Closed Projects</a></li>
+                          		<li class="allProjects"><a th:href="@{/main/projects/all}">All Projects</a></li>
                       		</ul>
                   	</li>
                   	

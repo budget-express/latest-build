@@ -74,13 +74,19 @@ public class SettingsQuoteController {
 		
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
-
+		List<String> links = new ArrayList<>();
+		
 		navigation.add("Settings");
 		navigation.add("Projects");
 		navigation.add(quote.getBudget().getProject().getName());
 		navigation.add(quote.getBudget().getName());
 		navigation.add(quote.getName());
-				
+		
+		links.add("settings");
+		links.add("settings/projects");
+		links.add("settings/project/"+quote.getBudget().getProject().getId());
+		links.add("settings/budget/"+quote.getBudget().getId());
+
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	User user = userService.findByName(auth.getName());
@@ -90,6 +96,7 @@ public class SettingsQuoteController {
     	model.addAttribute("quote", quote);
     	model.addAttribute("navtitle", quote.getName());
     	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("links" , links);
     	model.addAttribute("count" , quoteService.findNumbers(id));
 		model.addAttribute("title", quote.getName());
 		

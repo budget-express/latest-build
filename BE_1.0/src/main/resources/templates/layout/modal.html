@@ -1,0 +1,331 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+	<!-- Project-Modal-Add/Edit Start -->
+	<th:block th:fragment="modal-projectSave">
+		<form class="m-t" role="form" th:action="@{/main/project/save}" th:object="${project}" method="post">
+			<div class="modal inmodal" id="projectSave" tabindex="-1" role="dialog" aria-hidden="true">
+               	<div class="modal-dialog">
+                   	<div class="modal-content animated bounceInRight">
+                       	<div class="modal-header">
+                           	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                               <i class="fa fa-laptop modal-icon"></i>
+                               <h4 class="modal-title"><label class="modalTitle"></label></h4>
+                               <small class="font-bold modalHeader"></small>
+                           </div>
+                           
+                           <div class="modal-body">
+								<input class="form-control projectID" type="hidden" th:field="*{id}" />
+                           		
+				            	<div class="form-group">
+				                    <input type="text" class="form-control projectName" placeholder="Project Name" required="required" th:field="*{name}"/>
+				                </div>
+				                <div class="form-group">
+				                    <input type="text" class="form-control projectDescription" placeholder="Project Description" required="required" th:field="*{description}"/>
+				                </div>
+				                <div class="form-group">
+				                    <input type="text" class="form-control projectYear" placeholder="Project Year" required="required" th:field="*{year}"/>
+				                </div>
+				                
+				                <label for="projectStatus">Status:</label>
+				                <select class="form-control m-b projectStatus" id="projectStatus"  th:field="*{status}">
+			                        <option value="Planning">Planning</option>
+			                        <option value="Open">Open</option>
+			                        <option value="Closed">Closed</option>
+                                  	</select>
+				                
+				                <label for="projectType">Type:</label>
+				                <select class="form-control m-b projectType" id="projectType"  th:field="*{type}">
+			                        <option value="Infrastructure">Infrastructure</option>
+			                        <option value="Project">Project</option>
+			                        <option value="Special">Special</option>
+		                        </select>
+                           </div>
+                           
+                           <div class="modal-footer">
+                               <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                               <button type="submit" class="btn btn-primary">Save</button>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+		</form>			
+		<!-- Project-Modal-Add/Edit End -->
+	</th:block>
+	
+	<th:block th:fragment="modal-budgetSave">
+		<!-- Budget-Modal-Add/Edit Start -->
+		<div class="modal inmodal" id="budgetSave" tabindex="-1" role="dialog" aria-hidden="true">
+        	<div class="modal-dialog modal-lg">
+            	<div class="modal-content animated bounceInRight">
+                	
+                	<div class="modal-body">
+                    	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title"><label class="modalTitle"></label></h4>
+                        <small class="font-bold modalHeader"></small>
+                        <form class="m-t wizard-big" role="form" id="form" th:action="@{/main/budget/save}" th:object="${budget}" method="post">
+							<input class="form-control projectID" type="hidden" th:field="*{project.id}" />
+							<input class="form-control budgetID" type="hidden" th:field="*{id}" />
+                            	<h1>Profile</h1>
+                               	<fieldset>
+                                	<h2>Budget Profile</h2>
+                                   	<div class="row">
+                                   		<div class="col-lg-6">
+                                        	<div class="form-group">
+                                           		<label for="budgetName">Name:</label>
+		                    					<input type="text" class="form-control required budgetName" placeholder="Name" th:field="*{name}"/>
+		                					</div>
+                                           	<div class="form-group">
+                                           		<label for="budgetCode">Budget Code:</label>
+		                   						<input type="text" class="form-control required budgetCode" placeholder="Budget Code" th:field="*{budgetCode}"/>
+		                					</div>
+                                       	</div>
+                                       	<div class="col-lg-6">
+                                        	<div class="form-group">
+                                           		<label for="budgetSDescription">Short Description:</label>
+		                   						<input type="text" class="form-control required budgetSDescription" placeholder="Short Description" th:field="*{descriptionShort}"/>
+		                					</div>
+			                				<div class="form-group">
+			                					<label for="budgetLDescription">Long Description:</label>
+			                   					<textarea style="resize:none" class="form-control budgetLDescription" rows="3" placeholder="Long Description" th:field="*{descriptionLong}"></textarea>
+			                				</div>	                                        
+                                   		</div>
+                                  	</div>
+                               	</fieldset>
+                          		
+                          		<h1>Details</h1>
+                               	<fieldset>
+                                	<h2>Budget Details</h2>
+                                   	<div class="row">
+                                       	<div class="col-lg-6">
+                                    		<div class="form-group">
+			                    				<label for="budgetStatus">Status:</label>
+												<select class="form-control required budgetStatus" th:field="*{status}">
+							                        <option value="Planning">Planning</option>
+							                        <option value="Open">Open</option>
+							                        <option value="Closed">Closed</option>
+						                        </select>
+		                					</div>
+		                				
+			                				<div class="form-group">
+			                					<label for="budgetCategory" class="control-label">Category:</label>
+						                        <select class="form-control required budgetCategory" th:field="*{category}">
+							                        <option value="Datacenter">Datacenter</option>
+				                           			<option value="License">License</option>
+				                          				<option value="Software">Software</option>
+				                          				<option value="Opex">Opex</option>
+						                        </select>
+						                 	</div>
+					                 	
+						                 	<div class="form-group">
+						                        <label for="budgetRegion" class="control-label">Region:</label>
+						                        <select  class="form-control required budgetRegion" th:field="*{region}">
+							                       	<option value="Global">Global</option>
+						                            <option value="USA">USA</option>
+						                            <option value="EMEA">EMEA</option>
+						                            <option value="APAC">APAC</option>
+						                            <option value="LATAM">LATAM</option>
+						                        </select>
+						                   	</div>
+			                			</div>
+			                			<div class="col-lg-6">
+			                				<div class="form-group">
+						                        <label for="budgetCriticality" class="control-label">Criticality:</label>
+						                        <select class="form-control required budgetCriticality" th:field="*{criticality}">
+							                        <option value="1 - Lights Out">1 - Lights Out</option>
+						                            <option value="2 - Critical">2 - Critical</option>
+						                            <option value="3 - Project">3 - Project</option>
+						                        </select>
+						                   	</div>
+					                        
+						                   	<div class="form-group">
+						                        <label for="budgetRanking" class="control-label">Ranking:</label>
+						                        <select class="form-control required budgetRanking" th:field="*{ranking}">
+							                        <option value="1">1</option>
+						                            <option value="2">2</option>
+						                            <option value="3">3</option>
+						                            <option value="4">4</option>
+						                        </select>
+						                  	</div>
+		                				</div>
+                                   	</div>
+                               	</fieldset>
+                               
+                               	<h1>Breakout</h1>
+                               	<fieldset>
+                                	<h2>Quarterly Breakout</h2>
+                                   	<div class="row">
+                                    	<div class="col-lg-12">
+                                       	<div class="form-group">
+                                       		<label for="budgetQ1amount">Q1 amount:</label>
+                                       		<div class="row">
+                                       			<div class="col-lg-6">
+                                       				<div class="input-group m-b">
+                                       					<span class="input-group-addon">
+                                       						<i class="fa fa-usd" aria-hidden="true"></i>
+                                       					</span>
+                                       					<input type="text" class="form-control budgetQ1" th:field="*{q1}" value="0"/>
+                                       					<span class="input-group-addon"><input type="checkbox" class="budget-q1e" th:field="*{enabledQ1}"/></span>
+                                       				</div>
+                                        		</div>
+                                        	</div>
+                                        </div>
+										
+										<div class="form-group">
+                                       		<label for="budgetQ2amount">Q2 amount:</label>
+                                       		<div class="row">
+                                       			<div class="col-lg-6">
+                                       				<div class="input-group m-b">
+                                       					<span class="input-group-addon">
+                                       						<i class="fa fa-usd" aria-hidden="true"></i>
+                                       					</span>
+                                       					<input type="text" class="form-control budgetQ2" th:field="*{q2}" value="0"/>
+                                       					<span class="input-group-addon"><input type="checkbox" class="budget-q2e" th:field="*{enabledQ2}" /></span>
+                                       				</div>
+                                        		</div>
+                                        	</div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                       		<label for="budgetQ3amount">Q3 amount:</label>
+                                       		<div class="row">
+                                       			<div class="col-lg-6">
+                                       				<div class="input-group m-b">
+                                       					<span class="input-group-addon">
+                                       						<i class="fa fa-usd" aria-hidden="true"></i>
+                                       					</span>
+                                       					<input type="text" class="form-control budgetQ3" th:field="*{q3}" value="0"/>
+                                       					<span class="input-group-addon"><input type="checkbox" class="budget-q3e" th:field="*{enabledQ3}" /></span>
+                                       				</div>
+                                        		</div>
+                                        	</div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                       		<label for="budgetQ4amount">Q4 amount:</label>
+                                       		<div class="row">
+                                       			<div class="col-lg-6">
+                                       				<div class="input-group m-b">
+                                       					<span class="input-group-addon">
+                                       						<i class="fa fa-usd" aria-hidden="true"></i>
+                                       					</span>
+                                       					<input type="text" class="form-control budgetQ4" th:field="*{q4}" value="0"/>
+                                       					<span class="input-group-addon"><input type="checkbox" class="budget-q4e" th:field="*{enabledQ4}" /></span>
+                                       				</div>
+                                        		</div>
+                                        	</div>
+                                        </div>
+                                       </div>
+                                 	</div>
+                             	</fieldset>
+                           </form>
+                        </div>
+                      </div>
+                  </div>
+              </div>		
+		<!-- Budget-Modal-Add/Edit End -->
+	</th:block>
+	
+	<th:block th:fragment="modal-quoteSave">
+		<!-- Quote-Modal-Add/Edit Start -->
+		<form class="m-t" role="form" id="form" th:action="@{/main/quote/save}" th:object="${quote}" method="post">
+			<div class="modal inmodal" id="saveQuote" tabindex="-1" role="dialog" aria-hidden="true">
+               	<div class="modal-dialog">
+                   	<div class="modal-content animated bounceInRight">
+                       	<div class="modal-header">
+                           	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                               <i class="fa fa-laptop modal-icon"></i>
+                               <h4 class="modal-title"><label class="modalTitle"></label></h4>
+                               <small class="font-bold modalHeader"></small>
+                           </div>
+                          
+                          	<div class="modal-body">
+
+							<input class="form-control budgetID" type="hidden" th:field="*{budget.id}" />
+							<input class="form-control quoteID" type="hidden" th:field="*{id}" />
+							
+							<label for="quoteName">Name:</label>
+							<input type="text" th:field="*{name}" class="form-control quoteName" />
+							
+							<label for="quoteJustification">Justification:</label>
+							<textarea style="resize:none" th:field="*{justification}" class="form-control quoteJustification" rows="3"></textarea>
+							
+							<label for="quoteVendor">Vendor:</label>
+							<input type="text" th:field="*{vendor}" class="form-control quoteVendor" />
+							
+							<label for="quoteVendorContact">Vendor Contact:</label>
+							<input type="text" th:field="*{vendorContact}" class="form-control quoteVendorContact" />
+							
+							<label for="quoteVendorEmail">Vendor Email:</label>
+							<input type="text" th:field="*{vendorEmail}" class="form-control quoteVendorEmail" />
+							
+							<label for="quoteStatus">Status:</label>
+							<select th:field="*{status}" class="form-control quoteStatus">
+		                        <option value="Staged">Staged</option>
+		                        <option value="Pending" sec:authorize="hasAuthority('ROLE_ADMIN')" >Pending</option>
+		                        <option value="Paid" sec:authorize="hasAuthority('ROLE_ADMIN')" >Paid</option>
+		                        <option value="Canceled" >Canceled</option>
+	                        </select>
+							
+							<label for="quoteCapex">Capex Amount:</label>
+							<input type="text" th:field="*{capex}" class="form-control quoteCapex" />
+							
+							<label for="quoteOpex">Opex Amount:</label>
+							<input type="text" th:field="*{opex}" class="form-control quoteOpex" />		
+                          		
+                           
+                         </div>
+                         
+                         <div class="modal-footer">
+                               <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                               <button type="submit" class="btn btn-primary">Save</button>
+                           </div>
+                       </div>
+                   </div>
+               </div>	
+          	</form>	
+		<!-- Quote-Modal-Add/Edit End -->
+	</th:block>
+	
+	<th:block th:fragment="modal-fileSave">
+		<!-- File-Modal-Add Start -->
+			<form class="m-t" role="form" id="form" th:action="@{/main/file/save}" method="post" enctype="multipart/form-data">
+				<div class="modal inmodal" id="saveFile" tabindex="-1" role="dialog" aria-hidden="true">
+                	<div class="modal-dialog">
+                    	<div class="modal-content animated bounceInRight">
+                        	<div class="modal-header">
+                            	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <i class="fa fa-laptop modal-icon"></i>
+                                <h4 class="modal-title"><label class="modalTitle"></label></h4>
+                                <small class="font-bold modalHeader"></small>
+                            </div>
+                           
+                           	<div class="modal-body">
+
+								<input class="form-control" th:value="${quote.id}" type="hidden" name="id" />
+
+								<label for="fileName">File:</label>
+								<input type="file" id="fileName" class="form-control" name="myFile"/>
+																									
+								<label for="fileType">Type:</label>
+								<select id="fileType" class="form-control" name="fileType">
+			                        <option value="">Choose..</option>
+			                        <option value="Quote">Quote</option>
+			                        <option value="PO">PO</option>
+		                        </select>									
+                            
+	                         </div>
+	                         
+	                         <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>	
+           	</form>	
+			<!-- File-Modal-Add End -->
+	</th:block>
+	
+	
+</th:block>

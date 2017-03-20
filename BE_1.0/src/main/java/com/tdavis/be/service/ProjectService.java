@@ -208,35 +208,39 @@ public class ProjectService {
 		double budgetRequested = 0;
 		double budgetApproved = 0;
 		double budgetSpent = 0;
+		double budgetSpentOpex = 0;
 		double budgetPending = 0;
+		double budgetPendingOpex = 0;
 		double budgetStaged = 0;
+		double budgetStagedOpex = 0;
 		
 		if (project.getBudgets() != null){
 			for (Budget budget : project.getBudgets()){
+				logger.system(budget.getName());
 				budgetRequested += budget.getBudgetRequested();
 				budgetApproved += budget.getBudgetApproved();
+				
 				budgetSpent += budget.getQuoteSpent();
 				budgetPending += budget.getQuotePending();
 				budgetStaged += budget.getQuoteStaged();
+				
+				budgetSpentOpex += budget.getQuoteSpentOpex();
+				budgetPending += budget.getQuotePendingOpex();
+				budgetStagedOpex += budget.getQuoteStagedOpex();
 			}
 		
 			project.setBudgetApproved(budgetApproved);
 			project.setBudgetRequested(budgetRequested);
+			
 			project.setBudgetSpent(budgetSpent);
 			project.setBudgetStaged(budgetStaged);
 			project.setBudgetPending(budgetPending);
+			
+			project.setBudgetSpentOpex(budgetSpentOpex);
+			project.setBudgetStagedOpex(budgetStagedOpex);
+			project.setBudgetPendingOpex(budgetPendingOpex);
 		}
-		
-		switch (project.getStatus()){
-			case "Planning" :
-			case "Closed" : project.setEnabled(false);
-			break;
-			case "Open" : project.setEnabled(true);
-			break;
-			default:
-			break;
-		}
-		
+				
 		logger.system("Calculations on Project: " + project.getName());
 		return project;
 	}
@@ -280,7 +284,7 @@ public class ProjectService {
 		double pending;
 		
 		if (project.getBudgetApproved() != 0) {
-			pending = (project.getBudgetPending()/project.getBudgetApproved())*100;
+			pending = ((project.getBudgetPending()+project.getBudgetStaged())/project.getBudgetApproved())*100;
 		} else {
 			pending = 0;
 		}
@@ -288,5 +292,21 @@ public class ProjectService {
 		return pending;
 	}
 
+	public double getPercentRemaining(Project project) {
+		
+		double pending;
+		double spent;
+		double remaining;
+		
+		if (project.getBudgetApproved() != 0) {
+			pending = ((project.getBudgetPending()+project.getBudgetStaged())/project.getBudgetApproved())*100;
+			spent = (project.getBudgetSpent()/project.getBudgetApproved())*100;
+			remaining = 100 - (pending+spent);
+		} else {
+			remaining = 0;
+		}
+		
+		return remaining;
+	}
 		
 }

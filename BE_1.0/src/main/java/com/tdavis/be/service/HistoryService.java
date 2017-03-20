@@ -50,6 +50,14 @@ public class HistoryService {
 		}
 		
 		/* Recall Data
+		 * Sort by ID
+		 */
+		public Page<History> getHistoryById(Integer pageNumber) {
+			PageRequest pageable = new PageRequest(pageNumber -1, PAGE_SIZE, Sort.Direction.DESC, "id");
+			return historyRepository.findAll(pageable);
+		}
+		
+		/* Recall Data
 		 *  Find Number of Logs
 		 */
 		@SuppressWarnings("unused")

@@ -26,9 +26,12 @@ public class Project {
 	//Budget Variables
 	private double budgetRequested;
 	private double budgetApproved;
-	private double budgetSpent;
-	private double budgetPending;	
-	private double budgetStaged;
+	private double budgetSpent; 		//Capex
+	private double budgetPending;		//Capex
+	private double budgetStaged;  		//Capex
+	private double budgetSpentOpex; 	//Opex
+	private double budgetPendingOpex;	//Opex
+	private double budgetStagedOpex;  	//Opex
 	
     //Logging
     private String editedBy;
@@ -222,5 +225,30 @@ public class Project {
 		this.disabledBy = disabledBy;
 	}
 
+	public double getBudgetSpentOpex() {
+		return budgetSpentOpex;
+	}
+
+	public void setBudgetSpentOpex(double budgetSpentOpex) {
+		this.budgetSpentOpex = budgetSpentOpex;
+	}
+
+	public double getBudgetPendingOpex() {
+		return budgetPendingOpex;
+	}
+
+	public void setBudgetPendingOpex(double budgetPendingOpex) {
+		this.budgetPendingOpex = budgetPendingOpex;
+	}
+
+	public double getBudgetStagedOpex() {
+		return budgetStagedOpex;
+	}
+
+	public void setBudgetStagedOpex(double budgetStagedOpex) {
+		this.budgetStagedOpex = budgetStagedOpex;
+	}
+
+	
 	
 }

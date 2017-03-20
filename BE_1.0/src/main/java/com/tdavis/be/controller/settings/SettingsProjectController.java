@@ -78,9 +78,13 @@ public class SettingsProjectController {
 		
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
-
+		List<String> links = new ArrayList<>();
+		
 		navigation.add("Settings");
 		navigation.add("Projects");
+		
+		links.add("/settings");
+		links.add("/settings/projects/");
 		
 		//Find Projects sort by Year (page)
 		Page<Project> page = projectService.getProjectByYear(1);
@@ -94,6 +98,7 @@ public class SettingsProjectController {
     	model.addAttribute("projects", page);
     	model.addAttribute("navtitle", "Projects");
     	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("links" , links);
 		model.addAttribute("title", "Settings>>Projects");
 		
 		//projects.html
@@ -109,10 +114,15 @@ public class SettingsProjectController {
 		
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
+		List<String> links = new ArrayList<>();
 		
-		navigation.add("Settings");
+		navigation.add("Main");
 		navigation.add("Projects");
 		navigation.add(project.getName());
+		
+		links.add("settings");
+		links.add("settings/projects");
+		links.add("settings/project/"+project.getId());
 		
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -122,6 +132,7 @@ public class SettingsProjectController {
     	model.addAttribute("user", user);
     	model.addAttribute("project", project);
     	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("links" , links);
     	model.addAttribute("count", projectService.findNumbers(project.getId()));
     	model.addAttribute("logs",logger.findAll());
 		model.addAttribute("title", project.getName());

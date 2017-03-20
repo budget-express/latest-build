@@ -16,6 +16,7 @@ import com.tdavis.be.entity.FileUpload;
 import com.tdavis.be.entity.Project;
 import com.tdavis.be.entity.Quote;
 import com.tdavis.be.repository.BudgetRepository;
+import com.tdavis.be.repository.ProjectRepository;
 
 @Service
 @Transactional
@@ -81,6 +82,17 @@ public class BudgetService {
 		
 		return values;
 	}
+	/* Recall Data
+	 *  Find Number of budgets by Project
+	 */
+	public int getCount(Project project) {
+		int count =  0;
+		for(@SuppressWarnings("unused") Budget i: project.getBudgets()) {
+		   count++;
+		}
+
+		return count;
+	}
 	/***************************************************************************************************************************
 	 * 
 	 * Interact with Repository 
@@ -90,6 +102,7 @@ public class BudgetService {
 	/*
 	 * Save Budget
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public void save(Budget budget) {
 		
 		//Find Project
@@ -104,6 +117,7 @@ public class BudgetService {
 			//Preserve Created Date and Created By
 			budget.setDateCreated(budgetRepository.getOne(budget.getId()).getDateCreated());
 			budget.setCreatedBy(budgetRepository.getOne(budget.getId()).getCreatedBy());
+			budget.setQuotes(budgetRepository.getOne(budget.getId()).getQuotes());
 
 				
 			//Set Edited Date and Edited By
@@ -130,9 +144,12 @@ public class BudgetService {
 		//Save Budget
 		budgetRepository.save(temp);
 		logger.info("project", project.getId(), message);
+		budgetRepository.flush();
 		
 		//Update Project
 		projectService.save(project);
+		
+		
 		
 	}
 
@@ -173,19 +190,21 @@ public class BudgetService {
 	/*
 	 * Delete Budget
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public void delete(int id) {
 
 		//Temp Budget
 		Budget temp = budgetRepository.getOne(id);
+		int projectId = temp.getProject().getId();
 		
 		//Delete Budget
 		budgetRepository.delete(temp);
 		logger.info("project", temp.getProject().getId(), "Deleted Budget "+ temp.getName()+" from Project: " + temp.getProject().getName());
 		
-		//Update Project
-		projectService.save(temp.getProject());
+		budgetRepository.flush();
 		
+		//Update Project
+		projectService.save(projectService.findById(projectId));
 	}
 	
 	/***************************************************************************************************************************

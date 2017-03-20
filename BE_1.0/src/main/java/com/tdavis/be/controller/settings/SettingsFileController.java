@@ -3,8 +3,6 @@ package com.tdavis.be.controller.settings;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -25,9 +23,6 @@ import com.tdavis.be.service.QuoteService;
 @Controller
 @RequestMapping("/settings")
 public class SettingsFileController {
-
-		// Define the logger object for this class
-		private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 		//Constants
 		private String redirectQuote = "redirect:/settings/quote/";
@@ -62,15 +57,13 @@ public class SettingsFileController {
 			FileUpload fileUpload = new FileUpload();
 			
 			int quoteid = Integer.parseInt(id);
-			logger.info(quoteid + "");
 			Quote quote = quoteService.findById(quoteid);
 			
 		
 			fileUpload.setName(myFile.getOriginalFilename());
 			fileUpload.setType(type);
 			fileUpload.setFiledata(myFile.getBytes());
-			fileUpload.setQuote(quote);
-			logger.info("Do I get here?");		
+			fileUpload.setQuote(quote);	
 			fileUploadService.save(fileUpload);
 			
 			return redirectQuote + quote.getId();

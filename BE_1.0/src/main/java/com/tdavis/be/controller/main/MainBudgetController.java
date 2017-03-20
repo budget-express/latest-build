@@ -34,7 +34,7 @@ import com.tdavis.be.service.UserService;
 
 
 @Controller
-@RequestMapping("/main")
+@RequestMapping("/main/budget")
 public class MainBudgetController {
 	
 	@Autowired
@@ -72,7 +72,7 @@ public class MainBudgetController {
 	 * Listing of Projects
 	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@RequestMapping("/budget/{id}")
+	@RequestMapping("/{id}")
 	public String viewProject(Model model, @PathVariable int id) {
 		
 		//Find Budget
@@ -83,11 +83,16 @@ public class MainBudgetController {
 
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
+		List<String> links = new ArrayList<>();
 		
 		navigation.add("Main");
 		navigation.add("Projects");
 		navigation.add(project.getName());
 		navigation.add(budget.getName());
+		
+		links.add("main");
+		links.add("main/projects/open");
+		links.add("main/project/"+ project.getId());
 		
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -98,13 +103,55 @@ public class MainBudgetController {
     	model.addAttribute("project", project);
     	model.addAttribute("budget", budget);
     	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("links" , links);
     	model.addAttribute("count", projectService.findNumbers(project.getId()));
     	model.addAttribute("percentspent", projectService.getPercentSpent(project));
     	model.addAttribute("percentpending", projectService.getPercentPending(project));
+    	model.addAttribute("percentremaining", projectService.getPercentRemaining(project));
     	model.addAttribute("logs",logger.findAll());
 		model.addAttribute("title", budget.getName());
 		
 		return "/main/view-budget";
 	}
+	
+	/********************************************************************************************************
+	 *  /Settings/Project/Budgets - Save, Delete
+	 * 	Interact with Budget Repositories - Access Database
+	 * 
+	 *********************************************************************************************************/
+	
+	/*
+	 * Home >> Settings >> Projects >> Save
+	 * Save Project
+	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostMapping("/save")
+	public String saveBudget(@ModelAttribute @Valid Budget budget, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			return "redirect:/error";
+		}
+	
+		//Call Budget Service to Save Budget to Project
+		budgetService.save(budget);
+		
+		//Redirect to Project Details
+		return "redirect:/main/budget/" + budget.getId();
+	}
+	
+	/*
+	 * Home >> Settings >> Budget >> Delete
+	 * Delete Budget
+	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping("/delete/{id}")
+	@ResponseBody
+	public String projectDelete(Model model, @PathVariable int id){
+
+		//Call Project Service to Delete Project
+		budgetService.delete(id);
+
+		//Redirect to Projects
+		return "success";
+	}	
 	
 }

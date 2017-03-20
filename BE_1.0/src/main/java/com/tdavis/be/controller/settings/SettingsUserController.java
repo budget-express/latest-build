@@ -64,7 +64,7 @@ public class SettingsUserController {
 	/*
 	 * List Users/Roles
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/users")
 	public String listUsers(Model model) {
 	
@@ -99,14 +99,14 @@ public class SettingsUserController {
 	/*
 	 * Save User
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/user/save")
 	public String saveUser2(@ModelAttribute @Valid User user, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			logger.error(bindingResult+"");
 			return "/error";
 		}
-		
+		logger.info(user.getPassword());
 		//Call User Services to Save User
 		userService.save(user);
 

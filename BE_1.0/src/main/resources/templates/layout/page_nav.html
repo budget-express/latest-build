@@ -8,7 +8,7 @@
                	<ol class="breadcrumb">
 					
 					<li>
-                       	<a th:href="@{/index}"><span>Home</span></a>
+                       	<a th:href="@{/}"><span>Home</span></a>
                    	</li>
                    	
                    	<th:block  th:each="nav, iterStat : ${navigation}">
@@ -16,7 +16,7 @@
 	                    	<a th:href="@{/}+${#strings.toLowerCase(navigation[0])}"><span th:text="${navigation[0]}"></span></a>
 	                   	</li>
 	                   	<li th:if="${iterStat.index &gt; 0 and iterStat.index &lt; iterStat.size-1}">
-	                    	<a th:href="@{/}+${#strings.toLowerCase(navigation[0])}+'/'+${#strings.toLowerCase(nav)}"><span th:text="${nav}"></span></a>
+	                    	<a th:href="@{/}+${links[iterStat.index]}"><span th:text="${nav}"></span></a>
 	                   	</li>
 	                   	<li class="active" th:if="${iterStat.index != 0 and iterStat.index == iterStat.size-1}">
 	                       	<strong><span th:text="${nav}"></span></strong>

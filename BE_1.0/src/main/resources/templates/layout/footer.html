@@ -10,57 +10,6 @@
 		<!-- /footer content -->
 	</th:block>
 	
-	<th:block th:fragment="footer-inspinia">
-		<div class="footer">
-        	<div class="pull-right">
-            	
-            	<span th:text="'Logged in as ' + ${user.name}"></span>
-        	</div>
-        	<div>
-            	<strong>Budget Tracker</strong> by Tim Davis
-        	</div>
-    	</div>
-	</th:block>
-	
-	<th:block th:fragment="js-inspinia">
-		
-		<!-- jQuery -->
-	    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	    <!-- jQueryUI -->
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
-	    <!-- Bootstrap -->
-	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	    <!-- MetisMenu -->
-	    <script src="/build/js/plugins/metismenu/jquery.metisMenu.js"></script>
-	    <!-- Slim Scroll -->
-	    <script src="/build/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-		<!-- iCheck -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
-		<!-- Sweet alert -->
-    	<script src="/build/js/plugins/sweetalert/sweetalert.min.js"></script>
-    	<!-- Steps -->
-    	<script src="/build/js/plugins/steps/jquery.steps.min.js"></script>
-    	<!-- Jquery Validate -->
-    	<script src="/build/js/plugins/validate/jquery.validate.min.js"></script>
-		
-	
-	    <!-- Custom and plugin javascript -->
-	    <script src="/build/js/inspinia.js"></script>
-	    <script src="/build/js/plugins/pace/pace.min.js"></script>
-	    <script src="/build/js/plugins/initial/initial.min.js"></script>
-	    
-	</th:block>
-	
-	<th:block th:fragment="customjs-inspinia">
-		<!-- Initialize Initials Start -->
-		<script>
-			$(document).ready(function() {
-				$(".profile").initials();
-			});
-		</script>
-		<!-- Initialize Initials End -->
-	</th:block>
-	
 	<th:block th:fragment="footer-jscript">
 		<!-- jQuery -->
 	    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -105,5 +54,437 @@
 		<!--  Clickable Rows -->
 
   
+	</th:block>
+	
+<!-- New Code Below -->
+	
+	<th:block th:fragment="footer-inspinia">
+		<div class="footer">
+        	<div class="pull-right">
+            	
+            	<span th:text="'Logged in as ' + ${user.name}"></span>
+        	</div>
+        	<div>
+            	<strong>Budget Tracker</strong> by Tim Davis
+        	</div>
+    	</div>
+	</th:block>
+	
+	<th:block th:fragment="js-inspinia">
+		
+		<!-- jQuery -->
+	    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	    <!-- jQueryUI -->
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+	    <!-- Bootstrap -->
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	    <!-- MetisMenu -->
+	    <script src="/build/js/plugins/metismenu/jquery.metisMenu.js"></script>
+	    <!-- Slim Scroll -->
+	    <script src="/build/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		<!-- iCheck -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+		<!-- Sweet alert -->
+    	<script src="/build/js/plugins/sweetalert/sweetalert.min.js"></script>
+    	<!-- Steps -->
+    	<script src="/build/js/plugins/steps/jquery.steps.min.js"></script>
+    	<!-- Jquery Validate -->
+    	<script src="/build/js/plugins/validate/jquery.validate.min.js"></script>
+		
+	
+	    <!-- Custom and plugin javascript -->
+	    <script src="/build/js/inspinia.js"></script>
+	    <script src="/build/js/plugins/pace/pace.min.js"></script>
+	    <script src="/build/js/plugins/initial/initial.min.js"></script>
+	    
+	</th:block>
+	
+	<th:block th:fragment="customjs-inspinia">
+		<!-- Initialize Initials Start -->
+		<script>
+			/*<![CDATA[*/
+			$(document).ready(function() {
+				$(".profile").initials();
+			});
+		
+			
+			/*]]>*/
+		</script>
+		<!-- Initialize Initials End -->
+	</th:block>
+	
+	<th:block th:fragment="customjs-popProject">
+		<script>
+			$(document).on("click", '.popProject',function(e) {
+				var projectid = $(this).data('projectid');
+				var name = $(this).data('name');
+				var description = $(this).data('description');
+				var year = $(this).data('year');
+				var status = $(this).data('status');
+				var type = $(this).data('type');
+				var modal = $(this).data('modal');
+				console.log(projectid);
+				if (modal == 'add') {
+					$(".modalTitle").text("Add Project");
+					$(".modalHeader").text("A a new Project to track budgets.");
+				} else if (modal == 'edit') {
+					$(".modalTitle").text("Edit Project");
+					$(".modalHeader").text("Edit an existing Project.");
+				}						
+		
+				$(".projectID").val(projectid);
+				$(".projectName").val(name);
+				$(".projectDescription").val(description);
+				$(".projectYear").val(year);
+				$(".projectStatus").val(status);
+				$(".projectType").val(type);
+	
+			});		
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="customjs-deleteProject">
+		<script>				
+			$(document).on("click", '.deleteProject',function(e) {
+				var projectid = $(this).data('id');
+				swal({
+			        title: "Are you sure?",
+			        text: "You will not be able to recover this Project!",
+			        type: "warning",
+			        showCancelButton: true,
+			        confirmButtonColor: "#DD6B55",
+			        confirmButtonText: "Yes, delete it!",
+	                cancelButtonText: "No, cancel plx!",
+	                   closeOnConfirm: false,
+	                   closeOnCancel: false },
+	                   function (isConfirm) {
+	                  		if (isConfirm) {
+	                  			$.ajax({
+					    	    type: "GET",
+					    	    url: "/main/project/delete/"+projectid,
+					    	    data: "{}",
+					    	    async: true,
+					    	    dataType: "text",
+	                  			});
+	                  			
+	                  			setTimeout(function(){window.location.reload(true);},100)
+	                  			
+	                       } else {
+	                           swal("Cancelled", "Your Project is safe :)", "error");
+	                       }
+				});
+	      	});
+	
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="customjs-popBudget">
+		<script>
+		    $(document).on("click", '.popBudget',function(e) {
+		    	var budgetid = $(this).data('id');
+				var projectid = $(this).data('projectid');
+				var pname = $(this).data('projectname');
+				var name = $(this).data('name');
+				var sdescription = $(this).data('sdescription');
+				var ldescription = $(this).data('ldescription');
+				var year = $(this).data('year');
+				var code = $(this).data('code');
+				var status = $(this).data('status');
+				var category = $(this).data('category');
+				var region = $(this).data('region');
+				var criticality = $(this).data('criticality');
+				var ranking = $(this).data('ranking');
+				var q1 = $(this).data('q1');
+				var q1e = $(this).data('q1e');
+				var q2 = $(this).data('q2');
+				var q2e = $(this).data('q2e');
+				var q3 = $(this).data('q3');
+				var q3e = $(this).data('q3e');
+				var q4 = $(this).data('q4');
+				var q4e = $(this).data('q4e');
+				var modal = $(this).data('modal');						
+				
+				if (modal == 'add') {
+					$(".modalTitle").text("Add Budget");
+					$(".modalHeader").text("Add a new Budget to Project "+pname+".");
+				} else if (modal == 'edit') {
+					$(".modalTitle").text("Edit Project");
+					$(".modalHeader").text("Edit Budget "+name+" in Project "+pname+".");
+					
+					if (q1e == true){
+						$('.budget-q1e').prop('checked', true);
+					}else {$('.budget-q1e').prop('checked', false);}
+					
+					if (q2e == true){
+						$('.budget-q2e').prop('checked', true);
+					}else {$('.budget-q2e').prop('checked', false);}
+					
+					if (q3e == true){
+						$('.budget-q3e').prop('checked', true);
+					}else {$('.budget-q3e').prop('checked', false);}
+					
+					if (q4e == true){
+						$('.budget-q4e').prop('checked', true);
+					}else {$('.budget-q4e').prop('checked', false);}	
+					
+					$(".budgetName").val(name);
+					$(".budgetSDescription").val(sdescription);
+					$(".budgetLDescription").val(ldescription);
+					$(".budgetYear").val(year);
+					$(".budgetCode").val(code);
+					$(".budgetStatus").val(status);
+					$(".budgetCategory").val(category);
+					$(".budgetRegion").val(region);
+					$(".budgetCriticality").val(criticality);
+					$(".budgetRanking").val(ranking);
+					$(".budgetQ1").val(q1);
+					$(".budgetQ2").val(q2);
+					$(".budgetQ3").val(q3);
+					$(".budgetQ4").val(q4);
+				}	
+				
+				$(".budgetID").val(budgetid);
+				$(".projectID").val(projectid);
+			});
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="customjs-deleteBudget">
+		<script>
+			$(document).on("click", '.deleteBudget',function(e) {
+				var budgetid = $(this).data('id');
+				swal({
+			        title: "Are you sure?",
+			        text: "You will not be able to recover this Budget!",
+			        type: "warning",
+			        showCancelButton: true,
+			        confirmButtonColor: "#DD6B55",
+			        confirmButtonText: "Yes, delete it!",
+	                cancelButtonText: "No, cancel please!",
+	                   closeOnConfirm: false,
+	                   closeOnCancel: false },
+	                   function (isConfirm) {
+	                  		if (isConfirm) {
+	                  			$.ajax({
+					    	    type: "GET",
+					    	    url: "/settings/budget/delete/"+budgetid,
+					    	    data: "{}",
+					    	    async: true,
+					    	    dataType: "text",
+	                  			});
+	                  			
+	                  			setTimeout(function(){window.location.reload(true);},100)
+	                       } else {
+	                           swal("Cancelled", "Your Budget is safe :)", "error");
+	                       }
+				});
+	      	});
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="customjs-wizardBudget">
+		<script>
+			/*<![CDATA[*/
+		        $(document).ready(function(){
+		            $("#wizard").steps();
+		            $("#form").steps({
+		                bodyTag: "fieldset",
+		                onStepChanging: function (event, currentIndex, newIndex)
+		                {
+		                    // Always allow going backward even if the current step contains invalid fields!
+		                    if (currentIndex > newIndex)
+		                    {
+		                        return true;
+		                    }
+		
+		                    // Forbid suppressing "Warning" step if the user is to young
+		                    if (newIndex === 3 && Number($("#age").val()) < 18)
+		                    {
+		                        return false;
+		                    }
+		
+		                    var form = $(this);
+		
+		                    // Clean up if user went backward before
+		                    if (currentIndex < newIndex)
+		                    {
+		                        // To remove error styles
+		                        $(".body:eq(" + newIndex + ") label.error", form).remove();
+		                        $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+		                    }
+		
+		                    // Disable validation on fields that are disabled or hidden.
+		                    form.validate().settings.ignore = ":disabled,:hidden";
+		
+		                    // Start validation; Prevent going forward if false
+		                    return form.valid();
+		                },
+		                onStepChanged: function (event, currentIndex, priorIndex)
+		                {
+		                    // Suppress (skip) "Warning" step if the user is old enough.
+		                    if (currentIndex === 2 && Number($("#age").val()) >= 18)
+		                    {
+		                        $(this).steps("next");
+		                    }
+		
+		                    // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
+		                    if (currentIndex === 2 && priorIndex === 3)
+		                    {
+		                        $(this).steps("previous");
+		                    }
+		                },
+		                onFinishing: function (event, currentIndex)
+		                {
+		                    var form = $(this);
+		
+		                    // Disable validation on fields that are disabled.
+		                    // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
+		                    form.validate().settings.ignore = ":disabled";
+		
+		                    // Start validation; Prevent form submission if false
+		                    return form.valid();
+		                },
+		                onFinished: function (event, currentIndex)
+		                {
+		                    var form = $(this);
+		
+		                    // Submit form input
+		                    form.submit();
+		                }
+		            }).validate({
+		                        errorPlacement: function (error, element)
+		                        {
+		                            element.before(error);
+		                        },
+		                        rules: {
+		                            confirm: {
+		                                equalTo: "#password"
+		                            }
+		                        }
+		                    });
+		       });
+		    /*]]>*/
+		    </script>
+	</th:block>
+	
+	<th:block th:fragment="customjs-popQuote">
+		<script>
+		    $(document).on("click", '.popQuote',function(e) {
+				var quoteid = $(this).data('id');
+				var budgetid = $(this).data('budgetid');
+				var bname = $(this).data('budgetname');
+				var name = $(this).data('name');
+				var justification = $(this).data('justification');
+				var vendor = $(this).data('vendor');
+				var vcontact = $(this).data('vcontact');
+				var vemail = $(this).data('vemail');
+				var status = $(this).data('status');
+				var capex = $(this).data('capex');
+				var opex = $(this).data('opex');
+				var modal = $(this).data('modal');
+				
+				if (modal == 'add') {
+					$(".modalTitle").text("Add Quote");
+					$(".modalHeader").text("Add a new Quote to Budget "+bname+".");
+				} else if (modal == 'edit') {
+					$(".modalTitle").text("Edit Project");
+					$(".modalHeader").text("Edit Quote "+name+" in Budget "+bname+".");
+				}
+				
+				$(".quoteID").val(quoteid);
+				$(".budgetID").val(budgetid);
+				$(".quoteName").val(name);
+				$(".quoteJustification").val(justification);
+				$(".quoteVendor").val(vendor);
+				$(".quoteVendorContact").val(vcontact);
+				$(".quoteVendorEmail").val(vemail);
+				$(".quoteStatus").val(status);
+				$(".quoteCapex").val(capex);
+				$(".quoteOpex").val(opex);
+			});
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="customjs-deleteQuote">
+		<script>
+		$(document).on("click", '.deletePopup',function(e) {
+				var quoteid = $(this).data('id');
+				swal({
+			        title: "Are you sure?",
+			        text: "You will not be able to recover this Quote!",
+			        type: "warning",
+			        showCancelButton: true,
+			        confirmButtonColor: "#DD6B55",
+			        confirmButtonText: "Yes, delete it!",
+	                cancelButtonText: "No, cancel please!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false },
+                    function (isConfirm) {
+                   		if (isConfirm) {
+                   			$.ajax({
+					    	    type: "GET",
+					    	    url: "/main/quote/delete/"+quoteid,
+					    	    data: "{}",
+					    	    async: true,
+					    	    dataType: "text",
+                   			});
+                   			
+                   			setTimeout(function(){window.location.reload(true);},100)
+                        } else {
+                            swal("Cancelled", "Your Quote is safe :)", "error");
+                        }
+				});
+       		});
+
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="customjs-popFile">
+		<script>
+			$(document).on("click", '.popFile',function(e) {
+				var id = $(this).data('id');
+				var quotetid = $(this).data('quoteid');
+				var qname = $(this).data('quotename');
+			
+				$(".modalTitle").text("Upload File");
+				$(".modalHeader").text("Upload a new File to Quote "+qname+".");
+	
+				$(".quoteID").val(quoteid);
+				$(".quoteName").val(name);
+			});
+		</script>
+	</th:block>
+	
+	<th:block th:fragment="customjs-deleteFile">
+		<script>
+			$(document).on("click", '.deleteFile',function(e) {
+				var id = $(this).data('id');
+				swal({
+			        title: "Are you sure?",
+			        text: "You will not be able to recover this File!",
+			        type: "warning",
+			        showCancelButton: true,
+			        confirmButtonColor: "#DD6B55",
+			        confirmButtonText: "Yes, delete it!",
+	                cancelButtonText: "No, cancel please!",
+	                closeOnConfirm: false,
+	                closeOnCancel: false },
+	                function (isConfirm) {
+	               		if (isConfirm) {
+	               			$.ajax({
+					    	    type: "GET",
+					    	    url: "/main/file/delete/"+fileid,
+					    	    data: "{}",
+					    	    async: true,
+					    	    dataType: "text",
+	               			});
+	               			
+	               			setTimeout(function(){window.location.reload(true);},100)
+	                    } else {
+	                        swal("Cancelled", "Your File is safe :)", "error");
+	                    }
+				});
+	   		});
+		</script>
 	</th:block>
 </th:block>

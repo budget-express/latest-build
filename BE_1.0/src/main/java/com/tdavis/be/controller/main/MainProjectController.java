@@ -83,11 +83,15 @@ public class MainProjectController {
 		
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
+		List<String> links = new ArrayList<>();
 		
 		navigation.add("Main");
 		navigation.add("Projects");
 		navigation.add(project.getName());
 		
+		links.add("main");
+		links.add("main/projects/active");
+				
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	User user = userService.findByName(auth.getName());   	
@@ -96,9 +100,11 @@ public class MainProjectController {
     	model.addAttribute("user", user);
     	model.addAttribute("project", project);
     	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("links" , links);
     	model.addAttribute("count", projectService.findNumbers(project.getId()));
     	model.addAttribute("percentspent", projectService.getPercentSpent(project));
     	model.addAttribute("percentpending", projectService.getPercentPending(project));
+    	model.addAttribute("percentremaining", projectService.getPercentRemaining(project));
     	model.addAttribute("logs",logger.findAll());
 		model.addAttribute("title", project.getName());
 		
@@ -115,10 +121,14 @@ public class MainProjectController {
 
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
-
+		List<String> links = new ArrayList<>();
+		
 		navigation.add("Main");
 		navigation.add("Projects");
 		navigation.add(sort);
+		
+		links.add("/main");
+		links.add("/main/projects/open");
 		
 		switch (sort) {
 			case "open":
@@ -140,6 +150,9 @@ public class MainProjectController {
     	model.addAttribute("user", user);
     	model.addAttribute("navtitle", "Projects");
     	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("links" , links);
+    	model.addAttribute("activeNav", "projects");
+    	model.addAttribute("activeLink", sort);
 		model.addAttribute("title", "Settings>>Projects");
 		
 		//projects.html

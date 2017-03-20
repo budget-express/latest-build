@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -78,7 +76,7 @@ public class MainQuoteController {
 	 */
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping("/quote/{id}")
-	public String viewProject(Model model, @PathVariable int id) {
+	public String viewQuote(Model model, @PathVariable int id) {
 		
 		//Find Quote
 		Quote quote = quoteService.findById(id);
@@ -91,12 +89,18 @@ public class MainQuoteController {
 
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
+		List<String> links = new ArrayList<>();
 		
 		navigation.add("Main");
 		navigation.add("Projects");
 		navigation.add(project.getName());
 		navigation.add(budget.getName());
 		navigation.add(quote.getName());
+		
+		links.add("main");
+		links.add("main/projects/open");
+		links.add("main/project/"+ project.getId());
+		links.add("main/budget/"+ budget.getId());
 		
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -108,12 +112,55 @@ public class MainQuoteController {
     	model.addAttribute("budget", budget);
     	model.addAttribute("quote", quote);
     	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("links" , links);
     	model.addAttribute("count", projectService.findNumbers(project.getId()));
     	model.addAttribute("percentspent", projectService.getPercentSpent(project));
     	model.addAttribute("percentpending", projectService.getPercentPending(project));
+    	model.addAttribute("percentremaining", projectService.getPercentRemaining(project));
     	model.addAttribute("logs",logger.findAll());
 		model.addAttribute("title", quote.getName());
 		
 		return "/main/view-quote";
 	}
+	
+	/********************************************************************************************************
+	 *  /Settings/Project/Budgets - Save, Delete
+	 * 	Interact with Budget Repositories - Access Database
+	 * 
+	 *********************************************************************************************************/
+	
+	/*
+	 * Home >> Settings >> Projects >> Save
+	 * Save Quote
+	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostMapping("/quote/save")
+	public String saveQuote(@ModelAttribute @Valid Quote quote, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			logger.system("Error: "+bindingResult);
+			return "redirect:/error";
+		}
+	
+		//Call Budget Service to Save Budget to Project
+		quoteService.save(quote);
+		
+		//Redirect to Project Details
+		return "redirect:/main/budget/" + quote.getBudget().getId();
+	}
+	
+	/*
+	 * Home >> Settings >> Budget >> Delete
+	 * Delete Quote
+	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@RequestMapping("/quote/delete/{id}")
+	@ResponseBody
+	public String deleteQuote(Model model, @PathVariable int id){
+
+		//Call Project Service to Delete Project
+		quoteService.delete(id);
+
+		//Redirect to Projects
+		return "success";
+	}	
 }

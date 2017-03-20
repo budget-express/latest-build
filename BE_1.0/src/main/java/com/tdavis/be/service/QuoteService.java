@@ -47,23 +47,28 @@ public class QuoteService {
 		}
 		
 		/* Recall Data - Quote
-		* Quote findById
+		*  Return Number of Files
 		*/
-		public int findNumbers(int id) {
-			
+		public int findNumbers(int id) {		
 			int files = 0;
+			Quote quote = quoteRepository.getOne(id);
 
-			Quote quote = quoteRepository.findById(id);
-
-				if (quote.getId() != null) {
-					for (FileUpload file : quote.getFileUploads()){
-						if (file.getId() != null) {
-							files++;
-						}
-					}
+			for(@SuppressWarnings("unused") FileUpload i: quote.getFileUploads()) {
+				   files++;
 				}
-			
+
 			return files;
+		}
+		
+		/* Recall Data - Quote
+		*  Get File Count in *Budget*
+		*/
+		public Integer getCount(Quote quote) {
+			int count = 0;;
+			for(@SuppressWarnings("unused") FileUpload i: quote.getFileUploads()) {
+				   count++;
+				}
+			return count;
 		}
 		
 		/***************************************************************************************************************************
@@ -82,7 +87,6 @@ public class QuoteService {
 			
 			//Temp Quote, Message
 			Quote temp = active(quote);
-			
 			String message;
 			
 			//If...Existing Quote...Update Quote in Repository
@@ -91,7 +95,7 @@ public class QuoteService {
 				//Preserve
 				temp.setDateCreated(findById(quote.getId()).getDateCreated());
 				temp.setCreatedBy(quoteRepository.getOne(quote.getId()).getCreatedBy());
-				temp.setBudget(budget);
+				temp.setFileUploads(findById(quote.getId()).getFileUploads());
 				
 				//Set Edited Timestamp
 				temp.setDateEdited(new Date());
@@ -103,10 +107,11 @@ public class QuoteService {
 				//Set Date Created and Created By and Budget
 				temp.setDateCreated(new Date());
 				temp.setCreatedBy(logger.getLoggedon());
-				temp.setBudget(budget);
-				
+
 				message = "Saved Quote: " + temp.getName()+" to Budget: " + budget.getName();
 			}
+			
+			temp.setBudget(budget);
 			
 			//Save Quote to Repository
 			quoteRepository.save(temp);

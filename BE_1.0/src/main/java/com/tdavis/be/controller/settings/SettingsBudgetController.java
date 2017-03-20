@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tdavis.be.entity.Budget;
+import com.tdavis.be.entity.Project;
 import com.tdavis.be.entity.Quote;
 import com.tdavis.be.entity.User;
 import com.tdavis.be.service.BudgetService;
+import com.tdavis.be.service.ProjectService;
 import com.tdavis.be.service.UserService;
 
 
@@ -38,6 +40,9 @@ public class SettingsBudgetController {
 	
 	//Constants
 	private String redirectProject = "redirect:/settings/project/";
+	
+	@Autowired
+	private ProjectService projectService;
 	
 	@Autowired
 	private BudgetService budgetService;
@@ -72,14 +77,22 @@ public class SettingsBudgetController {
 		
 		//Find Budget
 		Budget budget = budgetService.findById(id);
+		Project project = projectService.findById(budget.getProject().getId());
 		
 		//Set Page Navigation
 		List<String> navigation = new ArrayList<>();
+		List<String> links = new ArrayList<>();
 		
 		navigation.add("Settings");
 		navigation.add("Projects");
 		navigation.add(budget.getProject().getName());
 		navigation.add(budget.getName());
+		
+		links.add("settings");
+		links.add("settings/projects");
+		links.add("settings/project/"+project.getId());
+		
+
 				
 		//Find logged in user
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -90,6 +103,7 @@ public class SettingsBudgetController {
     	model.addAttribute("budget", budget);
     	model.addAttribute("navtitle", budget.getName());
     	model.addAttribute("navigation" , navigation);
+    	model.addAttribute("links" , links);
     	model.addAttribute("count" , budgetService.findNumbers(id));
 		model.addAttribute("title", budget.getName());
 		

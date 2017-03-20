@@ -26,7 +26,7 @@
 		                        <div class="ibox-title">
 		                            <h5>All projects</h5>
 		                            <div class="ibox-tools">
-		                                <a data-toggle="modal" href="#saveModal" class="btn btn-primary btn-xs popProject" data-modal="add">Create new project</a>
+		                                <a sec:authorize="hasAuthority('ROLE_ADMIN')" data-toggle="modal" href="#projectSave" class="btn btn-primary btn-xs popProject" data-modal="add">Create new project</a>
 		                            </div>
 		                        </div>
 		                        <div class="ibox-content">
@@ -45,29 +45,29 @@
 		                                <table class="table table-hover">
 		                                    <tbody th:each="project : ${projects}">
 		                                    <tr>
-		                                        <td class="project-status">
-		                                            <span th:if="${project.status} == 'Open'" class="label label-primary">Active</span>
-		                                            <span th:if="${project.status} == 'Closed'" class="label label-default">Inactive</span>
-		                                            <span th:if="${project.status} == 'Planning'" class="label label-warning">Planning</span>
+		                                        <td class="project-status col-lg-1">
+		                                            <span th:if="${project.status} == 'Open'" class="label label-primary pull-left">Active</span>
+		                                            <span th:if="${project.status} == 'Closed'" class="label label-default pull-left">Inactive</span>
+		                                            <span th:if="${project.status} == 'Planning'" class="label label-warning pull-left">Planning</span>
 		                                        </td>
-		                                        <td class="project-year" th:text="${project.year}"></td>
-		                                        <td class="project-title">
+		                                        <td class="project-year col-lg-1" th:text="${project.year}"></td>
+		                                        <td class="project-title col-lg-2">
 		                                            <span th:text="${project.name}"></span>
 		                                            <br/>
 		                                            <small>Created <span th:text="${project.dateCreated}"></span></small>
 		                                        </td>
-		                                        <td class="project-completion">
-		                                                <small th:if="${project.budgetApproved} != 0" th:text="${(project.budgetSpent / project.budgetApproved)*100}"></small>
+		                                        <td class="project-completion col-lg-1">
+		                                                <small th:if="${project.budgetApproved} != 0" th:text="${(project.budgetSpent / project.budgetApproved)*100}+'% Spent'"></small>
 		                                                <div class="progress progress-mini">
-		                                                    <div th:if="${project.budgetApproved} != 0" th:style="'width: ' + ${(project.budgetSpent / project.budgetApproved)*100} + ';'" class="progress-bar"></div>
+		                                                    <div th:if="${project.budgetApproved} != 0" th:style="'width: ' + ${(project.budgetSpent / project.budgetApproved)*100} + '%;'" class="progress-bar"></div>
 		                                                    <div th:if="${project.budgetApproved} == 0" style="width:0;" class="progress-bar"></div>
 		                                                </div>
 		                                        </td>
-		                                        <td th:text="${project.description}"></td>
-		                                        <td class="project-type" th:text="${project.type}"></td>
-		                                        <td class="project-actions">
+		                                        <td class="project-description col-lg-4" th:text="${project.description}"></td>
+		                                        <td class="project-type col-lg-1" th:text="${project.type}"></td>
+		                                        <td class="project-actions col-lg-2">
 		                                            <a th:href="@{/main/project/} + ${project.id}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
-		                                            <a data-toggle="modal" href="#saveModal" class="btn btn-white btn-sm popProject" data-modal="edit"
+		                                            <a sec:authorize="hasAuthority('ROLE_ADMIN')" data-toggle="modal" href="#projectSave" class="btn btn-white btn-sm popProject" data-modal="edit"
 		                                            	th:attr="data-projectid=${project.id},
 		                                            		data-name=${project.name},
 		                                            		data-description=${project.description},
@@ -76,7 +76,7 @@
 		                                            		data-type=${project.type}">
 		                                            	<i class="fa fa-pencil"></i> Edit 
 		                                            </a>
-		                                            <button class="btn btn-white btn-sm popProject deletePopup" 
+		                                            <button sec:authorize="hasAuthority('ROLE_ADMIN')" class="btn btn-white btn-sm popProject deleteProject" 
 		                                            	th:attr="data-projectid=${project.id},
 		                                            		data-name=${project.name},
 		                                            		data-year=${project.year}">
@@ -93,117 +93,17 @@
 		            </div>
 		        </div>
 				<!-- Page End -->
-				<!-- Project-Modal-Add/Edit Start -->
-				<form class="m-t" role="form" th:action="@{/main/project/save}" th:object="${project}" method="post">
-					<div class="modal inmodal" id="saveModal" tabindex="-1" role="dialog" aria-hidden="true">
-	                	<div class="modal-dialog">
-	                    	<div class="modal-content animated bounceInRight">
-	                        	<div class="modal-header">
-	                            	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	                                <i class="fa fa-laptop modal-icon"></i>
-	                                <h4 class="modal-title"><label class="modalTitle"></label></h4>
-	                                <small class="font-bold modalHeader"></small>
-	                            </div>
-	                            
-	                            <div class="modal-body">
-										<input class="form-control projectID" type="hidden" th:field="*{id}" />
-	                            		
-						            	<div class="form-group">
-						                    <input type="text" class="form-control projectName" placeholder="Project Name" required="required" th:field="*{name}"/>
-						                </div>
-						                <div class="form-group">
-						                    <input type="text" class="form-control projectDescription" placeholder="Project Description" required="required" th:field="*{description}"/>
-						                </div>
-						                <div class="form-group">
-						                    <input type="text" class="form-control projectYear" placeholder="Project Year" required="required" th:field="*{year}"/>
-						                </div>
-						                
-						                <label for="projectStatus">Status:</label>
-						                <select class="form-control m-b projectStatus" id="projectStatus"  th:field="*{status}">
-					                        <option value="Planning">Planning</option>
-					                        <option value="Open">Open</option>
-					                        <option value="Closed">Closed</option>
-                                    	</select>
-						                
-						                <label for="projectType">Type:</label>
-						                <select class="form-control m-b projectType" id="projectType"  th:field="*{type}">
-					                        <option value="Infrastructure">Infrastructure</option>
-					                        <option value="Project">Project</option>
-					                        <option value="Special">Special</option>
-				                        </select>
-	                            </div>
-	                            
-	                            <div class="modal-footer">
-	                                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-	                                <button type="submit" class="btn btn-primary">Save</button>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-				</form>			
-				<!-- Project-Modal-Add/Edit End -->
+				
+				<!-- Project-Modal-Add/Edit -->
+				<th:block th:include="/layout/modal :: modal-projectSave"></th:block>
+				
 				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
 				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
 				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
-				<script>
-					var id;
-					
-					$(document).on("click", '.popProject',function(e) {
-						id = $(this).data('projectid');
-						var name = $(this).data('name');
-						var description = $(this).data('description');
-						var year = $(this).data('year');
-						var status = $(this).data('status');
-						var type = $(this).data('type');
-						var modal = $(this).data('modal');
-
-						if (modal == 'add') {
-							$(".modalTitle").text("Add Project");
-							$(".modalHeader").text("A a new Project to track budgets.");
-						} else if (modal == 'edit') {
-							$(".modalTitle").text("Edit Project");
-							$(".modalHeader").text("Edit an existing Project.");
-						}						
 				
-						$(".projectID").val(id);
-						$(".projectName").val(name);
-						$(".projectDescription").val(description);
-						$(".projectYear").val(year);
-						$(".projectStatus").val(status);
-						$(".projectType").val(type);
-
-					});
-					
-					$(document).on("click", '.deletePopup',function(e) {
-					
-						swal({
-					        title: "Are you sure?",
-					        text: "You will not be able to recover this Project!",
-					        type: "warning",
-					        showCancelButton: true,
-					        confirmButtonColor: "#DD6B55",
-					        confirmButtonText: "Yes, delete it!",
-			                cancelButtonText: "No, cancel plx!",
-		                    closeOnConfirm: false,
-		                    closeOnCancel: false },
-		                    function (isConfirm) {
-		                   		if (isConfirm) {
-		                   			$.ajax({
-							    	    type: "GET",
-							    	    url: "/main/project/delete/"+id,
-							    	    data: "{}",
-							    	    async: true,
-							    	    dataType: "text",
-		                   			});
-		                   			
-		                   			setTimeout(function(){window.location.reload(true);},100)
-		                        } else {
-		                            swal("Cancelled", "Your Project is safe :)", "error");
-		                        }
-						});
-		       		});
-
-				</script>
+				<!-- Project-Jscript -->
+				<th:block th:include="/layout/footer :: customjs-popProject"></th:block>
+				<th:block th:include="/layout/footer :: customjs-deleteProject"></th:block>
 			</div>
 		</div>
 	</div>
