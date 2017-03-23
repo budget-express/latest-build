@@ -92,10 +92,10 @@ public class HistoryService {
 		 */
 		public void system(String message) {
 			//Find logged in user
-	    	User user = userRepository.findByName(getLoggedon());
+	    	//User user = userRepository.findByName(getLoggedon());
 			
 	    	//Log Message to Database
-			History history = new History("info","system",0,user.getName(),user.getId(),message);
+			History history = new History("info","system",0,null,null,message);
 			
 			//Save History to Database
 			historyRepository.save(history);

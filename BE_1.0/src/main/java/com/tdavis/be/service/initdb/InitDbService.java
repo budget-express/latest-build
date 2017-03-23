@@ -64,7 +64,7 @@ public class InitDbService {
 			userAdmin.setRoles(roles);
 			userRepository.save(userAdmin);
 			logger.system("*Init* Added user: " + userAdmin.getName());
-			logger.warning("user", 2, "*Init* Default Admin Account.  Change Password!");
+			logger.system("*Init* Default Admin Account.  Change Password!");
 			
 			User userUser = new User();
 			userUser.setEnabled(true);
@@ -77,7 +77,7 @@ public class InitDbService {
 			userUser.setRoles(uroles);
 			userRepository.save(userUser);
 			logger.system("*Init* Added user: " + userAdmin.getName());
-			logger.warning("user", 2, "*Init* Default User Account.  Change Password!");
+			logger.system("*Init* Default User Account.  Change Password!");
 
 		}
 	}

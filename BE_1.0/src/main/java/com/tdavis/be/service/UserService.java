@@ -55,7 +55,7 @@ public class UserService {
 		
 		if (user.getId() != null) {
 			//Preserve Password
-			user.setPassword(userRepository.findById(user.getId()).getPassword());
+			user.setPassword(userRepository.getOne(user.getId()).getPassword());
 			
 			//Set Roles
 			user.setRoles(roleService.setRoles(user));
