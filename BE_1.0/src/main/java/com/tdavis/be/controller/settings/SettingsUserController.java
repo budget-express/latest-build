@@ -106,16 +106,32 @@ public class SettingsUserController {
 			logger.error(bindingResult+"");
 			return "/error";
 		}
-		logger.info(user.getPassword());
+		
 		//Call User Services to Save User
 		userService.save(user);
-
-		//Set Success for Deletion
-		model.addAttribute("success", true);
 		
 		//Redirect to User Details
 		return redirectUsers;
 	}
+	
+	/*
+	 * Change Password
+	 */
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PostMapping("/user/update")
+	public String changePwd(@ModelAttribute @Valid User user, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			logger.error(bindingResult+"");
+			return "/error";
+		}
+		
+		//Call User Services to Save User
+		userService.changePassword(user);
+		
+		//Redirect to User Details
+		return redirectUsers;
+	}
+	
 	
 	/*
 	 * Enable/Disable User
@@ -136,9 +152,6 @@ public class SettingsUserController {
 		//Call User Services to Save User
 		userService.save(user);
 		
-		//Set Success for Deletion
-		model.addAttribute("success", true);
-		
 		//Redirect to User Details
 		return "success";
 	}
@@ -153,9 +166,6 @@ public class SettingsUserController {
 		
 		//Call User Services to Delete User
 		userService.delete(id);
-		
-		//Set Success for Deletion
-		model.addAttribute("success", true);
 		
 		//Redirect to User Details
 		return "success";

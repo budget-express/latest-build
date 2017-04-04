@@ -115,6 +115,7 @@ public class QuoteService {
 			
 			//Save Quote to Repository
 			quoteRepository.save(temp);
+			quoteRepository.flush();
 			logger.info("budget", temp.getBudget().getId(), message);
 			
 			//Update Budget
@@ -131,10 +132,13 @@ public class QuoteService {
 			
 			//Delete Quote from Repository
 			quoteRepository.delete(temp);
+			quoteRepository.flush();
 			logger.warning("budget", temp.getBudget().getId(), "Deleted Quote "+ temp.getName()+" from Budget: " + temp.getBudget().getName());
 			
+			
+			
 			//Update Budget
-			budgetService.save(temp.getBudget());
+			budgetService.save(budgetService.findById(temp.getBudget().getId()));
 		}
 		
 		/*

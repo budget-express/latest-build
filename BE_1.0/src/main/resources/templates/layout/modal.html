@@ -39,6 +39,7 @@
 			                        <option value="Infrastructure">Infrastructure</option>
 			                        <option value="Project">Project</option>
 			                        <option value="Special">Special</option>
+			                        <option value="Opex">Opex</option>
 		                        </select>
                            </div>
                            
@@ -112,8 +113,11 @@
 						                        <select class="form-control required budgetCategory" th:field="*{category}">
 							                        <option value="Datacenter">Datacenter</option>
 				                           			<option value="License">License</option>
-				                          				<option value="Software">Software</option>
-				                          				<option value="Opex">Opex</option>
+			                          				<option value="Software">Software</option>
+			                          				<option value="Field-Office">Field-Office</option>
+			                          				<option value="End User Computing">End user Computing</option>
+			                          				<option value="Regulator/Complicance">Regulatory/Compliance</option>
+			                          				<option value="Opex">Opex</option>
 						                        </select>
 						                 	</div>
 					                 	
@@ -125,6 +129,7 @@
 						                            <option value="EMEA">EMEA</option>
 						                            <option value="APAC">APAC</option>
 						                            <option value="LATAM">LATAM</option>
+						                            <option value="Canada">Canada</option>
 						                        </select>
 						                   	</div>
 			                			</div>
@@ -268,10 +273,10 @@
 	                        </select>
 							
 							<label for="quoteCapex">Capex Amount:</label>
-							<input type="text" th:field="*{capex}" class="form-control quoteCapex" />
+							<input type="text" th:field="*{capex}" value="0" class="form-control quoteCapex" />
 							
 							<label for="quoteOpex">Opex Amount:</label>
-							<input type="text" th:field="*{opex}" class="form-control quoteOpex" />		
+							<input type="text" th:field="*{opex}" value="0" class="form-control quoteOpex" />		
                           		
                            
                          </div>

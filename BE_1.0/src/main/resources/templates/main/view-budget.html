@@ -3,362 +3,51 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
 	lang="en">
 <head>
-	<th:block th:include="/layout/header :: header-inspinia"></th:block>
+	<th:block th:include="layout/header :: header-inspinia"></th:block>
 </head>
 
 <body>
     <div id="wrapper">
 		
-		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		<th:block th:include="layout/side_nav :: side_nav-inspinia"></th:block>
 		
 		<div id="page-wrapper" class="gray-bg">
         	<div class="row border-bottom">
 				
-				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
-				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
+				<th:block th:include="layout/top_nav :: top_nav-inspinia"></th:block>
+				<th:block th:include="layout/page_nav :: page_nav-inspinia"></th:block>
 				
 				<!-- Page Start -->
 				<div class="row">
             		<div class="col-lg-12">
                 		<div class="wrapper wrapper-content animated fadeInUp">
-                    		<div class="ibox collapsed">
-                    			<div class="ibox-title">
-                       				<div class="col-lg-2">
-                       					<span class="btn btn-outline btn-info btn-sm col-lg-12" th:text="${project.name}"></span>
-                       				</div>
-                       				<div class="col-lg-2">
-                       					<span class="btn btn-outline btn-primary btn-sm col-lg-12" th:text="' $' + ${project.budgetApproved - project.budgetSpent}"><i class="fa fa-usd"></i></span>
-                       				</div>
-                       				
-                       				<div class="ibox-tools">
-                       					<a sec:authorize="hasAuthority('ROLE_ADMIN')" data-toggle="modal" href="#projectSave" class="btn btn-outline btn-success btn-sm popProject" data-modal="edit" 
-                       						th:attr="data-projectid=${project.id},
-		                                   		data-name=${project.name},
-		                                   		data-description=${project.description},
-		                                   		data-year=${project.year},
-		                                   		data-status=${project.status},
-		                                   		data-type=${project.type}">
-		                                	<i class="fa fa-pencil"></i> Edit 
-		                                </a>
-                       					<a class="collapse-link">
-                               				<i class="fa fa-chevron-up"></i>
-                           				</a>
-                       				</div>
-                   				</div>
-                    		
-                        		<div class="ibox-content">
-                            		
-                            		<div class="row">
-                                		<div class="col-lg-12">
-                                    		<dl class="dl-horizontal">
-                                        		<dt>Status:</dt> 
-                                        		<dd>
-                                        			<span th:if="${project.status} == 'Open'" class="label label-primary">Active</span>
-		                                            <span th:if="${project.status} == 'Closed'" class="label label-default">Inactive</span>
-		                                            <span th:if="${project.status} == 'Planning'" class="label label-warning">Planning</span>
-                                        		</dd>
-                                    		</dl>
-                                		</div>
-                            		</div>
-                            		
-                            		<div class="row">
-                                		<div class="col-lg-4">
-                                    		<dl class="dl-horizontal">
-                                    			<dt>Year:</dt> <dd th:text="${project.year}"></dd>
-		                                        <dt>Type:</dt> <dd th:text="${project.type}"></dd>
-		                                        <dt>Budget Requested:</dt> <dd th:text="'$'+${project.budgetRequested}"></dd>
-		                                        <dt>Budget Approved:</dt> <dd th:text="'$'+${project.budgetApproved}"></dd>
-                                    		</dl>
-                                		</div>
-                                		<div class="col-lg-4" id="cluster_info">
-                                    		<dl class="dl-horizontal" >
-		                                        <dt>Capex Budget Spent:</dt> <dd th:text="'$'+${project.budgetSpent}"></dd>
-		                                        <dt>Opex Budget Spent:</dt> <dd th:text="'$'+${project.budgetSpentOpex}"></dd>
-		                                        <dt>Capex Budget Pending:</dt> <dd th:text="'$'+${project.budgetStaged}"></dd>	
-		                                        <dt>Opex Budget Pending:</dt> <dd th:text="'$'+${project.budgetStagedOpex}"></dd>	                                        
-		                                    </dl>
-		                                </div>
-		                                <div class="col-lg-4" id="cluster_info">
-                                    		<dl class="dl-horizontal" >
-		                                        <dt>Last Updated:</dt> <dd th:text="${project.dateEdited}"></dd>
-		                                        <dt>Edited By:</dt> <dd th:text="${project.editedBy}"></dd>
-		                                        <dt>Created Date:</dt> <dd th:text="${project.dateCreated}"></dd>
-		                                        <dt>Created By:</dt> <dd th:text="${project.createdBy}"></dd>
-		                                    </dl>
-		                                </div>
-		                            </div>
-	                           		
-	                           		<div class="row">
-	                               		<div class="col-lg-12">
-	                                    	<dl class="dl-horizontal">
-		                                        <dt>Approved Budget:</dt>
-		                                        <dd>
-		                                        	<div class="progress progress-striped active">
-						                                <div th:style="'width: ' + ${percentspent} + '%;'" class="progress-bar progress-bar-success">
-						                                    <span class="sr-only"></span>
-						                                </div>
-						                                <div th:style="'width: ' + ${percentpending} + '%;'" class="progress-bar progress-bar-warning">
-						                                    <span class="sr-only"></span>
-						                                </div>
-						                                <div th:style="'width: ' + ${percentremaining} + '%;'" class="progress-bar progress-bar-primary">
-						                                    <span class="sr-only"></span>
-						                                </div>
-						                            </div>
-						                            <table>
-						                            	<tr class = "row">
-						                            		<td class="col-lg-3"><small><strong th:text="${percentspent} + '%'"> </strong> of budget spent.</small></td>
-						                            		<td class="col-lg-3"><small><strong th:text="${percentpending} + '%'"> </strong> of budget pending.</small></td>
-						                            		<td class="col-lg-3"><small><strong th:text="${percentremaining} + '%'"> </strong> of budget remaining.</small></td>
-						                            	</tr>
-						                            </table>
-		                                    	</dd>
-	                                    	</dl>
-	                                	</div>
-	                           		</div>
-	                           	</div>
-	                      	</div>
-
-                    		<div class="ibox">
-                    			<div class="ibox-title">
-                       				<div class="col-lg-2">
-                       					<span class="btn btn-outline btn-info btn-sm col-lg-12" th:text="${budget.name}"></span>
-                       				</div>
-                       				<div class="col-lg-2">
-                       					<span class="btn btn-outline btn-primary btn-sm col-lg-12" th:text="' $' + ${budget.budgetApproved - budget.quoteSpent}"><i class="fa fa-usd"></i></span>
-                       				</div>
-                       				
-                       				<div class="ibox-tools">
-                       					<a sec:authorize="hasAuthority('ROLE_ADMIN')" data-toggle="modal" href="#budgetSave" class="btn btn-outline btn-success btn-sm popBudget" data-modal="edit"
-                                          	th:attr="data-id=${budget.id},
-											data-projectid=${project.id},
-											data-projectname=${project.name},
-											data-name=${budget.name},
-											data-sdescription=${budget.descriptionShort},
-											data-ldescription=${budget.descriptionLong},
-											data-year=${budget.year},
-											data-code=${budget.budgetCode},
-											data-status=${budget.status},
-											data-category=${budget.category},
-											data-region=${budget.region},
-											data-criticality=${budget.criticality},
-											data-ranking=${budget.ranking},
-											data-q1=${budget.q1},
-											data-q1e=${budget.enabledQ1},
-											data-q2=${budget.q2},
-											data-q2e=${budget.enabledQ2},
-											data-q3=${budget.q3},
-											data-q3e=${budget.enabledQ3},
-											data-q4=${budget.q4},
-											data-q4e=${budget.enabledQ4}">
-                                          	<i class="fa fa-pencil"></i> Edit 
-                                         </a>
-                       					<a class="collapse-link">
-                               				<i class="fa fa-chevron-up"></i>
-                           				</a>
-                       				</div>
-                   				</div>
-                    		
-                        		<div class="ibox-content">
-                            		
-                            		<div class="row">
-                                		<div class="col-lg-12">
-                                    		<dl class="dl-horizontal">
-                                        		<dt>Status:</dt> 
-                                        		<dd>
-                                        			<span th:if="${project.status} == 'Open'" class="label label-primary">Active</span>
-		                                            <span th:if="${project.status} == 'Closed'" class="label label-default">Inactive</span>
-		                                            <span th:if="${project.status} == 'Planning'" class="label label-warning">Planning</span>
-                                        		</dd>
-                                    		</dl>
-                                		</div>
-                            		</div>
-                            		
-                            		<div class="row">
-                                		<div class="col-lg-4">
-                                    		<dl class="dl-horizontal">
-                                    			<dt>Year:</dt> <dd th:text="${project.year}"></dd>
-		                                        <dt>Type:</dt> <dd th:text="${project.type}"></dd>
-		                                        <dt>Budget Requested:</dt> <dd th:text="'$'+${project.budgetRequested}"></dd>
-		                                        <dt>Budget Approved:</dt> <dd th:text="'$'+${project.budgetApproved}"></dd>
-                                    		</dl>
-                                		</div>
-                                		<div class="col-lg-4" id="cluster_info">
-                                    		<dl class="dl-horizontal" >
-		                                        <dt>Capex Budget Spent:</dt> <dd th:text="'$'+${project.budgetSpent}"></dd>
-		                                        <dt>Opex Budget Spent:</dt> <dd th:text="'$'+${project.budgetSpentOpex}"></dd>
-		                                        <dt>Capex Budget Pending:</dt> <dd th:text="'$'+${project.budgetStaged}"></dd>	
-		                                        <dt>Opex Budget Pending:</dt> <dd th:text="'$'+${project.budgetStagedOpex}"></dd>	                                        
-		                                    </dl>
-		                                </div>
-		                                <div class="col-lg-4" id="cluster_info">
-                                    		<dl class="dl-horizontal" >
-		                                        <dt>Last Updated:</dt> <dd th:text="${project.dateEdited}"></dd>
-		                                        <dt>Edited By:</dt> <dd th:text="${project.editedBy}"></dd>
-		                                        <dt>Created Date:</dt> <dd th:text="${project.dateCreated}"></dd>
-		                                        <dt>Created By:</dt> <dd th:text="${project.createdBy}"></dd>
-		                                    </dl>
-		                                </div>
-		                            </div>
-	                           		
-	                           		<div class="row">
-	                               		<div class="col-lg-10">
-	                                    	<dl class="dl-horizontal">
-		                                        <dt>Approved Budget:</dt>
-		                                        <dd>
-		                                        	<div class="progress progress-striped active">
-						                                <div th:style="'width: ' + ${percentspent} + '%;'" class="progress-bar progress-bar-success">
-						                                    <span class="sr-only"></span>
-						                                </div>
-						                                <div th:style="'width: ' + ${percentpending} + '%;'" class="progress-bar progress-bar-warning">
-						                                    <span class="sr-only"></span>
-						                                </div>
-						                                <div th:style="'width: ' + ${percentremaining} + '%;'" class="progress-bar progress-bar-primary">
-						                                    <span class="sr-only"></span>
-						                                </div>
-						                            </div>
-						                            <table>
-						                            	<tr class = "row">
-						                            		<td class="col-lg-3"><small><strong th:text="${percentspent} + '%'"> </strong> of budget spent.</small></td>
-						                            		<td class="col-lg-3"><small><strong th:text="${percentpending} + '%'"> </strong> of budget pending.</small></td>
-						                            		<td class="col-lg-3"><small><strong th:text="${percentremaining} + '%'"> </strong> of budget remaining.</small></td>
-						                            	</tr>
-						                            </table>
-		                                    	</dd>
-	                                    	</dl>
-	                                	</div>
-	                           		</div>
-	                           	</div>
-	                      	</div>
-
-
-                    		<div class="ibox">
-                    			<div class="ibox-title " sec:authorize="hasAuthority('ROLE_ADMIN')" >
-		                            <div class="ibox-tools">
-		                                <a data-toggle="modal" href="#saveQuote" class="btn btn-primary btn-xs popQuote" data-modal="add" th:attr="data-budgetname=${budget.name},data-budgetid=${budget.id}">Create new quote</a>
-		                            </div>
-		                        </div>
-                    		
-                        		<div class="ibox-content">
-		                            <div class="row m-t-sm">
-		                                <div class="col-lg-12">
-			                                <div class="panel blank-panel">
-				                                <div class="panel-heading">
-				                                    <div class="panel-options">
-				                                        <ul class="nav nav-tabs">
-				                                            <li class="active"><a href="#quotes" data-toggle="tab">Quotes</a></li>
-				                                            <li class=""><a href="#activity" data-toggle="tab">Last activity</a></li>
-				                                        </ul>
-				                                    </div>
-				                                </div>
-		
-				                                <div class="panel-body">
-					                                <div class="tab-content">
-						                                <div class="tab-pane active" id="quotes">
-						                                    <div class="feed-activity-list">
-						                                        <div class="feed-element">
-						                                            <table class="table table-hover">
-								                                   		<tbody th:each="quote : ${budget.quotes}">
-								                                    		<tr class="row">
-										                                        <td class="quote-status col-lg-1">
-										                                            <span th:if="${quote.status} == 'Staged'" class="label label-success">Active</span>
-										                                            <span th:if="${quote.status} == 'Pending'" class="label label-warning">Inactive</span>
-										                                            <span th:if="${quote.status} == 'Paid'" class="label label-info">Planning</span>
-										                                            <span th:if="${quote.status} == 'Cancelled'" class="label label-default">Cancelled</span>
-										                                        </td>
-										                                        <td class="quote-title col-lg-2">
-										                                            <span th:text="${quote.name}"></span>
-										                                            <br/>
-										                                            <small>Created <span th:text="${quote.dateCreated}"></span></small>
-										                                        </td>
-										                                        <td class="quote-vendor col-lg-2" th:text="${quote.vendor}"></td>
-										                                        <td class="quote-vendorContact col-lg-3" th:text="${quote.vendorContact}"></td>
-										                                        <td class="quote-capex col-lg-1" th:text="${quote.capex}"></td>
-										                                        <td class="quote-opex col-lg-1" th:text="${quote.opex}"></td>
-										                                        <td class="budget-actions col-lg-2">
-										                                        	<div class="pull-right">
-											                                            <a th:href="@{/main/quote/} + ${quote.id}" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
-											                                            <a data-toggle="modal" href="#saveQuote" class="btn btn-white btn-sm popQuote" data-modal="edit"
-											                                            		th:attr="data-id=${quote.id},
-																							    data-budgetid=${budget.id},
-																							    data-budgetname=${budget.name},
-																							    data-name=${quote.name},
-																							    data-justification=${quote.justification},
-																							    data-vendor=${quote.vendor},
-																							    data-vcontact=${quote.vendorContact},
-																							    data-vemail=${quote.vendorEmail},
-																							    data-status=${quote.status},
-																							    data-capex=${quote.capex},
-																							    data-opex=${quote.opex}">
-											                                            	<i class="fa fa-pencil"></i> Edit 
-											                                            </a>
-											                                            <button class="btn btn-white btn-sm popQuote deleteQuote" 
-											                                            	th:attr="data-id=${quote.id},
-																							data-name=${quote.name}">
-											                                            	<i class="fa fa-trash"></i> Delete 
-											                                            </button>
-											                                    	</div>
-										                                        </td>
-								                                    		</tr>
-								                                   		</tbody>
-								                                	</table>
-						                                        </div>
-				                                        	</div>
-				                                		</div>
-                                		
-				                                		<div class="tab-pane" id="activity">
-													    	<div class="full-height-scroll">
-						               							<div class="table-responsive">
-							                            			<table class="table table-hover issue-tracker">
-										                            	<tbody th:each="log : ${logs}">
-										                            		<tr th:if="${log.object} == 'budget' and ${log.objectId} == ${budget.id}">
-										                            			<td>
-										                            				<span th:if="${log.type} == 'info'" class="label label-outline label-info">Info</span>
-										                            				<span th:if="${log.type} == 'warning'" class="label label-warning">Warning</span>
-										                            				<span th:if="${log.type} == 'error'" class="label label-danger">Error</span>
-										                            				<span th:if="${log.type} == 'debug'" class="label label-default">Debug</span>
-										                            			</td>
-																				<td class="issue-info">
-																					<a href="#logPopup" th:text="'Owner: '+${log.object}"></a>
-																					
-																					<small th:text="${log.message}"></small>
-																				</td>
-																				<td th:text="${log.user}"></td>
-																				<td class="text-right" th:text="${log.date}"></td>
-							
-							                                    			</tr>
-							                                    		</tbody>
-							                                    	</table>
-						                                   		</div>
-						                                   	</div>
-														</div>
-					                            	</div>
-												</div>
-											</div>
-					               		</div>
-									</div>
-                     			</div>
-                    		</div>
+                    		<th:block th:include="layout/ibox :: ibox-viewProjectCap"></th:block>
+							<th:block th:include="layout/ibox :: ibox-viewBudgetCap"></th:block>
+                    		<th:block th:include="layout/ibox :: ibox-listQuote"></th:block>
                 		</div>
             		</div>
-            
-		            
 		        </div>
-				
 				<!-- Page End -->
-				<th:block th:include="/layout/modal :: modal-projectSave"></th:block>
-				<th:block th:include="/layout/modal :: modal-budgetSave"></th:block>
-				<th:block th:include="/layout/modal :: modal-quoteSave"></th:block>
 				
-				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
-				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
-				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
 				
-				<th:block th:include="/layout/footer :: customjs-popProject"></th:block>
-				<th:block th:include="/layout/footer :: customjs-popBudget"></th:block>
-				<th:block th:include="/layout/footer :: customjs-popQuote"></th:block>
-				<th:block th:include="/layout/footer :: customjs-deleteQuote"></th:block>
-				<th:block th:include="/layout/footer :: customjs-wizardBudget"></th:block>
+				<th:block th:include="layout/modal :: modal-projectSave"></th:block>
+				<th:block th:include="layout/modal :: modal-budgetSave"></th:block>
+				<th:block th:include="layout/modal :: modal-quoteSave"></th:block>
 				
+				<th:block th:include="layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="layout/footer :: customjs-inspinia"></th:block>
+				
+				<th:block th:include="layout/footer :: customjs-popProject"></th:block>
+				<th:block th:include="layout/footer :: customjs-popBudget"></th:block>
+				<th:block th:include="layout/footer :: customjs-popQuote"></th:block>
+				<th:block th:include="layout/footer :: customjs-deleteQuote"></th:block>
+				<th:block th:include="layout/footer :: customjs-wizardBudget"></th:block>
+				<script>
+					$(document).ready(function() {
+					  $('.ibox-project').addClass('collapsed');
+					});
+				</script>				
 			</div>
 		</div>
 	</div>

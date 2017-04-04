@@ -26,6 +26,8 @@ public class Project {
 	//Budget Variables
 	private double budgetRequested;
 	private double budgetApproved;
+	private double budgetRequestedOpex; //Opex
+	private double budgetApprovedOpex;	//Opex	
 	private double budgetSpent; 		//Capex
 	private double budgetPending;		//Capex
 	private double budgetStaged;  		//Capex
@@ -45,7 +47,7 @@ public class Project {
 	private Date dateEnabled;
 	private Date dateDisabled;
 
-	//Project/Infrastructure/Special
+	//Project/Infrastructure/Special/Opex
 	private String type;
 	
 	//Planning/Open/Closed
@@ -247,6 +249,22 @@ public class Project {
 
 	public void setBudgetStagedOpex(double budgetStagedOpex) {
 		this.budgetStagedOpex = budgetStagedOpex;
+	}
+
+	public double getBudgetRequestedOpex() {
+		return budgetRequestedOpex;
+	}
+
+	public void setBudgetRequestedOpex(double budgetRequestedOpex) {
+		this.budgetRequestedOpex = budgetRequestedOpex;
+	}
+
+	public double getBudgetApprovedOpex() {
+		return budgetApprovedOpex;
+	}
+
+	public void setBudgetApprovedOpex(double budgetApprovedOpex) {
+		this.budgetApprovedOpex = budgetApprovedOpex;
 	}
 
 	

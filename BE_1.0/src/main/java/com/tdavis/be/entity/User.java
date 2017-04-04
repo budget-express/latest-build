@@ -3,7 +3,6 @@ package com.tdavis.be.entity;
 
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,12 +25,10 @@ public class User {
 
 	@NotNull
 	@Size(min = 3, message = "Name must be at least 3 characters!")
-	@Column(unique = true)
 	private String fname;
 	
 	@NotNull
 	@Size(min = 3, message = "Name must be at least 3 characters!")
-	@Column(unique = true)
 	private String lname;
 
 	@NotNull

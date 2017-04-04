@@ -67,7 +67,7 @@ public class UserController {
 			System.out.println(bindingResult.toString());
 			return "/old/admin";
 		}
-		userService.edit(user);
+		userService.save(user);
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	String name = auth.getName(); //get logged in username
     	model.addAttribute("username", name);

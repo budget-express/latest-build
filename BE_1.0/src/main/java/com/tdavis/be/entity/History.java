@@ -2,6 +2,7 @@ package com.tdavis.be.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,6 +26,7 @@ public class History {
 	
 	private Integer userId;
 
+	@Column(length = 3000)
 	private String message;
 	
 	private String payload;

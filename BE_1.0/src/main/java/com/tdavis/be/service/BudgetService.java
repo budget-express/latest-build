@@ -240,7 +240,7 @@ public class BudgetService {
 						break;
 					case "staged" :
 						quoteStagedCapex += quote.getCapex();
-						quoteStagedOpex =+ quote.getOpex();
+						quoteStagedOpex += quote.getOpex();
 						break;
 					case "canceled" :
 					default :
@@ -349,6 +349,49 @@ public class BudgetService {
 		}
 		
 		return budget;
+	}
+	
+	public double getPercentSpent(Budget budget) {
+		
+		double spent;
+		
+		if (budget.getBudgetApproved() != 0) {
+			spent = (budget.getQuoteSpent()/budget.getBudgetApproved())*100;
+		} else {
+			spent = 0;
+		}
+		
+		return spent;
+	}
+	
+	public double getPercentPending(Budget budget) {
+		
+		double pending;
+		
+		if (budget.getBudgetApproved() != 0) {
+			pending = ((budget.getQuotePending()+budget.getQuoteStaged())/budget.getBudgetApproved())*100;
+		} else {
+			pending = 0;
+		}
+		
+		return pending;
+	}
+
+	public double getPercentRemaining(Budget budget) {
+		
+		double pending;
+		double spent;
+		double remaining;
+		
+		if (budget.getBudgetApproved() != 0) {
+			pending = ((budget.getQuotePending()+budget.getQuoteStaged())/budget.getBudgetApproved())*100;
+			spent = (budget.getQuoteSpent()/budget.getBudgetApproved())*100;
+			remaining = 100 - (pending+spent);
+		} else {
+			remaining = 0;
+		}
+		
+		return remaining;
 	}
 		
 }

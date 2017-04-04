@@ -60,7 +60,7 @@ public class UserConfiguration extends WebSecurityConfigurerAdapter {
 				.and()
 			.logout()
 				// @see: org.springframework.security.config.annotation.web.configurers.LogoutConfigurer#logoutUrl 
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
 				.and()
 			.rememberMe();
 		// @formatter:on

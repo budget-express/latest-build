@@ -3,71 +3,68 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
 	lang="en">
 <head>
-	<th:block th:include="/layout/header :: header-inspinia"></th:block>
+	<th:block th:include="layout/header :: header-inspinia"></th:block>
 </head>
 
 <body>
     <div id="wrapper">
 		
-		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		<th:block th:include="layout/side_nav :: side_nav-inspinia"></th:block>
 		
 		<div id="page-wrapper" class="gray-bg">
         	<div class="row border-bottom">
 				
-				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
+				<th:block th:include="layout/top_nav :: top_nav-inspinia"></th:block>
 				
 				<!-- Page Start -->
 				<div class="wrapper wrapper-content animated fadeInRight">
 					<div class="row">
 			        	<div class="col-sm-12">
-			            	<div class="ibox">
-			                	<div class="ibox-content">
-           							
-           							<form class="m-t" role="form" th:action="@{/settings/user/save}" th:object="${user}" method="post">
-	                            		
-				                        <input class="form-control" type="hidden" th:field="*{id}" th:value="${user.id}"/>
-				                         		
-						            	<div class="form-group">
-						                    <input type="hidden" class="form-control" th:field="*{name}" th:value="${user.name}"/>
-						                </div>
-						                <div class="form-group">
-						                    <input type="hidden" class="form-control" th:field="*{fname}" th:value="${user.fname}"/>
-						                </div>
-						                <div class="form-group">
-						                    <input type="hidden" class="form-control" th:field="*{lname}" th:value="${user.lname}"/>
-						                </div>
-						                <div class="form-group">
-						                    <input type="hidden" class="form-control" th:field="*{email}" th:value="${user.email}"/>
-						                </div>
-						                <div class="form-group">
-						                    <input type="hidden" class="form-control" th:field="*{title}" th:value="${user.title}"/>
-						                </div>
-						                <div class="form-group">
-						                    <input type="password" class="form-control" placeholder="Password" required="required" th:field="*{password}"/>
-						                </div>
-						                <div class="form-group">
-						                	<input class="form-control" type="hidden" th:field="*{enabled}" th:value="${user.enabled}"/>
-					                	</div>
-					                	<div class="form-group">
-					                		<input class="form-control" type="hidden" th:field="*{admin}" th:value="${user.admin}"/>
-					                	</div>
-					                	
-				                    </form>
-								</div>
-								
-								<div class="ibox-footer">
-	                                <button type="submit" class="btn btn-primary">Save changes</button>
-	                            </div>
-						  	</div>
+			        		<form class="m-t" role="form" th:action="@{/settings/user/update}" th:object="${user}" method="post">
+				            	<div class="ibox">
+				                	<div class="ibox-content">
+					                        <input class="form-control" type="hidden" th:field="*{id}" th:value="${user.id}"/>
+					                         		
+							            	<div class="form-group">
+							                    <input type="hidden" class="form-control" th:field="*{name}" th:value="${user.name}"/>
+							                </div>
+							                <div class="form-group">
+							                    <input type="hidden" class="form-control" th:field="*{fname}" th:value="${user.fname}"/>
+							                </div>
+							                <div class="form-group">
+							                    <input type="hidden" class="form-control" th:field="*{lname}" th:value="${user.lname}"/>
+							                </div>
+							                <div class="form-group">
+							                    <input type="hidden" class="form-control" th:field="*{email}" th:value="${user.email}"/>
+							                </div>
+							                <div class="form-group">
+							                    <input type="hidden" class="form-control" th:field="*{title}" th:value="${user.title}"/>
+							                </div>
+							                <div class="form-group">
+							                    <input type="password" class="form-control" placeholder="Password" required="required" th:field="*{password}"/>
+							                </div>
+							                <div class="form-group">
+							                	<input class="form-control" type="hidden" th:field="*{enabled}" th:value="${user.enabled}"/>
+						                	</div>
+						                	<div class="form-group">
+						                		<input class="form-control" type="hidden" th:field="*{admin}" th:value="${user.admin}"/>
+						                	</div>
+									</div>
+									
+									<div class="ibox-footer">
+		                                <button type="submit" class="btn btn-primary">Save changes</button>
+		                            </div>
+						  		</div>
+							</form>
            				</div>
            			</div>
            		</div>
            				
 				<!-- Page End -->
 				
-				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
-				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
-				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+				<th:block th:include="layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="layout/footer :: customjs-inspinia"></th:block>
 				
 			</div>
 		</div>

@@ -3,19 +3,19 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
 	lang="en">
 <head>
-	<th:block th:include="/layout/header :: header-inspinia"></th:block>
+	<th:block th:include="layout/header :: header-inspinia"></th:block>
 </head>
 
 <body>
     <div id="wrapper">
 		
-		<th:block th:include="/layout/side_nav :: side_nav-inspinia"></th:block>
+		<th:block th:include="layout/side_nav :: side_nav-inspinia"></th:block>
 		
 		<div id="page-wrapper" class="gray-bg">
         	<div class="row border-bottom">
 				
-				<th:block th:include="/layout/top_nav :: top_nav-inspinia"></th:block>
-				<th:block th:include="/layout/page_nav :: page_nav-inspinia"></th:block>
+				<th:block th:include="layout/top_nav :: top_nav-inspinia"></th:block>
+				<th:block th:include="layout/page_nav :: page_nav-inspinia"></th:block>
 				
 				<!-- Page Start -->
 				<div class="row">
@@ -142,9 +142,9 @@
 	                </div>
 				</form>			
 				<!-- Project-Modal-Add/Edit End -->
-				<th:block th:include="/layout/footer :: footer-inspinia"></th:block>
-				<th:block th:include="/layout/footer :: js-inspinia"></th:block>
-				<th:block th:include="/layout/footer :: customjs-inspinia"></th:block>
+				<th:block th:include="layout/footer :: footer-inspinia"></th:block>
+				<th:block th:include="layout/footer :: js-inspinia"></th:block>
+				<th:block th:include="layout/footer :: customjs-inspinia"></th:block>
 				<script>
 					var id;
 					

@@ -108,6 +108,9 @@ public class MainBudgetController {
     	model.addAttribute("percentspent", projectService.getPercentSpent(project));
     	model.addAttribute("percentpending", projectService.getPercentPending(project));
     	model.addAttribute("percentremaining", projectService.getPercentRemaining(project));
+    	model.addAttribute("bpercentspent", budgetService.getPercentSpent(budget));
+    	model.addAttribute("bpercentpending", budgetService.getPercentPending(budget));
+    	model.addAttribute("bpercentremaining", budgetService.getPercentRemaining(budget));
     	model.addAttribute("logs",logger.findAll());
 		model.addAttribute("title", budget.getName());
 		

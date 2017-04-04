@@ -162,13 +162,12 @@
 	                  			$.ajax({
 					    	    type: "GET",
 					    	    url: "/main/project/delete/"+projectid,
-					    	    data: "{}",
+					    	    data: {},
 					    	    async: true,
 					    	    dataType: "text",
+					    	    
 	                  			});
-	                  			
-	                  			setTimeout(function(){window.location.reload(true);},100)
-	                  			
+	                  			{setTimeout(function(){window.location.reload(true);},100)}               			
 	                       } else {
 	                           swal("Cancelled", "Your Project is safe :)", "error");
 	                       }
@@ -382,6 +381,14 @@
 				var capex = $(this).data('capex');
 				var opex = $(this).data('opex');
 				var modal = $(this).data('modal');
+				var admin = $(this).data('admin');
+				
+				if (status == "Paid" || status == "Pending") {
+					if (!admin) {
+						sweetAlert("Oops...", "You do not have access to modify this record!", "error");
+						return;
+					}
+				}
 				
 				if (modal == 'add') {
 					$(".modalTitle").text("Add Quote");
@@ -390,7 +397,7 @@
 					$(".modalTitle").text("Edit Project");
 					$(".modalHeader").text("Edit Quote "+name+" in Budget "+bname+".");
 				}
-				
+								
 				$(".quoteID").val(quoteid);
 				$(".budgetID").val(budgetid);
 				$(".quoteName").val(name);
@@ -401,6 +408,7 @@
 				$(".quoteStatus").val(status);
 				$(".quoteCapex").val(capex);
 				$(".quoteOpex").val(opex);
+				$('#saveQuote').modal('show');
 			});
 		</script>
 	</th:block>
@@ -409,6 +417,16 @@
 		<script>
 		$(document).on("click", '.deletePopup',function(e) {
 				var quoteid = $(this).data('id');
+				var status = $(this).data('status');
+				var admin = $(this).data('admin');
+				
+				if (status == "Paid" || status == "Pending") {
+					if (!admin) {
+						sweetAlert("Oops...", "You do not have access to modify this record!", "error");
+						return;
+					}
+				}
+				
 				swal({
 			        title: "Are you sure?",
 			        text: "You will not be able to recover this Quote!",

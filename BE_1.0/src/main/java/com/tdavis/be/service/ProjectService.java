@@ -216,7 +216,6 @@ public class ProjectService {
 		
 		if (project.getBudgets() != null){
 			for (Budget budget : project.getBudgets()){
-				logger.system(budget.getName());
 				budgetRequested += budget.getBudgetRequested();
 				budgetApproved += budget.getBudgetApproved();
 				
@@ -225,7 +224,7 @@ public class ProjectService {
 				budgetStaged += budget.getQuoteStaged();
 				
 				budgetSpentOpex += budget.getQuoteSpentOpex();
-				budgetPending += budget.getQuotePendingOpex();
+				budgetPendingOpex += budget.getQuotePendingOpex();
 				budgetStagedOpex += budget.getQuoteStagedOpex();
 			}
 		
